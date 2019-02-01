@@ -23,6 +23,7 @@ public class Stopwatch extends Application{
 	Timeline timeline;
 	int  hrs = 0, mins = 0, secs = 0, millis = 0;
 	boolean sos = true;
+	
 	public static void main(String[] args) {
 		launch(args);
 	}
@@ -99,5 +100,56 @@ public class Stopwatch extends Application{
 		scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
 		stage.setTitle("Neiti Aika - ajanhallintapalvelu");
 		stage.show();
+	}
+	
+	public VBox getVBox() {
+		timerText = new Text("00:00:000");
+		timeline = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+            	change(timerText);
+			}
+		}));
+		timeline.setCycleCount(Timeline.INDEFINITE);
+		timeline.setAutoReverse(false);
+		sButton = new Button("Start");
+		sButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	if(sos) {
+            		timeline.play();
+            		sos = false;
+            		sButton.setText("Stop");
+            	} else {
+            		timeline.pause();
+            		sos = true;
+            		sButton.setText("Start");
+            	}
+            }
+        });
+		rButton = new Button("Reset");
+		rButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+            	mins = 0;
+            	secs = 0;
+            	millis = 0;
+            	timeline.pause();
+            	timerText.setText("00:00:000");
+            	if(!sos) {
+            		sos = true;
+            		sButton.setText("Start");
+            	}
+            }
+        });
+		timerText.setId("timerNum");
+
+		hBox = new HBox(30);
+		hBox.setAlignment(Pos.CENTER);
+		hBox.getChildren().addAll(sButton, rButton);
+		vBox = new VBox(30);
+		vBox.setAlignment(Pos.CENTER);
+		vBox.getChildren().addAll(timerText, hBox);
+		return vBox;
 	}
 }
