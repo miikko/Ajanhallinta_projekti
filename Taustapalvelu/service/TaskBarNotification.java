@@ -10,13 +10,14 @@ import java.net.MalformedURLException;
 
 public class TaskBarNotification {
 	
-	public static void displayNotification() throws AWTException, MalformedURLException {
+	//Displays a task bar notification with the given title and content
+	public static void displayNotification(String title, String content) throws AWTException, MalformedURLException {
 		SystemTray tray = SystemTray.getSystemTray();
 		Image image = Toolkit.getDefaultToolkit().createImage("icon.png");
 		TrayIcon trayIcon = new TrayIcon(image, "Temp");
 		trayIcon.setImageAutoSize(true);
 		trayIcon.setToolTip("Temp icon");
 		tray.add(trayIcon);
-		trayIcon.displayMessage("Title", "Content", MessageType.INFO);
+		trayIcon.displayMessage(title, content, MessageType.INFO);
 	}
 }
