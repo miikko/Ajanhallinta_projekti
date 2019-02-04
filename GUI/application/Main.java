@@ -14,12 +14,11 @@ public class Main extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();			
-			Scene scene = new Scene(root,400,400);
+			Scene scene = new Scene(root,600,300);
 			Stopwatch stopwatch = new Stopwatch();
 			VBox vBox = stopwatch.getVBox();
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
-			
 			root.setTop(vBox);
 			primaryStage.setScene(scene);
 			primaryStage.show();
