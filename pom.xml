@@ -5,15 +5,18 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Ajanhallinta_projekti</name>
   <build>
-    
+    <sourceDirectory>Taustapalvelu/service</sourceDirectory>
+    <testSourceDirectory>Taustapalvelu/tests</testSourceDirectory>
     <resources>
       <resource>
-        <directory>Taustapalvelu</directory>
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
+        <directory>Taustapalvelu/service</directory>
       </resource>
     </resources>
+    <testResources>
+    	<testResource>
+    	<directory>Taustapalvelu/tests</directory>
+    	</testResource>
+    </testResources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
