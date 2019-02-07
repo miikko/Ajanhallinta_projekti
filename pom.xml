@@ -7,14 +7,7 @@
   <build>
     <sourceDirectory></sourceDirectory>
     <testSourceDirectory>Taustapalvelu/tests</testSourceDirectory>
-    <resources>
-      <resource>
-        
-        <excludes>
-          <exclude>**/*.java</exclude>
-        </excludes>
-      </resource>
-    </resources>
+    
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
