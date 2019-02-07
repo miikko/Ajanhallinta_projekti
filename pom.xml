@@ -9,12 +9,12 @@
     <testSourceDirectory>Taustapalvelu/tests</testSourceDirectory>
     <resources>
       <resource>
-        <directory>Taustapalvelu/service</directory>
+        <directory>lib</directory>
       </resource>
     </resources>
     <testResources>
     	<testResource>
-    	<directory>Taustapalvelu/tests</directory>
+    	<directory>lib</directory>
     	</testResource>
     </testResources>
     <plugins>
