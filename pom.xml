@@ -30,9 +30,6 @@
       <artifactId>maven-surefire-plugin</artifactId>
       <!-- latest version (2.20.1) does not work well with JUnit5 -->
       <version>2.19.1</version>
-      <configuration>
-      	<argLine>-Djava.library.path=${project.basedir}/libs/</argLine>
-      </configuration>
       <dependencies>
         <dependency>
           <groupId>org.junit.platform</groupId>

@@ -1,5 +1,3 @@
-package service;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterAll;
@@ -8,9 +6,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class RecorderTest {
-
-	Recorder rec;
+class TaskBarNotificationTest {
+	
 	
 	@BeforeAll
 	static void setUpBeforeClass() throws Exception {
@@ -29,9 +26,8 @@ class RecorderTest {
 	}
 
 	@Test
-	void test() {
-		rec = new Recorder();
-		assertEquals(2, rec.simpleSum(), "Simple sum didn't work.");
+	void test() {		
+		assertEquals(2, TaskBarNotification.simpleSum(), "Simple sum doesn't work");
 	}
 
 }

@@ -38,10 +38,6 @@ public class Recorder extends Thread {
 		quit = true;
 	}
 	
-	public int simpleSum() {
-		return 1 + 1;
-	}
-	
 	// Returns the active window's full name
 	public String getActiveWindowName() {
 		char[] buffer = new char[MAX_NAME_LENGTH];

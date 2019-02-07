@@ -20,4 +20,8 @@ public class TaskBarNotification {
 		tray.add(trayIcon);
 		trayIcon.displayMessage(title, content, MessageType.INFO);
 	}
+	
+	public static int simpleSum() {
+		return 1 + 1;
+	}
 }
