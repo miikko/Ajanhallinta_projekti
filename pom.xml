@@ -9,12 +9,12 @@
     <testSourceDirectory>Taustapalvelu/tests</testSourceDirectory>
     <resources>
       <resource>
-        <directory>lib</directory>
+        <directory>Taustapalvelu/service</directory>
       </resource>
     </resources>
     <testResources>
     	<testResource>
-    	<directory>lib</directory>
+    	<directory>Taustapalvelu/tests</directory>
     	</testResource>
     </testResources>
     <plugins>
@@ -34,6 +34,12 @@
     <artifactId>junit-jupiter-api</artifactId>
     <version>5.1.0</version>
     <scope>compile</scope>
+	</dependency>
+	<dependency>
+	<groupId>net.java.dev.jna</groupId>
+	<artifactId>jna</artifactId>
+	<version>5.2.0</version>
+	<classifier>platform</classifier>
 	</dependency>
   </dependencies>
 </project>
