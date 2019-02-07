@@ -5,7 +5,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Ajanhallinta_projekti</name>
   <build>
-    
+    <sourceDirectory></sourceDirectory>
     <resources>
       <resource>
         <directory>Taustapalvelu</directory>

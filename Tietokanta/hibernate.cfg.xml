@@ -23,7 +23,7 @@
    </property>
    <property name="hbm2ddl.auto">create</property>
    <property name="show_sql">true</property>
-   <mapping class="tietokanta.Kayttaja"/>
+   <mapping class="Tietokanta.Kayttaja"/>
 
 </session-factory>
 </hibernate-configuration>
