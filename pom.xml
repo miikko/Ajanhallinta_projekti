@@ -6,6 +6,7 @@
   <name>Ajanhallinta_projekti</name>
   <build>
     <sourceDirectory></sourceDirectory>
+    <testSourceDirectory>Taustapalvelu/tests</testSourceDirectory>
     <resources>
       <resource>
         <directory>Taustapalvelu</directory>
