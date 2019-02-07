@@ -8,6 +8,7 @@ public class ServiceMain {
 		Recorder rec = new Recorder();
 		while (true) {
 			System.out.println(rec.getActiveProgramDescription());
+			System.out.println("flag");
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
