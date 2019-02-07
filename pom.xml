@@ -5,16 +5,16 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Ajanhallinta_projekti</name>
   <build>
-    <sourceDirectory>Taustapalvelu/service/java</sourceDirectory>
-    <testSourceDirectory>Taustapalvelu/tests/java</testSourceDirectory>
+    <sourceDirectory>Taustapalvelu/service</sourceDirectory>
+    <testSourceDirectory>Taustapalvelu</testSourceDirectory>
     <resources>
       <resource>
-        <directory>Taustapalvelu/service/java</directory>
+        <directory>Taustapalvelu/service</directory>
       </resource>
     </resources>
     <testResources>
     	<testResource>
-    	<directory>Taustapalvelu/tests/java</directory>
+    	<directory>Taustapalvelu/tests</directory>
     	</testResource>
     </testResources>
     <plugins>
