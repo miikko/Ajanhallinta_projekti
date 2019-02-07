@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
 class TaskBarNotificationTest {
 	
 	TaskBarNotification tb;
@@ -29,7 +30,7 @@ class TaskBarNotificationTest {
 	@Test
 	void test() {		
 		tb = new TaskBarNotification();
-		assertEquals(2, tb, "Simple sum doesn't work");
+		assertEquals(2, tb.simpleSum(), "Simple sum doesn't work");
 	}
 
 }

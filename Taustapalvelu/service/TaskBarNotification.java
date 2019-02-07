@@ -1,4 +1,3 @@
-package service;
 
 import java.awt.AWTException;
 import java.awt.Image;

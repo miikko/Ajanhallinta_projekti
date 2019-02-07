@@ -6,17 +6,7 @@
   <name>Ajanhallinta_projekti</name>
   <build>
     <sourceDirectory>Taustapalvelu/service</sourceDirectory>
-    <testSourceDirectory>Taustapalvelu</testSourceDirectory>
-    <resources>
-      <resource>
-        <directory>Taustapalvelu/service</directory>
-      </resource>
-    </resources>
-    <testResources>
-    	<testResource>
-    	<directory>Taustapalvelu/tests</directory>
-    	</testResource>
-    </testResources>
+    <testSourceDirectory>Taustapalvelu/tests</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
