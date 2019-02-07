@@ -5,10 +5,10 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>Ajanhallinta_projekti</name>
   <build>
-    <sourceDirectory>GUI</sourceDirectory>
+    <sourceDirectory>Taustapalvelu</sourceDirectory>
     <resources>
       <resource>
-        <directory>GUI</directory>
+        <directory>Taustapalvelu</directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
