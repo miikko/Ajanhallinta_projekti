@@ -10,6 +10,10 @@ import java.net.MalformedURLException;
 
 public class TaskBarNotification {
 	
+	public TaskBarNotification() {
+		
+	}
+	
 	//Displays a task bar notification with the given title and content
 	public static void displayNotification(String title, String content) throws AWTException, MalformedURLException {
 		SystemTray tray = SystemTray.getSystemTray();
@@ -21,7 +25,7 @@ public class TaskBarNotification {
 		trayIcon.displayMessage(title, content, MessageType.INFO);
 	}
 	
-	public static int simpleSum() {
+	public int simpleSum() {
 		return 1 + 1;
 	}
 }
