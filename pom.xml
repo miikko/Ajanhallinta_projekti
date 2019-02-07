@@ -9,7 +9,7 @@
     <testSourceDirectory>Taustapalvelu/tests</testSourceDirectory>
     <resources>
       <resource>
-        <directory>Taustapalvelu</directory>
+        
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
