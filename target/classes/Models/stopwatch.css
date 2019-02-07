@@ -1,0 +1,27 @@
+/* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+     -fx-background-image: url("../../assets/MetallicBG.jpg");
+     -fx-background-position: center;
+     -fx-background-repeat: no-repeat;
+     -fx-background-size: cover;
+     -fx-font-weight: bold;
+     -fx-font-size: 30px;
+}
+
+.button {
+    -fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+}
+
+#timerNum {
+	-fx-font-size: 75;
+}
