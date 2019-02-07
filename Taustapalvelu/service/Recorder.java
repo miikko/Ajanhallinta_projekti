@@ -1,8 +1,13 @@
 package service;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.Kernel32;
@@ -11,40 +16,55 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.ptr.IntByReference;
 
-public class Recorder {
+import sun.awt.shell.ShellFolder;
+
+public class Recorder extends Thread {
 	private final int MAX_NAME_LENGTH = 1024;
-	private final Kernel32 kernel32 = Kernel32.INSTANCE;
-	private final User32 user32 = User32.INSTANCE;
+	private final Kernel32 KERNEL32 = Kernel32.INSTANCE;
+	private final User32 USER32 = User32.INSTANCE;
+	private boolean quit = false;
 
 	public Recorder() {
 
 	}
+	
+	public void run() {
+		while (!quit) {
+			
+		}
+	}
 
+	public void quit() {
+		quit = true;
+	}
+	
+	public int simpleSum() {
+		return 1 + 1;
+	}
+	
 	// Returns the active window's full name
 	public String getActiveWindowName() {
 		char[] buffer = new char[MAX_NAME_LENGTH];
-		user32.GetWindowText(user32.GetForegroundWindow(), buffer, MAX_NAME_LENGTH);
+		USER32.GetWindowText(USER32.GetForegroundWindow(), buffer, MAX_NAME_LENGTH);
 		return Native.toString(buffer);
 	}
 
-	// Returns the .exe file belonging to the active window
-	public String getActiveWindowFileName() {
-		HWND hWnd = user32.GetForegroundWindow();
+	// Returns the path to the .exe file belonging to the active window
+	public String getActiveWindowFilePath() {
+		HWND hWnd = USER32.GetForegroundWindow();
 		IntByReference processId = new IntByReference();
-		user32.GetWindowThreadProcessId(hWnd, processId);
-		HANDLE processHandle = kernel32.OpenProcess(Kernel32.PROCESS_QUERY_LIMITED_INFORMATION, false,
+		USER32.GetWindowThreadProcessId(hWnd, processId);
+		HANDLE processHandle = KERNEL32.OpenProcess(Kernel32.PROCESS_QUERY_LIMITED_INFORMATION, false,
 				processId.getValue());
 		char[] buffer = new char[4096];
 		IntByReference bufferSize = new IntByReference(buffer.length);
-		boolean success = kernel32.QueryFullProcessImageName(processHandle, 0, buffer, bufferSize);
-		kernel32.CloseHandle(processHandle);
+		boolean success = KERNEL32.QueryFullProcessImageName(processHandle, 0, buffer, bufferSize);
+		KERNEL32.CloseHandle(processHandle);
 		if (!success) {
 			return null;
 		}
 		String fullPath = Native.toString(buffer);
-		// return fullPath;
-		//Delete path leading to the .exe file
-		return fullPath.split("\\\\")[fullPath.split("\\\\").length - 1];
+		return fullPath;
 	}
 
 	//Returns the currently active program's description
@@ -52,7 +72,8 @@ public class Recorder {
 	//Or alternatively it can be found in the Task-Manager's "Name"-column
 	public String getActiveProgramDescription() {
 		String description = null;
-		String exeName = getActiveWindowFileName();
+		String path = getActiveWindowFilePath();
+		String exeName = path.split("\\\\")[path.split("\\\\").length - 1];
 		if (exeName != null) {
 			// Remove the '.exe' ending from the name
 			StringBuilder sb = new StringBuilder(exeName);
@@ -87,5 +108,18 @@ public class Recorder {
 			}
 		}
 		return description;
+	}
+	
+	public Icon getActiveWindowIcon() {
+		String path = getActiveWindowFilePath();
+		File file = new File(path);
+		Icon icon = null;
+		try {
+			ShellFolder shellFolder = ShellFolder.getShellFolder(file);
+			icon = new ImageIcon(shellFolder.getIcon(true));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return icon;
 	}
 }
