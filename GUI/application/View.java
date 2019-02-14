@@ -2,6 +2,7 @@ package application;
 	
 import Models.Login;
 import Models.Stopwatch;
+import controllers.GUI_Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -12,21 +13,23 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 
-public class Main extends Application {
+public class View extends Application {
+	
+	private GUI_Controller controller;
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			BorderPane root = new BorderPane();			
 			Scene scene = new Scene(root,600,300);
-			Stopwatch stopwatch = new Stopwatch();
-			VBox vBox = stopwatch.getVBox();
-			Login login = new Login();
-			HBox loginTextFields = login.getLoginTextFields(5);
-			HBox loginBtns = login.getBtnContainer(5);
+			controller = new GUI_Controller(this);
+			VBox stopwatchContainer = controller.getStopwatch();
+			HBox[] loginContainer = controller.getLoginContainer(5);
+			HBox loginTextFields = loginContainer[0];
+			HBox loginBtns = loginContainer[1];
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
-			root.setTop(vBox);
+			root.setTop(stopwatchContainer);
 			root.setCenter(loginTextFields);
 			root.setBottom(loginBtns);
 			primaryStage.setScene(scene);
