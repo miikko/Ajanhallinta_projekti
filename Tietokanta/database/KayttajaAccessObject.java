@@ -6,10 +6,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class KayttajaAccessObject {
+public class KayttajaAccessObject implements KayttajaDAO_IF{
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 	
+	@Override
 	public boolean createKayttaja(Kayttaja kayttaja) {
 		Session istunto = istuntotehdas.openSession();
 		try {
@@ -27,6 +28,7 @@ public class KayttajaAccessObject {
 		}
 	}
 
+	@Override
 	public Kayttaja readKayttaja(String user_name) {
 		Session istunto = istuntotehdas.openSession();
 		try {
@@ -45,6 +47,7 @@ public class KayttajaAccessObject {
 		
 	}
 
+	@Override
 	public Kayttaja[] readKayttajat() {
 		Session istunto = istuntotehdas.openSession();
 		try {
@@ -63,6 +66,7 @@ public class KayttajaAccessObject {
 		}
 	}
 
+	@Override
 	public boolean updateKayttaja(Kayttaja kayttaja) {
 		Session istunto = istuntotehdas.openSession();
 		try {
@@ -80,6 +84,7 @@ public class KayttajaAccessObject {
 		}
 	}
 
+	@Override
 	public boolean deleteKayttaja(String user_name) {
 		Session istunto = istuntotehdas.openSession();
 		try {

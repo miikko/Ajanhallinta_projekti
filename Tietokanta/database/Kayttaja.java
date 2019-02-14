@@ -2,6 +2,8 @@ package database;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -10,23 +12,19 @@ import javax.persistence.Table;
 public class Kayttaja {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private int userID;
+	
 	@Column(name ="user_name")
 	private String user_name;
-	
-	@Column(name="application")
-	private String application;
-	
+
 	@Column(name="password")
 	private String password;
+
 	
-	@Column(name="time")
-	private String time;
-	
-	public Kayttaja(String user_name, String application, String time, String password) {
+	public Kayttaja(String user_name, String password) {
 		super();
 		this.user_name = user_name;
-		this.application = application;
-		this.time = time;
 		this.password = password;
 	}
 	public Kayttaja() {
@@ -38,22 +36,6 @@ public class Kayttaja {
 	
 	public void setName(String user_name) {
 		this.user_name = user_name;
-	}
-	
-	public String getApp() {
-		return application;
-	}
-	
-	public void setApp(String application) {
-		this.application = application;
-	}
-
-	public String getTime() {
-		return time;
-	}
-	
-	public void setTime(String time) {
-		this.time = time;
 	}
 	
 	public String getPassword() {
