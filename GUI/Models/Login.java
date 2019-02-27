@@ -11,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 public class Login {
+	//Kommentoi tämä, jos ei ole lokaalia tietokantaa
 	static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 	private HBox tFContainer;
 	private HBox btnContainer;
@@ -29,6 +30,8 @@ public class Login {
 		passwordTF = new PasswordField();
 		passwordTF.setPromptText("Password");
 		tFContainer.getChildren().addAll(usernameTF, passwordTF);
+		tFContainer.setStyle("-fx-border-color: black");
+		tFContainer.setAlignment(Pos.CENTER);
 		return tFContainer;
 	}
 	
@@ -43,11 +46,13 @@ public class Login {
 				String password = passwordTF.getText();
 				System.out.println("Username: " + username + ", password: " + password);
 				//Send info to DAO controller
+				//Kommentoi nämä, jos ei ole lokaalia tietokantaa
 				Kayttaja kayttaja = new Kayttaja(username, password);
 				kayttajaDAO.createKayttaja(kayttaja);
 			}
-			
 		});
+		loginBtn.setAlignment(Pos.CENTER);
+		btnContainer.setStyle("-fx-border-color: black");
 		btnContainer.getChildren().addAll(loginBtn);
 		return btnContainer;
 	}
