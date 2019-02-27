@@ -1,5 +1,7 @@
 package Models;
 
+import database.Kayttaja;
+import database.KayttajaAccessObject;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -9,6 +11,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
 public class Login {
+	static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 	private HBox tFContainer;
 	private HBox btnContainer;
 	private TextField usernameTF;
@@ -40,6 +43,8 @@ public class Login {
 				String password = passwordTF.getText();
 				System.out.println("Username: " + username + ", password: " + password);
 				//Send info to DAO controller
+				Kayttaja kayttaja = new Kayttaja(username, password);
+				kayttajaDAO.createKayttaja(kayttaja);
 			}
 			
 		});
