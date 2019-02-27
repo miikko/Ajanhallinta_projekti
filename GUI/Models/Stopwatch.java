@@ -38,17 +38,17 @@ public class Stopwatch{
 			hrs++;
 			mins = 0;
 		}
-		text.setText((((mins/10) == 0) ? "0" : "") + mins + ":"
-		 + (((secs/10) == 0) ? "0" : "") + secs + ":" 
-			+ (((millis/10) == 0) ? "00" : (((millis/100) == 0) ? "0" : "")) + millis++);
+		text.setText((((hrs/10) == 0) ? "0" : "") + hrs + ":" + (((mins/10) == 0) ? "0" : "") + mins + ":"
+				 + (((secs/10) == 0) ? "0" : "") + secs);
     }
 	
 	public VBox getVBox() {
-		timerText = new Text("00:00:000");
+		timerText = new Text("00:00:00");
 		timeline = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
             	change(timerText);
+            	millis++;
 			}
 		}));
 		timeline.setCycleCount(Timeline.INDEFINITE);
@@ -76,7 +76,7 @@ public class Stopwatch{
             	secs = 0;
             	millis = 0;
             	timeline.pause();
-            	timerText.setText("00:00:000");
+            	timerText.setText("00:00:00");
             	if(!sos) {
             		sos = true;
             		sButton.setText("Start");
