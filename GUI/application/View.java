@@ -1,10 +1,13 @@
 package application;
 	
+import java.util.List;
+
 import Models.Login;
 import Models.Stopwatch;
 import controllers.GUI_Controller;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.PasswordField;
@@ -26,9 +29,9 @@ public class View extends Application {
 			Scene scene = new Scene(root,1000,700);
 			controller = new GUI_Controller(this);
 			VBox stopwatchContainer = controller.getStopwatch();
-			HBox[] loginContainer = controller.getLoginContainer(5);
-			HBox loginTextFields = loginContainer[0];
-			HBox loginBtns = loginContainer[1];
+			List<Node> loginContainer = controller.getLoginContainer(5);
+			VBox loginTextFields = (VBox) loginContainer.get(0);
+			HBox loginBtns = (HBox) loginContainer.get(1);
 			StackPane pieChart = controller.getPieChart();
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());

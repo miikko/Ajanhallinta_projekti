@@ -1,9 +1,13 @@
 package controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import Models.Charts;
 import Models.Login;
 import Models.Stopwatch;
 import application.View;
+import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -23,12 +27,12 @@ public class GUI_Controller {
 		charts = new Charts();
 	}
 	
-	public HBox[] getLoginContainer(int spacing) {
-		HBox[] loginContainer = new HBox[2];
-		HBox textFields = login.getLoginTextFields(spacing);
+	public List<Node> getLoginContainer(int spacing) {
+		List<Node> loginContainer = new ArrayList<>();
+		VBox textFields = login.getLoginTextFields(spacing);
 		HBox btnContainer = login.getBtnContainer(spacing);
-		loginContainer[0] = textFields;
-		loginContainer[1] = btnContainer;
+		loginContainer.add(textFields);
+		loginContainer.add(btnContainer);
 		return loginContainer;
 	}
 	
