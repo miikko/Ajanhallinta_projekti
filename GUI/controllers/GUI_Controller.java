@@ -1,46 +1,50 @@
 package controllers;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
-import Models.Charts;
-import Models.Login;
-import Models.Stopwatch;
 import application.View;
-import javafx.scene.Node;
-import javafx.scene.chart.PieChart;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.Pane;
 
 public class GUI_Controller {
 	
 	private View view;
-	private Stopwatch sw;
-	private Login login;
-	private Charts charts;
+	private HashMap<String, Pane> screens = new HashMap<>();
 	
 	public GUI_Controller(View view) {
 		this.view = view;
-		sw = new Stopwatch();
-		login = new Login();
-		charts = new Charts();
 	}
 	
-	public List<Node> getLoginContainer(int spacing) {
-		List<Node> loginContainer = new ArrayList<>();
-		VBox textFields = login.getLoginTextFields(spacing);
-		HBox btnContainer = login.getBtnContainer(spacing);
-		loginContainer.add(textFields);
-		loginContainer.add(btnContainer);
-		return loginContainer;
+	public boolean handleLogin(String username, String password) {
+		//TODO: Check if username and password exist in database
+		boolean userExists = true;
+		if (userExists) {
+			return false;
+		} else {
+			//Kommentoi nämä, jos ei ole lokaalia tietokantaa
+			//Kayttaja kayttaja = new Kayttaja(username, password);
+			//kayttajaDAO.createKayttaja(kayttaja);
+			return true;
+		}
 	}
 	
-	public VBox getStopwatch() {
-		return sw.getVBox();
+	public boolean handleRegister(String username, String password) {
+		//TODO: Check if username exists
+		boolean nameTaken = true;
+		if (nameTaken) {
+			return false;
+		} else {
+			//TODO: Create a new user
+			
+			return true;
+		}
 	}
 	
-	public StackPane getPieChart() {
-		return charts.getPieChart();
+	public void addScreen(String name, Pane screen) {
+		screens.put(name, screen);
 	}
+	
+	public void activateScreen(String name) {
+		view.setRoot(screens.get(name));
+	}
+
 }
