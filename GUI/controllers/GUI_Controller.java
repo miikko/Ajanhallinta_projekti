@@ -4,39 +4,46 @@ import java.util.HashMap;
 
 import application.View;
 import javafx.scene.layout.Pane;
+import models.UserAuth;
 
 public class GUI_Controller {
 	
 	private View view;
 	private HashMap<String, Pane> screens = new HashMap<>();
+	private UserAuth uAuth;
 	
 	public GUI_Controller(View view) {
 		this.view = view;
+		uAuth = new UserAuth();
 	}
 	
 	public boolean handleLogin(String username, String password) {
-		//TODO: Check if username and password exist in database
-		boolean userExists = true;
-		if (userExists) {
-			return false;
-		} else {
+		return true;
+		/*
+		boolean loginSuccessful = uAuth.login(username, password);
+		if (loginSuccessful) {
 			//Kommentoi nämä, jos ei ole lokaalia tietokantaa
 			//Kayttaja kayttaja = new Kayttaja(username, password);
 			//kayttajaDAO.createKayttaja(kayttaja);
 			return true;
-		}
+		} else {
+			return false;
+		}*/
 	}
 	
 	public boolean handleRegister(String username, String password) {
-		//TODO: Check if username exists
-		boolean nameTaken = true;
-		if (nameTaken) {
-			return false;
-		} else {
+		boolean regSuccessful = uAuth.register(username, password);
+		if (regSuccessful) {
 			//TODO: Create a new user
 			
 			return true;
+		} else {
+			return false;
 		}
+	}
+	
+	public String getUserName() {
+		return "User";
 	}
 	
 	public void addScreen(String name, Pane screen) {

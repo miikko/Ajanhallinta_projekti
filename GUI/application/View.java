@@ -47,8 +47,9 @@ public class View extends Application {
 	//Main screen variables
 	private BorderPane mainScreen;
 	private VBox navBar;
+	private Label welcomeLbl;
 	//Stopwatch variables
-	private VBox stopWatch;
+	private VBox stopwatch;
 	private int  hrs = 0, mins = 0, secs = 0, millis = 0;
 	private boolean sos = true;
 	//Chart variables
@@ -58,7 +59,7 @@ public class View extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			controller = new GUI_Controller(this);
-			createLoginScreen(5);		
+			createLoginScreen(5);
 			scene = new Scene(loginScreen,1000,700);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
@@ -78,9 +79,31 @@ public class View extends Application {
 		launch(args);
 	}
 	
-	private void createMainScreen(int spacing) {
-		//TODO: Add Borderpane that contains stopwatch and navbar
-		//TODO: 
+	private void createMainScreen() {
+		mainScreen = new BorderPane();
+		createPieChart();
+		createStopwatch();
+		createNavBar();
+		createWelcomeLabel();
+		mainScreen.setLeft(navBar);
+		mainScreen.setCenter(welcomeLbl);
+		controller.addScreen("Main", mainScreen);
+	}
+	
+	private void updateMainScreen(String selection) {
+		switch (selection) {
+		case "PieChart":
+			mainScreen.setCenter(pieChart);
+			break;
+		case "Stopwatch":
+			mainScreen.setCenter(stopwatch);
+			break;
+		case "Default":
+			mainScreen.setCenter(welcomeLbl);
+			break;
+		default:
+			break;
+		}
 	}
 	
 	private void createLoginScreen(int spacing) {
@@ -129,7 +152,8 @@ public class View extends Application {
 				System.out.println("Username: " + username + ", password: " + password);
 				if (controller.handleLogin(username, password)) {
 					//TODO: Transition to main screen
-					
+					createMainScreen();
+					controller.activateScreen("Main");
 				} else {
 					popUp.setText("Invalid username and/or password.");
 				}				
@@ -144,7 +168,7 @@ public class View extends Application {
 				if (controller.handleRegister(username, password)) {
 					//TODO: Display an alert with confirmation btn that a new user was created
 					//TODO: Transition to main screen
-					
+					createMainScreen();
 				} else {
 					popUp.setText("Selected username is already taken. Please choose another one.");
 				}	
@@ -158,7 +182,7 @@ public class View extends Application {
 		btnContainer.getChildren().addAll(loginBtn, regBtn);
 	}
 	
-	private void createStopWatch() {
+	private void createStopwatch() {
 		Text timerText = new Text("00:00:00");
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
@@ -204,9 +228,9 @@ public class View extends Application {
 		HBox swBtnContainer = new HBox(30);
 		swBtnContainer.setAlignment(Pos.CENTER);
 		swBtnContainer.getChildren().addAll(sButton, rButton);
-		stopWatch = new VBox(30);
-		stopWatch.setAlignment(Pos.CENTER);
-		stopWatch.getChildren().addAll(timerText, swBtnContainer);
+		stopwatch = new VBox(30);
+		stopwatch.setAlignment(Pos.CENTER);
+		stopwatch.getChildren().addAll(timerText, swBtnContainer);
 	}
 	
 	private void change(Text text) {
@@ -226,7 +250,39 @@ public class View extends Application {
 				 + (((secs/10) == 0) ? "0" : "") + secs);
     }
 	
+	private void createNavBar() {
+		navBar = new VBox();
+		Button defaultBtn = new Button("Main menu");
+		defaultBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				updateMainScreen("Default");
+			}
+		});
+		Button swBtn = new Button("Stopwatch");
+		swBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				updateMainScreen("Stopwatch");
+			}
+		});
+		Button chartBtn = new Button("Charts");
+		chartBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				updateMainScreen("PieChart");
+			}
+		});
+		navBar.getChildren().addAll(defaultBtn, swBtn, chartBtn);
+	}
+	
+	private void createWelcomeLabel() {
+		String name = controller.getUserName();
+		welcomeLbl = new Label("Welcome " + name);
+	}
+	
 	private void createPieChart() {
+		pieChart = new StackPane();
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(new PieChart.Data("YouTube", 13),
 				new PieChart.Data("Twitch", 25), new PieChart.Data("Netflix", 10), new PieChart.Data("ViaPlay", 22),
 				new PieChart.Data("Ruutu", 30));
