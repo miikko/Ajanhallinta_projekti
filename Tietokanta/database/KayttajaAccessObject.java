@@ -29,12 +29,12 @@ public class KayttajaAccessObject implements KayttajaDAO_IF{
 	}
 
 	@Override
-	public Kayttaja readKayttaja(String user_name) {
+	public Kayttaja readKayttaja(int id) {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
 			Kayttaja kayttaja = new Kayttaja();
-			istunto.load(kayttaja, user_name);
+			istunto.load(kayttaja, id);
 			transaktio.commit();
 			return kayttaja;
 		}catch(Exception e) {
@@ -85,10 +85,10 @@ public class KayttajaAccessObject implements KayttajaDAO_IF{
 	}
 
 	@Override
-	public boolean deleteKayttaja(String user_name) {
+	public boolean deleteKayttaja(int id) {
 		Session istunto = istuntotehdas.openSession();
 		try {
-			Kayttaja kayt = readKayttaja(user_name);
+			Kayttaja kayt = readKayttaja(id);
 			transaktio = istunto.beginTransaction();
 			istunto.delete(kayt);
 			transaktio.commit();
@@ -102,11 +102,11 @@ public class KayttajaAccessObject implements KayttajaDAO_IF{
 		}
 	}
 	
-	public boolean updateSitting(String userName) {
+	public boolean updateSitting(int id) {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
-			istunto.saveOrUpdate(userName);
+			istunto.saveOrUpdate(id);
 			
 			transaktio.commit();
 			return true;

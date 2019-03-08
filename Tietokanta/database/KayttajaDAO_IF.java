@@ -2,8 +2,9 @@ package database;
 
 public interface KayttajaDAO_IF {
 	public abstract boolean createKayttaja(Kayttaja kayttaja);
-	public abstract Kayttaja readKayttaja(String user_name);
+	public abstract Kayttaja readKayttaja(int id);
 	public abstract Kayttaja[] readKayttajat();
 	public abstract boolean updateKayttaja(Kayttaja kayttaja);
-	public abstract boolean deleteKayttaja(String user_name);
+	public abstract boolean deleteKayttaja(int id);
+	public abstract boolean updateSitting(int id);
 }
