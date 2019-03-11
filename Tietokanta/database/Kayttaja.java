@@ -9,6 +9,14 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
+
+/**
+ * This class is all about the user data object
+ * 
+ * @author JP
+ * @version 1.0
+ * @since 08/03/2019
+ */
 @Entity
 @Table(name="Kayttaja_Table")
 public class Kayttaja {
