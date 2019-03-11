@@ -8,13 +8,24 @@ import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.net.MalformedURLException;
 
+/**
+ * Class contains methods for displaying OS notifications to users
+ * @author miikk
+ * @since 12/3/2019
+ */
 public class TaskBarNotification {
 	
 	public TaskBarNotification() {
 		
 	}
 	
-	//Displays a task bar notification with the given title and content
+	/**
+	 * Displays a task bar notification with the given title and content.
+	 * @param title
+	 * @param content
+	 * @throws AWTException
+	 * @throws MalformedURLException
+	 */
 	public static void displayNotification(String title, String content) throws AWTException, MalformedURLException {
 		SystemTray tray = SystemTray.getSystemTray();
 		Image image = Toolkit.getDefaultToolkit().createImage("icon.png");

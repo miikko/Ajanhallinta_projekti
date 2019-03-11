@@ -18,6 +18,12 @@ import com.sun.jna.ptr.IntByReference;
 
 import sun.awt.shell.ShellFolder;
 
+/**
+ * Class uses native library functions to record user activity outside of this application.<br>
+ * Linking Java and native C libraries is done with the JNA library.
+ * @author miikk
+ * @since 12/3/2019
+ */
 public class Recorder extends Thread {
 	private final int MAX_NAME_LENGTH = 1024;
 	private final Kernel32 KERNEL32 = Kernel32.INSTANCE;
@@ -37,15 +43,21 @@ public class Recorder extends Thread {
 	public void quit() {
 		quit = true;
 	}
-	
-	// Returns the active window's full name
+	/**
+	 * Uses User32 library's native methods to get the active window's name.
+	 * @return active window's name (same as the text on the top left corner of the window).
+	 */
 	public String getActiveWindowName() {
 		char[] buffer = new char[MAX_NAME_LENGTH];
 		USER32.GetWindowText(USER32.GetForegroundWindow(), buffer, MAX_NAME_LENGTH);
 		return Native.toString(buffer);
 	}
 
-	// Returns the path to the .exe file belonging to the active window
+	/**
+	 * Uses native methods belonging to Kernel32 and User32 libraries to get the full path to executable file in control of the active window.<br>
+	 * In Windows OS path starts from "This PC".
+	 * @return full path to the active window's executable file.
+	 */
 	public String getActiveWindowFilePath() {
 		HWND hWnd = USER32.GetForegroundWindow();
 		IntByReference processId = new IntByReference();
@@ -63,9 +75,11 @@ public class Recorder extends Thread {
 		return fullPath;
 	}
 
-	//Returns the currently active program's description
-	//Program description can be found by right-clicking the file in File-explorer and selecting properties
-	//Or alternatively it can be found in the Task-Manager's "Name"-column
+	/**
+	 * Gets the active window's description using PowerShell commands.<br>
+	 * The description in Windows OS is the same as in the Task-Manager's "Name"-column.<br>
+	 * @return currently active program's description. If description is not found/is missing returns null.
+	 */
 	public String getActiveProgramDescription() {
 		String description = null;
 		String path = getActiveWindowFilePath();
@@ -106,6 +120,10 @@ public class Recorder extends Thread {
 		return description;
 	}
 	
+	/**
+	 * Uses ShellFolder to locate and store the active window's icon.
+	 * @return Java Swing icon of the active window. Returns null if icon is not found/is missing.
+	 */
 	public Icon getActiveWindowIcon() {
 		String path = getActiveWindowFilePath();
 		File file = new File(path);

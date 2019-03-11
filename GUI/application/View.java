@@ -1,6 +1,4 @@
 package application;
-	
-import java.util.List;
 
 import controllers.GUI_Controller;
 import javafx.animation.KeyFrame;
@@ -15,7 +13,6 @@ import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
@@ -32,7 +29,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
-
 /**
  * Class is designed to show GUI content to user. <br>
  * View part in the MVC-framework
@@ -41,57 +37,58 @@ import javafx.scene.text.Text;
  * @since 11/03/2019
  */
 public class View extends Application {
-	
+
 	private GUI_Controller controller;
 	private Scene scene;
-	//Login screen variables
+	// Login screen variables
 	private BorderPane loginScreen;
 	private VBox tfContainer;
 	private HBox btnContainer;
 	private TextField usernameTF;
 	private PasswordField passwordTF;
 	private Label popUp;
-	//Main screen variables
+	// Main screen variables
 	private BorderPane mainScreen;
 	private VBox navBar;
 	private Label welcomeLbl;
-	//Stopwatch variables
+	// Stopwatch variables
 	private VBox stopwatch;
-	private int  hrs = 0, mins = 0, secs = 0, millis = 0;
+	private int hrs = 0, mins = 0, secs = 0, millis = 0;
 	private boolean pause = true;
-	//Chart variables
+	// Chart variables
 	private StackPane pieChart;
 	private StackPane barChart;
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 			controller = new GUI_Controller(this);
 			createLoginScreen(5);
-			scene = new Scene(loginScreen,1000,700);
+			scene = new Scene(loginScreen, 1000, 700);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
-	        primaryStage.setTitle("Ajanhallintapalvelu");
+			primaryStage.setTitle("Ajanhallintapalvelu");
 			primaryStage.setScene(scene);
 			primaryStage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void init() {
-		
+
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	/**
 	 * Creates the main screen that the user sees after logging in.<br>
 	 * Calls element builder functions and sets the contents to default.<br>
-	 * Also adds the main screen to controllers screen pool so it can be chosen later. 
+	 * Also adds the main screen to controllers screen pool so it can be chosen
+	 * later.
 	 */
 	private void createMainScreen() {
 		mainScreen = new BorderPane();
@@ -104,9 +101,10 @@ public class View extends Application {
 		mainScreen.setCenter(welcomeLbl);
 		controller.addScreen("Main", mainScreen);
 	}
-	
+
 	/**
 	 * Changes main screen contents to selection.
+	 * 
 	 * @param selection
 	 */
 	private void updateMainScreen(String selection) {
@@ -127,12 +125,15 @@ public class View extends Application {
 			break;
 		}
 	}
-	
+
 	/**
-	 * Creates the login screen that is the first screen the user sees when logging in.<br>
-	 * This screen contains 2 text fields for username and password and 2 buttons for logging in and registering.<br>
-	 * Also adds the login screen to controllers screen pool so it can be chosen later, for example when logging out.
-	 *  
+	 * Creates the login screen that is the first screen the user sees when logging
+	 * in.<br>
+	 * This screen contains 2 text fields for username and password and 2 buttons
+	 * for logging in and registering.<br>
+	 * Also adds the login screen to controllers screen pool so it can be chosen
+	 * later, for example when logging out.
+	 * 
 	 * @param spacing
 	 */
 	private void createLoginScreen(int spacing) {
@@ -143,9 +144,10 @@ public class View extends Application {
 		loginScreen.setBottom(btnContainer);
 		controller.addScreen("Login", loginScreen);
 	}
-	
+
 	/**
-	 * Initializes the login text fields and the pop up label and puts them in a container.
+	 * Initializes the login text fields and the pop up label and puts them in a
+	 * container.
 	 * 
 	 * @param spacing
 	 */
@@ -173,7 +175,7 @@ public class View extends Application {
 		tfContainer.getChildren().addAll(popUp, subContainer);
 		tfContainer.setAlignment(Pos.CENTER);
 	}
-	
+
 	/**
 	 * Initializes the login buttons and puts them in a container.<br>
 	 * 
@@ -190,12 +192,12 @@ public class View extends Application {
 				String password = passwordTF.getText();
 				System.out.println("Username: " + username + ", password: " + password);
 				if (controller.handleLogin(username, password)) {
-					//TODO: Transition to main screen
+					// TODO: Transition to main screen
 					createMainScreen();
 					controller.activateScreen("Main");
 				} else {
 					popUp.setText("Invalid username and/or password.");
-				}				
+				}
 			}
 		});
 		Button regBtn = new Button("Register");
@@ -205,14 +207,14 @@ public class View extends Application {
 				String username = usernameTF.getText();
 				String password = passwordTF.getText();
 				if (controller.handleRegister(username, password)) {
-					//TODO: Display an alert with confirmation btn that a new user was created
-					//TODO: Transition to main screen
+					// TODO: Display an alert with confirmation btn that a new user was created
+					// TODO: Transition to main screen
 					createMainScreen();
 				} else {
 					popUp.setText("Selected username is already taken. Please choose another one.");
-				}	
+				}
 			}
-			
+
 		});
 		HBox.setMargin(loginBtn, new Insets(spacing));
 		HBox.setMargin(regBtn, new Insets(spacing));
@@ -220,48 +222,48 @@ public class View extends Application {
 		btnContainer.setStyle("-fx-border-color: black");
 		btnContainer.getChildren().addAll(loginBtn, regBtn);
 	}
-	
+
 	private void createStopwatch() {
 		Text timerText = new Text("00:00:00");
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-            	change(timerText);
-            	millis++;
+				change(timerText);
+				millis++;
 			}
 		}));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.setAutoReverse(false);
 		Button startButton = new Button("Start");
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	if(pause) {
-            		timeline.play();
-            		pause = false;
-            		startButton.setText("Stop");
-            	} else {
-            		timeline.pause();
-            		pause = true;
-            		startButton.setText("Start");
-            	}
-            }
-        });
+			@Override
+			public void handle(ActionEvent event) {
+				if (pause) {
+					timeline.play();
+					pause = false;
+					startButton.setText("Stop");
+				} else {
+					timeline.pause();
+					pause = true;
+					startButton.setText("Start");
+				}
+			}
+		});
 		Button resetButton = new Button("Reset");
 		resetButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-            	mins = 0;
-            	secs = 0;
-            	millis = 0;
-            	timeline.pause();
-            	timerText.setText("00:00:00");
-            	if(!pause) {
-            		pause = true;
-            		startButton.setText("Start");
-            	}
-            }
-        });
+			@Override
+			public void handle(ActionEvent event) {
+				mins = 0;
+				secs = 0;
+				millis = 0;
+				timeline.pause();
+				timerText.setText("00:00:00");
+				if (!pause) {
+					pause = true;
+					startButton.setText("Start");
+				}
+			}
+		});
 		timerText.setId("timerNum");
 
 		HBox swBtnContainer = new HBox(30);
@@ -271,24 +273,24 @@ public class View extends Application {
 		stopwatch.setAlignment(Pos.CENTER);
 		stopwatch.getChildren().addAll(timerText, swBtnContainer);
 	}
-	
+
 	private void change(Text text) {
-		if(millis == 1000) {
+		if (millis == 1000) {
 			secs++;
 			millis = 0;
 		}
-		if(secs == 60) {
+		if (secs == 60) {
 			mins++;
 			secs = 0;
 		}
-		if(mins == 60) {
+		if (mins == 60) {
 			hrs++;
 			mins = 0;
 		}
-		text.setText((((hrs/10) == 0) ? "0" : "") + hrs + ":" + (((mins/10) == 0) ? "0" : "") + mins + ":"
-				 + (((secs/10) == 0) ? "0" : "") + secs);
-    }
-	
+		text.setText((((hrs / 10) == 0) ? "0" : "") + hrs + ":" + (((mins / 10) == 0) ? "0" : "") + mins + ":"
+				+ (((secs / 10) == 0) ? "0" : "") + secs);
+	}
+
 	private void createNavBar() {
 		navBar = new VBox();
 		Button defaultBtn = new Button("Main menu");
@@ -305,13 +307,13 @@ public class View extends Application {
 				updateMainScreen("Stopwatch");
 			}
 		});
-		/*Button chartBtn = new Button("Charts");
-		chartBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateMainScreen("PieChart");
-			}
-		});*/
+		/*
+		 * Button chartBtn = new Button("Charts"); chartBtn.setOnAction(new
+		 * EventHandler<ActionEvent>() {
+		 * 
+		 * @Override public void handle(ActionEvent arg0) {
+		 * updateMainScreen("PieChart"); } });
+		 */
 		Button pieChartBtn = new Button("Pie charts");
 		pieChartBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -328,12 +330,12 @@ public class View extends Application {
 		});
 		navBar.getChildren().addAll(defaultBtn, swBtn, pieChartBtn, barChartBtn);
 	}
-	
+
 	private void createWelcomeLabel() {
 		String name = controller.getUserName();
 		welcomeLbl = new Label("Welcome " + name);
 	}
-	
+
 	private void createPieChart() {
 		pieChart = new StackPane();
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(new PieChart.Data("YouTube", 13),
@@ -358,65 +360,62 @@ public class View extends Application {
 		chart.setLegendSide(Side.LEFT);
 		pieChart.getChildren().addAll(chart, caption);
 	}
-	
+
 	private void createBarChart() {
-		
+
 		barChart = new StackPane();
-		
+
 		final String monday = "Monday";
-	    final String tuesday = "Tuesday";
-	    final String wednesday = "Wednesday";
-	    final String thursday = "Thursday";
-	    final String friday = "Friday";
-	    final String saturday = "Saturday";
-	    final String sunday = "Sunday";
-	    
-	    final CategoryAxis xAxis = new CategoryAxis();
-        final NumberAxis yAxis = new NumberAxis();
-        final BarChart<String,Number> bChart = new BarChart<String,Number>(xAxis,yAxis);
-        bChart.setTitle("Used time on different applications");
-        xAxis.setLabel("Day of the week");       
-        yAxis.setLabel("Hours");
- 
-        XYChart.Series platform1 = new XYChart.Series();
-        platform1.setName("Netflix");       
-        platform1.getData().add(new XYChart.Data(monday, 7.2));
-        platform1.getData().add(new XYChart.Data(tuesday, 8.7));
-        platform1.getData().add(new XYChart.Data(wednesday, 3.0));
-        platform1.getData().add(new XYChart.Data(thursday, 4.4));
-        platform1.getData().add(new XYChart.Data(friday, 5.2));   
-        platform1.getData().add(new XYChart.Data(saturday, 1.1));      
-        platform1.getData().add(new XYChart.Data(sunday, 1.1));      
+		final String tuesday = "Tuesday";
+		final String wednesday = "Wednesday";
+		final String thursday = "Thursday";
+		final String friday = "Friday";
+		final String saturday = "Saturday";
+		final String sunday = "Sunday";
 
-        
-        XYChart.Series platform2 = new XYChart.Series();
-        platform2.setName("Twitch");
-        platform2.getData().add(new XYChart.Data(monday, 2.2));
-        platform2.getData().add(new XYChart.Data(tuesday, 3.2));
-        platform2.getData().add(new XYChart.Data(wednesday, 4.8));
-        platform2.getData().add(new XYChart.Data(thursday, 1.1));
-        platform2.getData().add(new XYChart.Data(friday, 0.9));  
-        platform2.getData().add(new XYChart.Data(saturday, 7.2));  
-        platform2.getData().add(new XYChart.Data(sunday, 2.2));  
+		final CategoryAxis xAxis = new CategoryAxis();
+		final NumberAxis yAxis = new NumberAxis();
+		final BarChart<String, Number> bChart = new BarChart<String, Number>(xAxis, yAxis);
+		bChart.setTitle("Used time on different applications");
+		xAxis.setLabel("Day of the week");
+		yAxis.setLabel("Hours");
 
-        
-        XYChart.Series platform3 = new XYChart.Series();
-        platform3.setName("YouTube");
-        platform3.getData().add(new XYChart.Data(monday, 4.4));
-        platform3.getData().add(new XYChart.Data(tuesday, 3.3));
-        platform3.getData().add(new XYChart.Data(wednesday, 7.1));
-        platform3.getData().add(new XYChart.Data(thursday, 4.9));
-        platform3.getData().add(new XYChart.Data(friday, 9.2));  
-        platform3.getData().add(new XYChart.Data(saturday, 6.8));  
-        platform3.getData().add(new XYChart.Data(sunday, 4.4)); 
-        
-        bChart.getData().addAll(platform1, platform2, platform3);
-        
-        barChart.getChildren().addAll(bChart);
+		XYChart.Series platform1 = new XYChart.Series();
+		platform1.setName("Netflix");
+		platform1.getData().add(new XYChart.Data(monday, 7.2));
+		platform1.getData().add(new XYChart.Data(tuesday, 8.7));
+		platform1.getData().add(new XYChart.Data(wednesday, 3.0));
+		platform1.getData().add(new XYChart.Data(thursday, 4.4));
+		platform1.getData().add(new XYChart.Data(friday, 5.2));
+		platform1.getData().add(new XYChart.Data(saturday, 1.1));
+		platform1.getData().add(new XYChart.Data(sunday, 1.1));
+
+		XYChart.Series platform2 = new XYChart.Series();
+		platform2.setName("Twitch");
+		platform2.getData().add(new XYChart.Data(monday, 2.2));
+		platform2.getData().add(new XYChart.Data(tuesday, 3.2));
+		platform2.getData().add(new XYChart.Data(wednesday, 4.8));
+		platform2.getData().add(new XYChart.Data(thursday, 1.1));
+		platform2.getData().add(new XYChart.Data(friday, 0.9));
+		platform2.getData().add(new XYChart.Data(saturday, 7.2));
+		platform2.getData().add(new XYChart.Data(sunday, 2.2));
+
+		XYChart.Series platform3 = new XYChart.Series();
+		platform3.setName("YouTube");
+		platform3.getData().add(new XYChart.Data(monday, 4.4));
+		platform3.getData().add(new XYChart.Data(tuesday, 3.3));
+		platform3.getData().add(new XYChart.Data(wednesday, 7.1));
+		platform3.getData().add(new XYChart.Data(thursday, 4.9));
+		platform3.getData().add(new XYChart.Data(friday, 9.2));
+		platform3.getData().add(new XYChart.Data(saturday, 6.8));
+		platform3.getData().add(new XYChart.Data(sunday, 4.4));
+
+		bChart.getData().addAll(platform1, platform2, platform3);
+
+		barChart.getChildren().addAll(bChart);
 	}
-	
+
 	public void setRoot(Pane screen) {
 		scene.setRoot(screen);
 	}
 }
-
