@@ -33,6 +33,13 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
 
+/**
+ * Class is designed to show GUI content to user. <br>
+ * View part in the MVC-framework
+ * 
+ * @author miikko & MrJoXuX
+ * @since 11/03/2019
+ */
 public class View extends Application {
 	
 	private GUI_Controller controller;
@@ -81,6 +88,11 @@ public class View extends Application {
 		launch(args);
 	}
 	
+	/**
+	 * Creates the main screen that the user sees after logging in.<br>
+	 * Calls element builder functions and sets the contents to default.<br>
+	 * Also adds the main screen to controllers screen pool so it can be chosen later. 
+	 */
 	private void createMainScreen() {
 		mainScreen = new BorderPane();
 		createPieChart();
@@ -93,6 +105,10 @@ public class View extends Application {
 		controller.addScreen("Main", mainScreen);
 	}
 	
+	/**
+	 * Changes main screen contents to selection.
+	 * @param selection
+	 */
 	private void updateMainScreen(String selection) {
 		switch (selection) {
 		case "PieChart":
@@ -112,6 +128,13 @@ public class View extends Application {
 		}
 	}
 	
+	/**
+	 * Creates the login screen that is the first screen the user sees when logging in.<br>
+	 * This screen contains 2 text fields for username and password and 2 buttons for logging in and registering.<br>
+	 * Also adds the login screen to controllers screen pool so it can be chosen later, for example when logging out.
+	 *  
+	 * @param spacing
+	 */
 	private void createLoginScreen(int spacing) {
 		loginScreen = new BorderPane();
 		createLoginTextFields(spacing);
@@ -121,6 +144,11 @@ public class View extends Application {
 		controller.addScreen("Login", loginScreen);
 	}
 	
+	/**
+	 * Initializes the login text fields and the pop up label and puts them in a container.
+	 * 
+	 * @param spacing
+	 */
 	private void createLoginTextFields(int spacing) {
 		EventHandler<KeyEvent> inputHandler = new EventHandler<KeyEvent>() {
 			@Override
@@ -146,6 +174,11 @@ public class View extends Application {
 		tfContainer.setAlignment(Pos.CENTER);
 	}
 	
+	/**
+	 * Initializes the login buttons and puts them in a container.<br>
+	 * 
+	 * @param spacing
+	 */
 	private void createLoginBtnContainer(int spacing) {
 		btnContainer = new HBox(spacing);
 		btnContainer.setAlignment(Pos.CENTER);
