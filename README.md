@@ -38,6 +38,6 @@ tarkistaminen, tätä voisi vielä kehittää.
 
 Käyttöliittymämme eri toiminnallisuudet kuten datakartat ja 
 sekunttikellot  sekä kirjautumisruutu ovat vielä erillisissä ikkunoissa
-tätä voisi korjailli niin, että kaikki olisivat siististi yhdessä 
+tätä voisi korjailla niin, että kaikki olisivat siististi yhdessä 
 ikkunassa. Tähän voisi myös kehittää uusia datan esittämisgraafeja.
 
