@@ -380,35 +380,34 @@ public class View extends Application {
 		xAxis.setLabel("Day of the week");
 		yAxis.setLabel("Hours");
 
-		XYChart.Series platform1 = new XYChart.Series();
+		XYChart.Series<String, Number> platform1 = new XYChart.Series<>();
 		platform1.setName("Netflix");
-		platform1.getData().add(new XYChart.Data(monday, 7.2));
-		platform1.getData().add(new XYChart.Data(tuesday, 8.7));
-		platform1.getData().add(new XYChart.Data(wednesday, 3.0));
-		platform1.getData().add(new XYChart.Data(thursday, 4.4));
-		platform1.getData().add(new XYChart.Data(friday, 5.2));
-		platform1.getData().add(new XYChart.Data(saturday, 1.1));
-		platform1.getData().add(new XYChart.Data(sunday, 1.1));
+		platform1.getData().add(new XYChart.Data<>(monday, 7.2));
+		platform1.getData().add(new XYChart.Data<>(tuesday, 8.7));
+		platform1.getData().add(new XYChart.Data<>(wednesday, 3.0));
+		platform1.getData().add(new XYChart.Data<>(thursday, 4.4));
+		platform1.getData().add(new XYChart.Data<>(friday, 5.2));
+		platform1.getData().add(new XYChart.Data<>(saturday, 1.1));
+		platform1.getData().add(new XYChart.Data<>(sunday, 1.1));
 
-		XYChart.Series platform2 = new XYChart.Series();
+		XYChart.Series<String, Number> platform2 = new XYChart.Series<>();
 		platform2.setName("Twitch");
-		platform2.getData().add(new XYChart.Data(monday, 2.2));
-		platform2.getData().add(new XYChart.Data(tuesday, 3.2));
-		platform2.getData().add(new XYChart.Data(wednesday, 4.8));
-		platform2.getData().add(new XYChart.Data(thursday, 1.1));
-		platform2.getData().add(new XYChart.Data(friday, 0.9));
-		platform2.getData().add(new XYChart.Data(saturday, 7.2));
-		platform2.getData().add(new XYChart.Data(sunday, 2.2));
-
-		XYChart.Series platform3 = new XYChart.Series();
+		platform2.getData().add(new XYChart.Data<>(monday, 2.2));
+		platform2.getData().add(new XYChart.Data<>(tuesday, 3.2));
+		platform2.getData().add(new XYChart.Data<>(wednesday, 4.8));
+		platform2.getData().add(new XYChart.Data<>(thursday, 1.1));
+		platform2.getData().add(new XYChart.Data<>(friday, 0.9));
+		platform2.getData().add(new XYChart.Data<>(saturday, 7.2));
+		platform2.getData().add(new XYChart.Data<>(sunday, 2.2));
+		XYChart.Series<String, Number> platform3 = new XYChart.Series<>();
 		platform3.setName("YouTube");
-		platform3.getData().add(new XYChart.Data(monday, 4.4));
-		platform3.getData().add(new XYChart.Data(tuesday, 3.3));
-		platform3.getData().add(new XYChart.Data(wednesday, 7.1));
-		platform3.getData().add(new XYChart.Data(thursday, 4.9));
-		platform3.getData().add(new XYChart.Data(friday, 9.2));
-		platform3.getData().add(new XYChart.Data(saturday, 6.8));
-		platform3.getData().add(new XYChart.Data(sunday, 4.4));
+		platform3.getData().add(new XYChart.Data<>(monday, 4.4));
+		platform3.getData().add(new XYChart.Data<>(tuesday, 3.3));
+		platform3.getData().add(new XYChart.Data<>(wednesday, 7.1));
+		platform3.getData().add(new XYChart.Data<>(thursday, 4.9));
+		platform3.getData().add(new XYChart.Data<>(friday, 9.2));
+		platform3.getData().add(new XYChart.Data<>(saturday, 6.8));
+		platform3.getData().add(new XYChart.Data<>(sunday, 4.4));
 
 		bChart.getData().addAll(platform1, platform2, platform3);
 
