@@ -83,7 +83,12 @@ public class Recorder extends Thread {
 	public String getActiveProgramDescription() {
 		String description = null;
 		String path = getActiveWindowFilePath();
-		String exeName = path.split("\\\\")[path.split("\\\\").length - 1];
+		String exeName;
+		try {
+			exeName = path.split("\\\\")[path.split("\\\\").length - 1];
+		} catch (NullPointerException e) {
+			return "Description missing";
+		}
 		if (exeName != null) {
 			// Remove the '.exe' ending from the name
 			StringBuilder sb = new StringBuilder(exeName);
@@ -116,6 +121,9 @@ public class Recorder extends Thread {
 					}
 				}
 			}
+		}
+		if (description == null) {
+			return "Description missing";
 		}
 		return description;
 	}

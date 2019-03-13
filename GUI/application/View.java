@@ -4,8 +4,12 @@ import controllers.GUI_Controller;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -13,6 +17,7 @@ import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import service.Recorder;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
@@ -50,7 +55,9 @@ public class View extends Application {
 	// Main screen variables
 	private BorderPane mainScreen;
 	private VBox navBar;
+	private VBox defaultContent;
 	private Label welcomeLbl;
+	private boolean recording;
 	// Stopwatch variables
 	private VBox stopwatch;
 	private int hrs = 0, mins = 0, secs = 0, millis = 0;
@@ -96,9 +103,9 @@ public class View extends Application {
 		createBarChart();
 		createStopwatch();
 		createNavBar();
-		createWelcomeLabel();
+		createDefaultContent();
 		mainScreen.setLeft(navBar);
-		mainScreen.setCenter(welcomeLbl);
+		mainScreen.setCenter(defaultContent);
 		controller.addScreen("Main", mainScreen);
 	}
 
@@ -119,7 +126,7 @@ public class View extends Application {
 			mainScreen.setCenter(stopwatch);
 			break;
 		case "Default":
-			mainScreen.setCenter(welcomeLbl);
+			mainScreen.setCenter(defaultContent);
 			break;
 		default:
 			break;
@@ -224,7 +231,8 @@ public class View extends Application {
 	}
 
 	/**
-	 * Creates a stopwatch that can be used to track teh screentime of a certain application.<br>
+	 * Creates a stopwatch that can be used to track teh screentime of a certain
+	 * application.<br>
 	 * Includes all the buttons and methods for the stopwatch to work independently.
 	 * 
 	 */
@@ -295,9 +303,10 @@ public class View extends Application {
 		text.setText((((hrs / 10) == 0) ? "0" : "") + hrs + ":" + (((mins / 10) == 0) ? "0" : "") + mins + ":"
 				+ (((secs / 10) == 0) ? "0" : "") + secs);
 	}
-	
+
 	/**
-	 * Initializes the navigation bar that can be seen on the left side of the screen once a user has logged in.<br>
+	 * Initializes the navigation bar that can be seen on the left side of the
+	 * screen once a user has logged in.<br>
 	 * Creates both the spacing and the buttons included to the bar.
 	 * 
 	 */
@@ -342,16 +351,57 @@ public class View extends Application {
 	}
 
 	/**
-	 * Creates the greeting a user receives when logging in.
-	 * 
+	 * Creates the greeting a user receives when logging in.<br>
+	 * Also contains a button that starts the recorder service.
 	 */
-	private void createWelcomeLabel() {
+	private void createDefaultContent() {
+		defaultContent = new VBox();
 		String name = controller.getUserName();
 		welcomeLbl = new Label("Welcome " + name);
+		Button recBtn = new Button("Start recording");
+		Recorder rec = new Recorder();
+		Service<Void> recService = new Service<Void>() {
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+					@Override
+					protected Void call() throws Exception {
+						while (recording) {
+							Platform.runLater(() -> {
+								welcomeLbl.setText("Active window name: " + rec.getActiveProgramDescription());
+							});
+							Thread.sleep(1000);
+						}
+						Platform.runLater(() -> {
+							welcomeLbl.setText("Welcome " + name);
+						});
+						return null;
+					}
+				};
+			}
+
+		};
+		recBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				if (recording) {
+					recBtn.setText("Start recording");
+					recording = false;
+				} else {
+					recService.reset();
+					recService.start();
+					recBtn.setText("Stop recording");
+					recording = true;
+				}
+			}
+		});
+		defaultContent.setAlignment(Pos.CENTER);
+		defaultContent.getChildren().addAll(welcomeLbl, recBtn);
 	}
-	
+
 	/**
-	 * Initializes the base for a pie chart that can be used to show the elapsed screen time of a user.<br>
+	 * Initializes the base for a pie chart that can be used to show the elapsed
+	 * screen time of a user.<br>
 	 * Includes the basic model of the chart and the information of the given day.
 	 */
 	private void createPieChart() {
@@ -380,8 +430,10 @@ public class View extends Application {
 	}
 
 	/**
-	 * Initializes the base for a bar chart that can be used to show the elapsed screen time of a user.<br>
-	 * Includes the basic model of the chart and the information of the given day or week.
+	 * Initializes the base for a bar chart that can be used to show the elapsed
+	 * screen time of a user.<br>
+	 * Includes the basic model of the chart and the information of the given day or
+	 * week.
 	 */
 	private void createBarChart() {
 
