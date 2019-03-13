@@ -223,6 +223,11 @@ public class View extends Application {
 		btnContainer.getChildren().addAll(loginBtn, regBtn);
 	}
 
+	/**
+	 * Creates a stopwatch that can be used to track teh screentime of a certain application.<br>
+	 * Includes all the buttons and methods for the stopwatch to work independently.
+	 * 
+	 */
 	private void createStopwatch() {
 		Text timerText = new Text("00:00:00");
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(1), new EventHandler<ActionEvent>() {
@@ -290,7 +295,12 @@ public class View extends Application {
 		text.setText((((hrs / 10) == 0) ? "0" : "") + hrs + ":" + (((mins / 10) == 0) ? "0" : "") + mins + ":"
 				+ (((secs / 10) == 0) ? "0" : "") + secs);
 	}
-
+	
+	/**
+	 * Initializes the navigation bar that can be seen on the left side of the screen once a user has logged in.<br>
+	 * Creates both the spacing and the buttons included to the bar.
+	 * 
+	 */
 	private void createNavBar() {
 		navBar = new VBox();
 		Button defaultBtn = new Button("Main menu");
@@ -331,11 +341,19 @@ public class View extends Application {
 		navBar.getChildren().addAll(defaultBtn, swBtn, pieChartBtn, barChartBtn);
 	}
 
+	/**
+	 * Creates the greeting a user receives when logging in.
+	 * 
+	 */
 	private void createWelcomeLabel() {
 		String name = controller.getUserName();
 		welcomeLbl = new Label("Welcome " + name);
 	}
-
+	
+	/**
+	 * Initializes the base for a pie chart that can be used to show the elapsed screen time of a user.<br>
+	 * Includes the basic model of the chart and the information of the given day.
+	 */
 	private void createPieChart() {
 		pieChart = new StackPane();
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(new PieChart.Data("YouTube", 13),
@@ -361,6 +379,10 @@ public class View extends Application {
 		pieChart.getChildren().addAll(chart, caption);
 	}
 
+	/**
+	 * Initializes the base for a bar chart that can be used to show the elapsed screen time of a user.<br>
+	 * Includes the basic model of the chart and the information of the given day or week.
+	 */
 	private void createBarChart() {
 
 		barChart = new StackPane();

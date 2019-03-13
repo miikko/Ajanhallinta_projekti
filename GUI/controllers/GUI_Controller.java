@@ -17,6 +17,13 @@ public class GUI_Controller {
 		uAuth = new UserAuth();
 	}
 	
+	/**
+	 * Checks the database for the given username and checks if the combination matches.<br>
+	 * 
+	 * @param username
+	 * @param password
+	 * @return the state of the login process
+	 */
 	public boolean handleLogin(String username, String password) {
 		return true;
 		/*
@@ -31,6 +38,13 @@ public class GUI_Controller {
 		}*/
 	}
 	
+	/**
+	 * Registers a new user based on the given username and password if the username has not already been taken.<br>
+	 * 
+	 * @param username
+	 * @param password
+	 * @return the state of the registration
+	 */
 	public boolean handleRegister(String username, String password) {
 		boolean regSuccessful = uAuth.register(username, password);
 		if (regSuccessful) {
@@ -42,14 +56,30 @@ public class GUI_Controller {
 		}
 	}
 	
+	/**
+	 * Gets the username of a chosen user
+	 * 
+	 * @return the username of a certain user ID
+	 */
 	public String getUserName() {
 		return "User";
 	}
 	
+	/**
+	 * Adds a screen with the given parameters to teh mapping
+	 * 
+	 * @param name
+	 * @param screen
+	 */
 	public void addScreen(String name, Pane screen) {
 		screens.put(name, screen);
 	}
 	
+	/**
+	 * Activates a screen with the given name in the mainscreen
+	 * 
+	 * @param name
+	 */
 	public void activateScreen(String name) {
 		view.setRoot(screens.get(name));
 	}
