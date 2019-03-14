@@ -13,6 +13,13 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
+/**
+ * This class includes the tables used in sittings.
+ * 
+ * @author Arttuhal
+ * @since 13/03/2019
+ */
+
 @Entity
 @Table(name="Sitting_Table")
 public class Sitting {
