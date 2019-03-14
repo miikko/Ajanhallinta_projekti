@@ -15,6 +15,7 @@ public class DatabaseHandler {
 	 * @param rData This is the data that is sent by the Recorder class
 	 * @return boolean: true if transaction succeeds, false if it fails
 	 */
+	
 	// TODO: Once Sitting and related classes are finished, connect with them
 	public boolean sendUpdates(String rData) {
 		
