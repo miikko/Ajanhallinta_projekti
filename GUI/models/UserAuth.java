@@ -17,7 +17,7 @@ public class UserAuth {
 	public boolean login(String username, String pw) {
 		//TODO: Check if username and password exist in database
 		
-		return false;
+		return true;
 	}
 	
 	/**

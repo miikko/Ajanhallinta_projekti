@@ -3,6 +3,8 @@ package controllers;
 import java.util.HashMap;
 
 import application.View;
+import database.Kayttaja;
+import database.KayttajaAccessObject;
 import javafx.scene.layout.Pane;
 import models.UserAuth;
 
@@ -11,6 +13,7 @@ public class GUI_Controller {
 	private View view;
 	private HashMap<String, Pane> screens = new HashMap<>();
 	private UserAuth uAuth;
+	private static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 	
 	public GUI_Controller(View view) {
 		this.view = view;
@@ -25,17 +28,15 @@ public class GUI_Controller {
 	 * @return the state of the login process
 	 */
 	public boolean handleLogin(String username, String password) {
-		return true;
-		/*
+		
 		boolean loginSuccessful = uAuth.login(username, password);
 		if (loginSuccessful) {
 			//Kommentoi nämä, jos ei ole lokaalia tietokantaa
-			//Kayttaja kayttaja = new Kayttaja(username, password);
-			//kayttajaDAO.createKayttaja(kayttaja);
+			Kayttaja kayttaja = new Kayttaja(username, password);
+			kayttajaDAO.createKayttaja(kayttaja);
 			return true;
-		} else {
-			return false;
-		}*/
+		}
+		return false;
 	}
 	
 	/**

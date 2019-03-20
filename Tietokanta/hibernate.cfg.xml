@@ -13,13 +13,20 @@
 
    <property name="hibernate.connection.url">
       <!--jdbc:mysql://mysql.metropolia.fi:3306/silas-->
-      jdbc:mysql://localhost/kayttaja_kanta
+      <!--jdbc:mysql://localhost/kayttaja_kanta-->
+      
+      <!-- Locate to PuTTY folder in cmd, then give the following command:
+      "plink -L 4444:10.114.32.17:3306 METROPOLIA_USERNAME_HERE@edunix.metropolia.fi -N" -->
+      <!-- Give your Metropolia password and then the tunnel should be established. Keep cmd/tunnel open while working.-->
+      jdbc:mysql://localhost:4444/ajanhallinta
    </property>
    <property name="hibernate.connection.username">
-      olso
+   	  <!-- add usernames here, give user rights in virtual pc with command: 
+   	  "grant all privileges on *.* to USERNAME_HERE@edunix.metropolia.fi identified by 'PASSWORD_HERE' with grant option;" -->
+      miikko
    </property>
    <property name="hibernate.connection.password">
-      olso
+   	  miikko
    </property>
    <property name="hbm2ddl.auto">create</property>
    <property name="show_sql">true</property>
