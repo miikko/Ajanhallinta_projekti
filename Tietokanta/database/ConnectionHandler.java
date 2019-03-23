@@ -1,5 +1,14 @@
 package database;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.swing.JOptionPane;
 
 import com.jcraft.jsch.JSch;
@@ -16,6 +25,7 @@ import com.jcraft.jsch.Session;
 public class ConnectionHandler {
 	private JSch jsch;
 	private Session session;
+	private final int LPORT = 4444;
 
 	private ConnectionHandler() {
 		jsch = new JSch();
@@ -34,6 +44,9 @@ public class ConnectionHandler {
 	 * User is asked for their Metropolia credentials for authentication before creating the tunnel.   
 	 */
 	public void openTunnel() {
+		if (!portAvailable(LPORT)) {
+			killProcessesUsingPort(LPORT);
+		}
 		if (session == null || !session.isConnected()) {
 			try {
 				String username = JOptionPane.showInputDialog("Enter Metropolia username");
@@ -41,15 +54,12 @@ public class ConnectionHandler {
 				String host = "edunix.metropolia.fi";
 				session = jsch.getSession(username, host);
 				session.setPassword(password);
-				int lport = 4444;
 				String rhost = "10.114.32.17";
 				int rport = 3306;
 				session.setConfig("StrictHostKeyChecking", "no");
 				session.connect();
-				int assinged_port = session.setPortForwardingL(lport, rhost, rport);
+				int assinged_port = session.setPortForwardingL(LPORT, rhost, rport);
 				System.out.println("localhost:" + assinged_port + " -> " + rhost + ":" + rport);
-				// TODO: Close tunnel when it is no longer needed.
-				// session.disconnect();
 			} catch (JSchException e) {
 				e.printStackTrace();
 			}
@@ -63,5 +73,57 @@ public class ConnectionHandler {
 		if (session != null && session.isConnected()) {
 			session.disconnect();
 		}
+	}
+	/**
+	 * Tries to create a socket on the given port to test if it can be created.
+	 * @param port
+	 * @return false if the port is listening, true otherwise. 
+	 */
+	private boolean portAvailable(int port) {
+		try (Socket socket = new Socket("localhost", port)) {
+			return false;
+		} catch (IOException e) {
+			return true;
+		}
+	}
+	
+	/**
+	 * Finds processes that are using the port and kills them.
+	 * @param port
+	 * @return true if the processes were killed successfully, false otherwise
+	 */
+	private boolean killProcessesUsingPort(int port) {
+		Runtime rt = Runtime.getRuntime();
+		String findCommand = "netstat -ano | findstr " + port;
+		Set<String> pids = new HashSet<>();
+		Process process = null;
+		BufferedReader stdInput = null;
+		try {
+			process = rt.exec(findCommand);
+			stdInput = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String input;
+			while ((input = stdInput.readLine()) != null) {
+				String[] inputSplit = input.split(" ");
+				pids.add(inputSplit[inputSplit.length - 1]);
+			}
+			for (String pid : pids) {
+				process = rt.exec("taskkill /PID " + pid + " /F");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			if (process != null) {
+				process.destroy();
+			}
+			if (stdInput != null) {
+				try {
+					stdInput.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return true;
 	}
 }
