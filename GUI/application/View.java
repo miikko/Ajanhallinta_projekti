@@ -5,11 +5,12 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker.State;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -21,6 +22,7 @@ import service.Recorder;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -63,6 +65,8 @@ public class View extends Application {
 	private int hrs = 0, mins = 0, secs = 0, millis = 0;
 	private boolean pause = true;
 	// Chart variables
+	private BorderPane chartContainer;
+	private ObservableList<String> chartTypes;
 	private StackPane pieChart;
 	private StackPane barChart;
 
@@ -99,8 +103,7 @@ public class View extends Application {
 	 */
 	private void createMainScreen() {
 		mainScreen = new BorderPane();
-		createPieChart();
-		createBarChart();
+		createChartContainer();
 		createStopwatch();
 		createNavBar();
 		createDefaultContent();
@@ -116,11 +119,8 @@ public class View extends Application {
 	 */
 	private void updateMainScreen(String selection) {
 		switch (selection) {
-		case "PieChart":
-			mainScreen.setCenter(pieChart);
-			break;
-		case "BarChart":
-			mainScreen.setCenter(barChart);
+		case "Charts":
+			mainScreen.setCenter(chartContainer);
 			break;
 		case "Stopwatch":
 			mainScreen.setCenter(stopwatch);
@@ -199,7 +199,6 @@ public class View extends Application {
 				String password = passwordTF.getText();
 				System.out.println("Username: " + username + ", password: " + password);
 				if (controller.handleLogin(username, password)) {
-					// TODO: Transition to main screen
 					createMainScreen();
 					controller.activateScreen("Main");
 				} else {
@@ -215,7 +214,6 @@ public class View extends Application {
 				String password = passwordTF.getText();
 				if (controller.handleRegister(username, password)) {
 					// TODO: Display an alert with confirmation btn that a new user was created
-					// TODO: Transition to main screen
 					createMainScreen();
 				} else {
 					popUp.setText("Selected username is already taken. Please choose another one.");
@@ -326,28 +324,27 @@ public class View extends Application {
 				updateMainScreen("Stopwatch");
 			}
 		});
+		Button chartBtn = new Button("Charts");
+		chartBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				updateMainScreen("Charts");
+			}
+		});
+
 		/*
-		 * Button chartBtn = new Button("Charts"); chartBtn.setOnAction(new
+		 * Button pieChartBtn = new Button("Pie charts"); pieChartBtn.setOnAction(new
 		 * EventHandler<ActionEvent>() {
 		 * 
 		 * @Override public void handle(ActionEvent arg0) {
-		 * updateMainScreen("PieChart"); } });
+		 * updateMainScreen("PieChart"); } }); Button barChartBtn = new
+		 * Button("Bar charts"); barChartBtn.setOnAction(new EventHandler<ActionEvent>()
+		 * {
+		 * 
+		 * @Override public void handle(ActionEvent arg0) {
+		 * updateMainScreen("BarChart"); } });
 		 */
-		Button pieChartBtn = new Button("Pie charts");
-		pieChartBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateMainScreen("PieChart");
-			}
-		});
-		Button barChartBtn = new Button("Bar charts");
-		barChartBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateMainScreen("BarChart");
-			}
-		});
-		navBar.getChildren().addAll(defaultBtn, swBtn, pieChartBtn, barChartBtn);
+		navBar.getChildren().addAll(defaultBtn, swBtn, chartBtn);
 	}
 
 	/**
@@ -398,6 +395,29 @@ public class View extends Application {
 		defaultContent.setAlignment(Pos.CENTER);
 		defaultContent.getChildren().addAll(welcomeLbl, recBtn);
 	}
+	/**
+	 * Calls the chart creation methods and additionally creates a BorderPane container for the created charts.<br>
+	 * The container also contains a dropdown menu for selecting charts.
+	 */
+	private void createChartContainer() {
+		chartContainer = new BorderPane();
+		chartTypes = FXCollections.observableArrayList();
+		createPieChart();
+		createBarChart();
+		final ComboBox<String> comboBox = new ComboBox<>(chartTypes);
+		comboBox.setPromptText("Select chart type");
+		comboBox.valueProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
+				if (arg2.equals("Pie chart")) {
+					chartContainer.setCenter(pieChart);
+				} else if (arg2.equals("Bar chart")) {
+					chartContainer.setCenter(barChart);
+				}
+			}
+		});
+		chartContainer.setTop(comboBox);
+	}
 
 	/**
 	 * Initializes the base for a pie chart that can be used to show the elapsed
@@ -427,6 +447,7 @@ public class View extends Application {
 		chart.setLabelLineLength(10);
 		chart.setLegendSide(Side.LEFT);
 		pieChart.getChildren().addAll(chart, caption);
+		chartTypes.add("Pie chart");
 	}
 
 	/**
@@ -486,6 +507,7 @@ public class View extends Application {
 		bChart.getData().addAll(platform1, platform2, platform3);
 
 		barChart.getChildren().addAll(bChart);
+		chartTypes.add("Bar chart");
 	}
 
 	public void setRoot(Pane screen) {

@@ -57,6 +57,7 @@ public class ConnectionHandler {
 				String rhost = "10.114.32.17";
 				int rport = 3306;
 				session.setConfig("StrictHostKeyChecking", "no");
+				session.setDaemonThread(true);
 				session.connect();
 				int assinged_port = session.setPortForwardingL(LPORT, rhost, rport);
 				System.out.println("localhost:" + assinged_port + " -> " + rhost + ":" + rport);

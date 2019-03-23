@@ -2,12 +2,6 @@ package controllers;
 
 import java.util.HashMap;
 
-import javax.swing.JOptionPane;
-
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.JSchException;
-import com.jcraft.jsch.Session;
-
 import application.View;
 import database.ConnectionHandler;
 import database.Kayttaja;
@@ -16,32 +10,33 @@ import javafx.scene.layout.Pane;
 import models.UserAuth;
 
 public class GUI_Controller {
-	
+
 	private View view;
 	private HashMap<String, Pane> screens = new HashMap<>();
 	private UserAuth uAuth;
-	//private static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
+	// private static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 	private ConnectionHandler connHandler;
-	
-	
+
 	public GUI_Controller(View view) {
 		this.view = view;
 		uAuth = new UserAuth();
+		// TODO: Move this call to a more proper place.
 		connHandler = ConnectionHandler.getInstance();
 		connHandler.openTunnel();
 	}
-	
+
 	/**
-	 * Checks the database for the given username and checks if the combination matches.<br>
+	 * Checks the database for the given username and checks if the combination
+	 * matches.<br>
 	 * 
 	 * @param username
 	 * @param password
 	 * @return the state of the login process
 	 */
-	public boolean handleLogin(String username, String password) {	
+	public boolean handleLogin(String username, String password) {
 		boolean loginSuccessful = uAuth.login(username, password);
 		if (loginSuccessful) {
-			//Kommentoi nämä, jos ei ole lokaalia tietokantaa
+			// Kommentoi nämä, jos ei ole lokaalia tietokantaa
 			KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 			Kayttaja kayttaja = new Kayttaja(username, password);
 			kayttajaDAO.createKayttaja(kayttaja);
@@ -49,9 +44,10 @@ public class GUI_Controller {
 		}
 		return false;
 	}
-	
+
 	/**
-	 * Registers a new user based on the given username and password if the username has not already been taken.<br>
+	 * Registers a new user based on the given username and password if the username
+	 * has not already been taken.<br>
 	 * 
 	 * @param username
 	 * @param password
@@ -60,14 +56,14 @@ public class GUI_Controller {
 	public boolean handleRegister(String username, String password) {
 		boolean regSuccessful = uAuth.register(username, password);
 		if (regSuccessful) {
-			//TODO: Create a new user
-			
+			// TODO: Create a new user
+
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
 	 * Gets the username of a chosen user
 	 * 
@@ -76,7 +72,7 @@ public class GUI_Controller {
 	public String getUserName() {
 		return "User";
 	}
-	
+
 	/**
 	 * Adds a screen with the given parameters to teh mapping
 	 * 
@@ -86,7 +82,7 @@ public class GUI_Controller {
 	public void addScreen(String name, Pane screen) {
 		screens.put(name, screen);
 	}
-	
+
 	/**
 	 * Activates a screen with the given name in the mainscreen
 	 * 
