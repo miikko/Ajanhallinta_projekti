@@ -1,5 +1,13 @@
 package models;
 
+import database.Kayttaja;
+import database.KayttajaAccessObject;
+
+/**
+ * Class contains methods for authenticating users and creating Kayttaja-objects.
+ * @author miikk
+ * @since 24.3.2019
+ */
 public class UserAuth {
 
 	public UserAuth() {
@@ -7,29 +15,41 @@ public class UserAuth {
 	}
 	
 	/**
-	 * Checks the database whether the username and password combination exists<br>
-	 * and authorises the login if it does
-	 * 
+	 * Checks the database for a user with the specified username and password combination.
 	 * @param username
 	 * @param pw
-	 * @return the information about the username and password combinations existence
+	 * @return the user with matching credentials or null if no such user is found.
 	 */
-	public boolean login(String username, String pw) {
+	public Kayttaja login(String username, String pw) {
 		//TODO: Check if username and password exist in database
-		
-		return true;
+		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
+		Kayttaja[] kayttajat = kayttajaDAO.readKayttajat();
+		for (Kayttaja kayttaja : kayttajat) {
+			if (kayttaja.getName().equals(username) && kayttaja.getPassword().equals(pw)) {
+				return kayttaja;
+			}
+		}
+		return null;
 	}
 	
 	/**
-	 * Goes through the database to see whether the chosen username already exists
-	 * 
+	 * Goes through all the users in the database to see whether the chosen username already exists.<br>
+	 * If it is not taken, creates a new user and adds it to the database
 	 * @param username
 	 * @param pw
-	 * @return the information about the username's existence
+	 * @return the created Kayttaja-object or null if the username was taken.
 	 */
-	public boolean register(String username, String pw) {
+	public Kayttaja register(String username, String pw) {
 		//TODO: Check if username exists
-		
-		return false;
+		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
+		Kayttaja[] kayttajat = kayttajaDAO.readKayttajat();
+		Kayttaja newUser = new Kayttaja(username, pw);
+		for (Kayttaja kayttaja : kayttajat) {
+			if (kayttaja.getName().equals(username)) {
+				return null;
+			}
+		}
+		kayttajaDAO.createKayttaja(newUser);
+		return newUser;
 	}
 }

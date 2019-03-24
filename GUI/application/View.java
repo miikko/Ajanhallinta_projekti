@@ -16,6 +16,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import service.Recorder;
@@ -43,8 +44,9 @@ import javafx.scene.text.Text;
  * @author miikko & MrJoXuX
  * @since 11/03/2019
  */
+//TODO: Find a proper place to create screens
 public class View extends Application {
-
+	
 	private GUI_Controller controller;
 	private Scene scene;
 	// Login screen variables
@@ -53,7 +55,7 @@ public class View extends Application {
 	private HBox btnContainer;
 	private TextField usernameTF;
 	private PasswordField passwordTF;
-	private Label popUp;
+	private Label inputInfoLbl;
 	// Main screen variables
 	private BorderPane mainScreen;
 	private VBox navBar;
@@ -162,13 +164,13 @@ public class View extends Application {
 		EventHandler<KeyEvent> inputHandler = new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
-				if (!popUp.getText().equals("")) {
-					popUp.setText("");
+				if (!inputInfoLbl.getText().equals("")) {
+					inputInfoLbl.setText("");
 				}
 			}
 		};
 		tfContainer = new VBox();
-		popUp = new Label("");
+		inputInfoLbl = new Label("");
 		HBox subContainer = new HBox(spacing);
 		usernameTF = new TextField();
 		usernameTF.setOnKeyTyped(inputHandler);
@@ -179,7 +181,7 @@ public class View extends Application {
 		subContainer.getChildren().addAll(usernameTF, passwordTF);
 		subContainer.setStyle("-fx-border-color: black");
 		subContainer.setAlignment(Pos.CENTER);
-		tfContainer.getChildren().addAll(popUp, subContainer);
+		tfContainer.getChildren().addAll(inputInfoLbl, subContainer);
 		tfContainer.setAlignment(Pos.CENTER);
 	}
 
@@ -202,7 +204,7 @@ public class View extends Application {
 					createMainScreen();
 					controller.activateScreen("Main");
 				} else {
-					popUp.setText("Invalid username and/or password.");
+					inputInfoLbl.setText("Invalid username and/or password.");
 				}
 			}
 		});
@@ -213,10 +215,10 @@ public class View extends Application {
 				String username = usernameTF.getText();
 				String password = passwordTF.getText();
 				if (controller.handleRegister(username, password)) {
-					// TODO: Display an alert with confirmation btn that a new user was created
 					createMainScreen();
+					createAndDisplayPopup("Registration successful!", "Main");
 				} else {
-					popUp.setText("Selected username is already taken. Please choose another one.");
+					inputInfoLbl.setText("Selected username is already taken. Please choose another one.");
 				}
 			}
 
@@ -226,6 +228,35 @@ public class View extends Application {
 		btnContainer.setAlignment(Pos.CENTER);
 		btnContainer.setStyle("-fx-border-color: black");
 		btnContainer.getChildren().addAll(loginBtn, regBtn);
+	}
+	
+	
+	/**
+	 * Creates and shows a popup with the given message and a confirm button.<br>
+	 * Clicking the button hides the popup and activates the given screen.
+	 * @param message
+	 * @param transitionScreenName
+	 */
+	//TODO: Find a more elegant way for creating a popup
+	private void createAndDisplayPopup(String message, String transitionScreenName) {
+		Stage popupStage = new Stage();
+		popupStage.initModality(Modality.APPLICATION_MODAL);
+		VBox popup = new VBox();
+		Button confButton = new Button("Confirm");
+		confButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				popupStage.hide();
+				controller.activateScreen(transitionScreenName);
+			}
+		});
+		popup.getChildren().addAll(new Label(message), confButton);
+		popup.setAlignment(Pos.CENTER);
+		popup.setPadding(new Insets(15));
+		Scene popupScene = new Scene(popup);
+		popupScene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
+		popupStage.setScene(popupScene);
+		popupStage.show();
 	}
 
 	/**

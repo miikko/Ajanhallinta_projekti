@@ -16,13 +16,14 @@ public class GUI_Controller {
 	private UserAuth uAuth;
 	// private static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 	private ConnectionHandler connHandler;
+	private Kayttaja user;
 
 	public GUI_Controller(View view) {
 		this.view = view;
-		uAuth = new UserAuth();
 		// TODO: Move this call to a more proper place.
 		connHandler = ConnectionHandler.getInstance();
 		connHandler.openTunnel();
+		uAuth = new UserAuth();
 	}
 
 	/**
@@ -34,12 +35,13 @@ public class GUI_Controller {
 	 * @return the state of the login process
 	 */
 	public boolean handleLogin(String username, String password) {
-		boolean loginSuccessful = uAuth.login(username, password);
-		if (loginSuccessful) {
+		user = uAuth.login(username, password);
+		if (user != null) {
 			// Kommentoi nämä, jos ei ole lokaalia tietokantaa
+			/*
 			KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 			Kayttaja kayttaja = new Kayttaja(username, password);
-			kayttajaDAO.createKayttaja(kayttaja);
+			kayttajaDAO.createKayttaja(kayttaja);*/
 			return true;
 		}
 		return false;
@@ -54,10 +56,8 @@ public class GUI_Controller {
 	 * @return the state of the registration
 	 */
 	public boolean handleRegister(String username, String password) {
-		boolean regSuccessful = uAuth.register(username, password);
-		if (regSuccessful) {
-			// TODO: Create a new user
-
+		user = uAuth.register(username, password);
+		if (user != null) {
 			return true;
 		} else {
 			return false;
@@ -70,7 +70,7 @@ public class GUI_Controller {
 	 * @return the username of a certain user ID
 	 */
 	public String getUserName() {
-		return "User";
+		return user.getName();
 	}
 
 	/**
