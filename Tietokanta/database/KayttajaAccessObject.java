@@ -2,9 +2,21 @@ package database;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
+
+import com.fasterxml.classmate.AnnotationConfiguration;
+
+import tietokanta.Kayttaja;
 
 /**
  * KayttajaAccessObject contains methods to store/update/delete/read user objects
@@ -110,7 +122,7 @@ public class KayttajaAccessObject implements KayttajaDAO_IF{
 			istunto.close();
 		}
 	}
-
+	
 	/**
 	 * This method deletes the user object from the user table.
 	 * @param id This is the specific id of an user object to be deleted.
@@ -132,6 +144,26 @@ public class KayttajaAccessObject implements KayttajaDAO_IF{
 			istunto.close();
 		}
 	}
+
+	
+	// Palauttaa käyttäjän usernamella käyttäjä objectin usernamen ja salasanan jos se löytyy, muuten palauttaa tyhjän listan.
+	public Kayttaja[] userExists(String user_name) {
+		 Session istunto = istuntotehdas.openSession();
+		 try {
+			 transaktio = istunto.beginTransaction();
+			 @SuppressWarnings("unchecked")
+			 List<Kayttaja> kayttajat = istunto.createQuery("from Kayttaja where user_name =:user_name").setParameter("user_name", user_name).getResultList();
+			 transaktio.commit();
+			 Kayttaja[] returnArray = new Kayttaja[kayttajat.size()];
+			 return (Kayttaja[]) kayttajat.toArray(returnArray);
+		 }catch(Exception e) {
+			 if(transaktio != null)
+				 transaktio.rollback();
+			 throw e;
+		 }finally {
+			 istunto.close();
+		 }
+		}
 	
 	/**
 	 * This method is not yet tested.
