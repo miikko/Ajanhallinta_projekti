@@ -146,16 +146,14 @@ public class KayttajaAccessObject implements KayttajaDAO_IF{
 	}
 
 	
-	// Palauttaa käyttäjän usernamella käyttäjä objectin usernamen ja salasanan jos se löytyy, muuten palauttaa tyhjän listan.
-	public Kayttaja[] userExists(String user_name) {
+	// Palauttaa käyttäjän usernamella käyttäjä objectin usernamen ja salasanan jos se löytyy, muuten palauttaa nullin.
+	public Kayttaja userExists(String user_name) {
 		 Session istunto = istuntotehdas.openSession();
 		 try {
 			 transaktio = istunto.beginTransaction();
 			 @SuppressWarnings("unchecked")
-			 List<Kayttaja> kayttajat = istunto.createQuery("from Kayttaja where user_name =:user_name").setParameter("user_name", user_name).getResultList();
-			 transaktio.commit();
-			 Kayttaja[] returnArray = new Kayttaja[kayttajat.size()];
-			 return (Kayttaja[]) kayttajat.toArray(returnArray);
+			 Kayttaja kayttaja = (database.Kayttaja) istunto.createQuery("from Kayttaja where user_name =:user_name").setParameter("user_name", user_name).getSingleResult();
+			 return kayttaja;
 		 }catch(Exception e) {
 			 if(transaktio != null)
 				 transaktio.rollback();

@@ -9,5 +9,5 @@ public interface KayttajaDAO_IF {
 	public abstract boolean updateKayttaja(Kayttaja kayttaja);
 	public abstract boolean deleteKayttaja(int id);
 	public abstract boolean updateSitting(int id);
-	public abstract Kayttaja[] userExists(String username);
+	public abstract Kayttaja userExists(String username);
 }
