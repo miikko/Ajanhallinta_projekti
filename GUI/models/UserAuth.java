@@ -20,15 +20,25 @@ public class UserAuth {
 	 * @param pw
 	 * @return the user with matching credentials or null if no such user is found.
 	 */
-	public Kayttaja login(String username, String pw) {
+	public Kayttaja login(String user_name, String pw) {
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		Kayttaja[] kayttajat = kayttajaDAO.readKayttajat();
-		for (Kayttaja kayttaja : kayttajat) {
+		Kayttaja kayttaja = kayttajaDAO.userExists(user_name);
+		
+		if(kayttaja == null) {
+			return null;
+		}else {
+			if(kayttaja.getPassword().equals(pw)){
+				return kayttaja;
+			}else {
+				return null;
+			}
+		}
+		/*for (Kayttaja kayttaja : kayttajat) {
 			if (kayttaja.getName().equals(username) && kayttaja.getPassword().equals(pw)) {
 				return kayttaja;
 			}
 		}
-		return null;
+		return null;*/
 	}
 	
 	/**
@@ -38,9 +48,18 @@ public class UserAuth {
 	 * @param pw
 	 * @return the created Kayttaja-object or null if the username was taken.
 	 */
-	public Kayttaja register(String username, String pw) {
+	public Kayttaja register(String user_name, String pw) {
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		Kayttaja[] kayttajat = kayttajaDAO.readKayttajat();
+		Kayttaja kayttaja = kayttajaDAO.userExists(user_name);
+		
+		if(kayttaja == null) {
+			Kayttaja newUser = new Kayttaja(user_name, pw);
+			kayttajaDAO.createKayttaja(newUser);
+			return newUser;
+		}else {
+			return null;
+		}
+		/*
 		Kayttaja newUser = new Kayttaja(username, pw);
 		for (Kayttaja kayttaja : kayttajat) {
 			if (kayttaja.getName().equals(username)) {
@@ -49,5 +68,6 @@ public class UserAuth {
 		}
 		kayttajaDAO.createKayttaja(newUser);
 		return newUser;
+		*/
 	}
 }

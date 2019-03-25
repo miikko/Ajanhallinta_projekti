@@ -151,9 +151,14 @@ public class KayttajaAccessObject implements KayttajaDAO_IF{
 		 Session istunto = istuntotehdas.openSession();
 		 try {
 			 transaktio = istunto.beginTransaction();
-			 @SuppressWarnings("unchecked")
-			 Kayttaja kayttaja = (database.Kayttaja) istunto.createQuery("from Kayttaja where user_name =:user_name").setParameter("user_name", user_name).getSingleResult();
-			 return kayttaja;
+			
+			 try {
+				 Kayttaja kayttaja = (database.Kayttaja) istunto.createQuery("from Kayttaja where user_name =:user_name").setParameter("user_name", user_name).getSingleResult();
+				 return kayttaja;
+			 }catch(NoResultException nre) {
+				 return null;
+			 }
+			 
 		 }catch(Exception e) {
 			 if(transaktio != null)
 				 transaktio.rollback();
