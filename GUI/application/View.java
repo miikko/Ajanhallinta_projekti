@@ -25,6 +25,8 @@ import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -61,6 +63,7 @@ public class View extends Application {
 	private VBox navBar;
 	private VBox defaultContent;
 	private Label welcomeLbl;
+	private MenuButton optionMenu;
 	private boolean recording;
 	// Stopwatch variables
 	private VBox stopwatch;
@@ -109,8 +112,10 @@ public class View extends Application {
 		createStopwatch();
 		createNavBar();
 		createDefaultContent();
+		createOptionMenu();
 		mainScreen.setLeft(navBar);
 		mainScreen.setCenter(defaultContent);
+		mainScreen.setRight(optionMenu);
 		controller.addScreen("Main", mainScreen);
 	}
 
@@ -206,6 +211,7 @@ public class View extends Application {
 				} else {
 					inputInfoLbl.setText("Invalid username and/or password.");
 				}
+				passwordTF.clear();
 			}
 		});
 		Button regBtn = new Button("Register");
@@ -220,6 +226,7 @@ public class View extends Application {
 				} else {
 					inputInfoLbl.setText("Selected username is already taken. Please choose another one.");
 				}
+				passwordTF.clear();
 			}
 
 		});
@@ -260,7 +267,31 @@ public class View extends Application {
 	}
 
 	/**
-	 * Creates a stopwatch that can be used to track teh screentime of a certain
+	 * Creates a MenuButton for various options such as exiting the application and logging out.<br>
+	 * On press, the controller is called to handle the action.
+	 */
+	private void createOptionMenu() {
+		optionMenu = new MenuButton("Options");
+		MenuItem logoutItem = new MenuItem("Logout");
+		logoutItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				controller.handleLogout();
+				controller.activateScreen("Login");
+			}	
+		});
+		MenuItem quitItem = new MenuItem("Quit");
+		quitItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				controller.handleExit((Stage) scene.getWindow());
+			}
+		});
+		optionMenu.getItems().addAll(logoutItem, quitItem);
+	}
+	
+	/**
+	 * Creates a stopwatch that can be used to track the screentime of a certain
 	 * application.<br>
 	 * Includes all the buttons and methods for the stopwatch to work independently.
 	 * 
@@ -362,19 +393,6 @@ public class View extends Application {
 				updateMainScreen("Charts");
 			}
 		});
-
-		/*
-		 * Button pieChartBtn = new Button("Pie charts"); pieChartBtn.setOnAction(new
-		 * EventHandler<ActionEvent>() {
-		 * 
-		 * @Override public void handle(ActionEvent arg0) {
-		 * updateMainScreen("PieChart"); } }); Button barChartBtn = new
-		 * Button("Bar charts"); barChartBtn.setOnAction(new EventHandler<ActionEvent>()
-		 * {
-		 * 
-		 * @Override public void handle(ActionEvent arg0) {
-		 * updateMainScreen("BarChart"); } });
-		 */
 		navBar.getChildren().addAll(defaultBtn, swBtn, chartBtn);
 	}
 

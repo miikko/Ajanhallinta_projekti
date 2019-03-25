@@ -7,6 +7,7 @@ import database.ConnectionHandler;
 import database.Kayttaja;
 import database.KayttajaAccessObject;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import models.UserAuth;
 
 public class GUI_Controller {
@@ -63,7 +64,18 @@ public class GUI_Controller {
 			return false;
 		}
 	}
+	
+	//TODO: Complete method
+	public void handleLogout() {
+		user = null;
+	}
 
+	//TODO: Complete method
+	public void handleExit(Stage stage) {
+		handleLogout();
+		stage.close();
+	}
+	
 	/**
 	 * Gets the username of a chosen user
 	 * 

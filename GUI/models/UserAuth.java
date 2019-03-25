@@ -21,7 +21,6 @@ public class UserAuth {
 	 * @return the user with matching credentials or null if no such user is found.
 	 */
 	public Kayttaja login(String username, String pw) {
-		//TODO: Check if username and password exist in database
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 		Kayttaja[] kayttajat = kayttajaDAO.readKayttajat();
 		for (Kayttaja kayttaja : kayttajat) {
@@ -40,7 +39,6 @@ public class UserAuth {
 	 * @return the created Kayttaja-object or null if the username was taken.
 	 */
 	public Kayttaja register(String username, String pw) {
-		//TODO: Check if username exists
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 		Kayttaja[] kayttajat = kayttajaDAO.readKayttajat();
 		Kayttaja newUser = new Kayttaja(username, pw);
