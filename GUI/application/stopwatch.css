@@ -6,7 +6,7 @@
      -fx-background-repeat: no-repeat;
      -fx-background-size: cover;
      -fx-font-weight: bold;
-     -fx-font-size: 30px;
+     -fx-font-size: 25px;
 }
 
 .button {
@@ -14,12 +14,47 @@
     -fx-font-family: "Arial Narrow";
     -fx-font-weight: bold;
     -fx-font-size: 20;
-    -fx-background-color: linear-gradient(#61a2b1, #2A5058);
+    -fx-background-color: linear-gradient(#00BBFF, #2A5058);
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
 .button:hover {
-    -fx-background-color: linear-gradient(#2A5058, #61a2b1);
+    -fx-background-color: linear-gradient(#2A5058, #00BBFF);
+}
+
+.combo-box {
+	-fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-background-color: linear-gradient(#00BBFF, #2A5058);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.combo-box .list-cell {
+	-fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-background-color: linear-gradient(#00BBFF, #2A5058);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.combo-box:hover {
+    -fx-background-color: linear-gradient(#2A5058, #00BBFF);
+}
+
+.menu-button {
+	-fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-background-color: linear-gradient(#00BBFF, #2A5058);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.menu-button:hover {
+    -fx-background-color: linear-gradient(#2A5058, #00BBFF);
 }
 
 #timerNum {

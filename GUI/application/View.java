@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Locale;
+
 import controllers.GUI_Controller;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -13,6 +15,7 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
@@ -24,6 +27,7 @@ import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
@@ -32,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -74,6 +79,8 @@ public class View extends Application {
 	private ObservableList<String> chartTypes;
 	private StackPane pieChart;
 	private StackPane barChart;
+	// Date picker variables
+	private DatePicker datePicker;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -97,6 +104,7 @@ public class View extends Application {
 	}
 
 	public static void main(String[] args) {
+		Locale.setDefault(Locale.US);
 		launch(args);
 	}
 
@@ -110,6 +118,7 @@ public class View extends Application {
 		mainScreen = new BorderPane();
 		createChartContainer();
 		createStopwatch();
+		createDatePicker();
 		createNavBar();
 		createDefaultContent();
 		createOptionMenu();
@@ -131,6 +140,9 @@ public class View extends Application {
 			break;
 		case "Stopwatch":
 			mainScreen.setCenter(stopwatch);
+			break;
+		case "DatePick":
+			mainScreen.setCenter(datePicker);
 			break;
 		case "Default":
 			mainScreen.setCenter(defaultContent);
@@ -393,7 +405,14 @@ public class View extends Application {
 				updateMainScreen("Charts");
 			}
 		});
-		navBar.getChildren().addAll(defaultBtn, swBtn, chartBtn);
+		Button dateBtn = new Button("History");
+		dateBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				updateMainScreen("DatePick");
+			}
+		});
+		navBar.getChildren().addAll(defaultBtn, swBtn, chartBtn, dateBtn);
 	}
 
 	/**
@@ -558,6 +577,23 @@ public class View extends Application {
 		barChart.getChildren().addAll(bChart);
 		chartTypes.add("Bar chart");
 	}
+	
+	private void createDatePicker() {
+        VBox vB = new VBox(20);
+
+        datePicker = new DatePicker();
+
+        GridPane gPane = new GridPane();
+        gPane.setHgap(10);
+        gPane.setVgap(10);
+
+        Label infoLabel = new Label("Select a past date:");
+        gPane.add(infoLabel, 0, 0);
+
+        GridPane.setHalignment(infoLabel, HPos.CENTER);
+        gPane.add(datePicker, 0, 1);
+        vB.getChildren().add(gPane);
+    }
 
 	public void setRoot(Pane screen) {
 		scene.setRoot(screen);
