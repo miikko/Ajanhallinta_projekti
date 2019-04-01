@@ -9,6 +9,8 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ColumnTransformer;
+
 
 /**
  * This class is all about the user data object
@@ -29,6 +31,7 @@ public class Kayttaja {
 	private String user_name;
 
 	@Column(name="password")
+	//@ColumnTransformer(forColumn="password", read="decrypt(password)", write="encrypt(?)")
 	private String password;
 	
 	public Kayttaja(String user_name, String password) {

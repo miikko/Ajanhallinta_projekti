@@ -90,3 +90,12 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
+*.html
+*.png
+*.js
+doc/jquery/jquery-ui.css
+doc/jquery/jquery-ui.min.css
+doc/jquery/jquery-ui.structure.css
+doc/jquery/jquery-ui.structure.min.css
+doc/package-list
+doc/stylesheet.css

@@ -51,6 +51,11 @@ public class UserAuth {
 	public Kayttaja register(String user_name, String pw) {
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 		Kayttaja kayttaja = kayttajaDAO.userExists(user_name);
+	
+		if(user_name.equals("") || pw.equals("")) {
+			System.out.println("Ei saa tyhjää");
+			return null;
+		}
 		
 		if(kayttaja == null) {
 			Kayttaja newUser = new Kayttaja(user_name, pw);
