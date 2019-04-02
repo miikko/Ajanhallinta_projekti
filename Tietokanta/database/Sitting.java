@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
@@ -16,7 +18,7 @@ import javax.persistence.Table;
 /**
  * This class includes the tables used in sittings.
  * 
- * @author Arttuhal
+ * @author Arttuhal & miikk
  * @since 13/03/2019
  */
 
@@ -26,7 +28,7 @@ public class Sitting {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private int userID;
+	private int sittingId;
 	
 	@Column(name ="start_time")
 	private String start_time;
@@ -34,11 +36,20 @@ public class Sitting {
 	@Column(name ="end_time")
 	private String end_time;
 	
-	@OneToMany
-	private List<WindowTime> window_time;
+	@ManyToOne
+	@JoinColumn(name="userId", nullable=false)
+	private Kayttaja kayttaja;
+	
+	//@OneToMany
+	//private List<WindowTime> window_time;
 
 	public Sitting() {
 		super();
+	}
+	
+	public Sitting(Kayttaja kayttaja) {
+		super();
+		this.kayttaja = kayttaja;
 	}
 	
 	public String getStart_time() {
@@ -56,7 +67,13 @@ public class Sitting {
 	public void setEnd_time(String end_time) {
 		this.end_time = end_time;
 	}
-
 	
+	public int getId() {
+		return sittingId;
+	}
+
+	public Kayttaja getKayttaja() {
+		return kayttaja;
+	}
 
 }

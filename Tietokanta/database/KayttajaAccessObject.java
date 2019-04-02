@@ -171,25 +171,4 @@ public class KayttajaAccessObject implements KayttajaDAO_IF {
 			istunto.close();
 		}
 	}
-
-	/**
-	 * This method is not yet tested. It is supposed to sends data updates to user
-	 * data table.
-	 */
-	public boolean updateSitting(int id) {
-		Session istunto = istuntotehdas.openSession();
-		try {
-			transaktio = istunto.beginTransaction();
-			istunto.saveOrUpdate(id);
-
-			transaktio.commit();
-			return true;
-		} catch (Exception e) {
-			if (transaktio != null)
-				transaktio.rollback();
-			throw e;
-		} finally {
-			istunto.close();
-		}
-	}
 }

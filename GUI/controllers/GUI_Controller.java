@@ -38,11 +38,6 @@ public class GUI_Controller {
 	public boolean handleLogin(String username, String password) {
 		user = uAuth.login(username, password);
 		if (user != null) {
-			// Kommentoi nämä, jos ei ole lokaalia tietokantaa
-			/*
-			KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-			Kayttaja kayttaja = new Kayttaja(username, password);
-			kayttajaDAO.createKayttaja(kayttaja);*/
 			return true;
 		}
 		return false;

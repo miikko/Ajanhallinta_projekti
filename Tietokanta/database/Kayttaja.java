@@ -1,10 +1,14 @@
 package database;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
@@ -15,8 +19,8 @@ import org.hibernate.annotations.ColumnTransformer;
 /**
  * This class is all about the user data object
  * 
- * @author JP
- * @version 1.0
+ * @author JP & miikk
+ * @version 2.0
  * @since 08/03/2019
  */
 @Entity
@@ -25,7 +29,7 @@ public class Kayttaja {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private int userID;
+	private int userId;
 	
 	@Column(name ="user_name")
 	private String user_name;
@@ -34,6 +38,11 @@ public class Kayttaja {
 	//@ColumnTransformer(forColumn="password", read="pgp_sym_decrypt(password), current_setting('encrypt.key')", write="pgp_sym_encrypt(?), current_setting('encrypt.key')")
 	private String password;
 	
+	//TODO: replace "fetch=FETCHType.EAGER" with a better solution. Current solution might cause problems with large data sets
+	@Column
+	@OneToMany(mappedBy="kayttaja", fetch=FetchType.EAGER)
+	private Set<Sitting> sittings;
+	
 	public Kayttaja(String user_name, String password) {
 		super();
 		this.user_name = user_name;
@@ -41,9 +50,9 @@ public class Kayttaja {
 	}
 	
 	// Tarvitaan käyttäjän updatemiseen
-	public Kayttaja(int userID, String user_name, String password) {
+	public Kayttaja(int userId, String user_name, String password) {
 		super();
-		this.userID = userID;
+		this.userId = userId;
 		this.user_name = user_name;
 		this.password = password;
 	}
@@ -68,6 +77,14 @@ public class Kayttaja {
 	}
 	
 	public int getId() {
-		return userID;
+		return userId;
+	}
+	
+	public Set<Sitting> getSittings() {
+		return sittings;
+	}
+	
+	public void setSittings(Set<Sitting> sittings) {
+		this.sittings = sittings;
 	}
 }
