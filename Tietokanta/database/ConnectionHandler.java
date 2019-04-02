@@ -1,6 +1,11 @@
 package database;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
@@ -26,9 +31,13 @@ public class ConnectionHandler {
 	private JSch jsch;
 	private Session session;
 	private final int LPORT = 4444;
+	private final String AUTH_PATH = "./dev_auth/metropolia_login.txt";
+	private String mUsername;
+	private String mPassword;
 
 	private ConnectionHandler() {
 		jsch = new JSch();
+		readMetropoliaCredentials();
 	}
 
 	private static class SingletonHolder {
@@ -49,11 +58,14 @@ public class ConnectionHandler {
 		}
 		if (session == null || !session.isConnected()) {
 			try {
-				String username = JOptionPane.showInputDialog("Enter Metropolia username");
-				String password = JOptionPane.showInputDialog("Enter Metropolia password");
+				if (!readMetropoliaCredentials()) {
+					mUsername = JOptionPane.showInputDialog("Enter Metropolia username");
+					mPassword = JOptionPane.showInputDialog("Enter Metropolia password");
+					writeMetropoliaCredentials(mUsername, mPassword);
+				}
 				String host = "edunix.metropolia.fi";
-				session = jsch.getSession(username, host);
-				session.setPassword(password);
+				session = jsch.getSession(mUsername, host);
+				session.setPassword(mPassword);
 				String rhost = "10.114.32.17";
 				int rport = 3306;
 				session.setConfig("StrictHostKeyChecking", "no");
@@ -124,6 +136,60 @@ public class ConnectionHandler {
 					e.printStackTrace();
 				}
 			}
+		}
+		return true;
+	}
+	
+	/**Reads Metropolia login credentials from a file.<br>
+	 * The credentials are required for creating a tunnel to database.
+	 * @return true if the credentials were read successfully, false if the file didn't exist or if the credentials were not in the file.
+	 */
+	private boolean readMetropoliaCredentials() {
+		try (BufferedReader br = new BufferedReader(new FileReader(AUTH_PATH))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				String[] lineSplit = line.split(":");
+				if (lineSplit[0].equals("Username")) {
+					mUsername = lineSplit[1];
+				} else if (lineSplit[0].equals("Password")) {
+					mPassword = lineSplit[1];
+				}
+			}
+		} catch (FileNotFoundException e) {
+			return false;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		if (mUsername == null || mPassword == null) {
+			return false;
+		}
+		return true;
+	}
+	
+	/**Creates a "metropolia_login.txt" file and writes the given credentials to the file so that they can be read on later compilations.<br>
+	 * Also creates a "dev_auth" directory on the root-directory for the file if the folder does not exist.
+	 * @param mUsername
+	 * @param mPassword
+	 * @return true if the directory and file were created and the credentials were written successfully, false if the directory already existed or if the credentials were not written.
+	 */
+	private boolean writeMetropoliaCredentials(String mUsername, String mPassword) {
+		int fileIndex = 0;
+		for (int i = 0; i < AUTH_PATH.length(); i++) {
+			if (AUTH_PATH.charAt(i) == '/') {
+				fileIndex = i;
+			}
+		}
+		String folderPath = AUTH_PATH.substring(0, fileIndex);
+		if (!new File(folderPath).mkdirs()) {
+			System.out.println("flag");
+			return false;
+		}
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(AUTH_PATH))) {
+			bw.write("Username:" + mUsername + System.lineSeparator() + "Password:" + mPassword);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}

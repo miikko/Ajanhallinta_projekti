@@ -99,3 +99,7 @@ doc/jquery/jquery-ui.structure.css
 doc/jquery/jquery-ui.structure.min.css
 doc/package-list
 doc/stylesheet.css
+
+# Developer
+
+dev_auth/
