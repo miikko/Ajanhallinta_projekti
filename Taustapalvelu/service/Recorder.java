@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -16,6 +19,9 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.ptr.IntByReference;
 
+import database.Kayttaja;
+import database.Sitting;
+import database.SittingAccessObject;
 import sun.awt.shell.ShellFolder;
 
 /**
@@ -28,16 +34,35 @@ public class Recorder extends Thread {
 	private final int MAX_NAME_LENGTH = 1024;
 	private final Kernel32 KERNEL32 = Kernel32.INSTANCE;
 	private final User32 USER32 = User32.INSTANCE;
-	private boolean quit = false;
+	private boolean quit;
+	private Kayttaja user;
+	private final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
-	public Recorder() {
-
+	public Recorder(Kayttaja user) {
+		this.user = user;
+		this.setDaemon(true);
 	}
 	
 	public void run() {
+		Date startDate = new Date();
+		Sitting sitting = new Sitting(user, DATE_FORMAT.format(startDate));
+		SittingAccessObject sittingDAO = new SittingAccessObject();
+		sittingDAO.createSitting(sitting);
+		long timerNanoSecs = System.nanoTime();
+		quit = false;
 		while (!quit) {
-			
+			//Send updated sitting to database every 60 seconds
+			if (System.nanoTime() - timerNanoSecs >= 60 * Math.pow(10, 9)) {
+				//Sets the endDate in case program execution stops before the thread is done running
+				Date endDate = new Date();
+				sitting.setEnd_date(DATE_FORMAT.format(endDate));
+				sittingDAO.updateSitting(sitting);
+				timerNanoSecs = System.nanoTime();
+			}
 		}
+		Date endDate = new Date();
+		sitting.setEnd_date(DATE_FORMAT.format(endDate));
+		sittingDAO.updateSitting(sitting);
 	}
 
 	public void quit() {

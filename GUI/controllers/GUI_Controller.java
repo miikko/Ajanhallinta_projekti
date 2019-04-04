@@ -5,10 +5,10 @@ import java.util.HashMap;
 import application.View;
 import database.ConnectionHandler;
 import database.Kayttaja;
-import database.KayttajaAccessObject;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import models.UserAuth;
+import service.Recorder;
 
 public class GUI_Controller {
 
@@ -18,6 +18,7 @@ public class GUI_Controller {
 	// private static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 	private ConnectionHandler connHandler;
 	private Kayttaja user;
+	private Recorder rec;
 
 	public GUI_Controller(View view) {
 		this.view = view;
@@ -60,8 +61,26 @@ public class GUI_Controller {
 		}
 	}
 	
-	//TODO: Complete method
+	public boolean startRecording() {
+		if ((rec != null && rec.isAlive()) || user == null) {
+			return false;
+		}
+		rec = new Recorder(user);
+		rec.start();
+		return true;
+	}
+	
+	public boolean stopRecording() {
+		if (rec == null || !rec.isAlive()) {
+			return false;
+		}
+		rec.quit();
+		return true;
+	}
+	
+	//TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on next timer check
 	public void handleLogout() {
+		stopRecording();
 		user = null;
 	}
 
@@ -71,17 +90,12 @@ public class GUI_Controller {
 		stage.close();
 	}
 	
-	/**
-	 * Gets the username of a chosen user
-	 * 
-	 * @return the username of a certain user ID
-	 */
 	public String getUserName() {
 		return user.getName();
 	}
 
 	/**
-	 * Adds a screen with the given parameters to teh mapping
+	 * Adds a screen with the given parameters to the mapping
 	 * 
 	 * @param name
 	 * @param screen
@@ -91,7 +105,7 @@ public class GUI_Controller {
 	}
 
 	/**
-	 * Activates a screen with the given name in the mainscreen
+	 * Activates a screen with the given name
 	 * 
 	 * @param name
 	 */

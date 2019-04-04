@@ -21,7 +21,7 @@ public class SittingAccessObject implements SittingDAO_IF {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
-			istunto.saveOrUpdate(sitting);
+			istunto.save(sitting);
 			transaktio.commit();
 			return true;
 		} catch (Exception e) {
@@ -42,7 +42,7 @@ public class SittingAccessObject implements SittingDAO_IF {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
-			istunto.saveOrUpdate(sitting);
+			istunto.update(sitting);
 			transaktio.commit();
 			return true;
 		} catch (Exception e) {

@@ -6,13 +6,10 @@ import controllers.GUI_Controller;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -22,7 +19,6 @@ import javafx.geometry.Side;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import service.Recorder;
 import javafx.scene.Scene;
 import javafx.scene.chart.*;
 import javafx.scene.control.Button;
@@ -424,38 +420,16 @@ public class View extends Application {
 		String name = controller.getUserName();
 		welcomeLbl = new Label("Welcome " + name);
 		Button recBtn = new Button("Start recording");
-		Recorder rec = new Recorder();
-		Service<Void> recService = new Service<Void>() {
-			@Override
-			protected Task<Void> createTask() {
-				return new Task<Void>() {
-					@Override
-					protected Void call() throws Exception {
-						while (recording) {
-							Platform.runLater(() -> {
-								welcomeLbl.setText("Active window name: " + rec.getActiveProgramDescription());
-							});
-							Thread.sleep(1000);
-						}
-						Platform.runLater(() -> {
-							welcomeLbl.setText("Welcome " + name);
-						});
-						return null;
-					}
-				};
-			}
-
-		};
 		recBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				if (recording) {
 					recBtn.setText("Start recording");
+					controller.stopRecording();
 					recording = false;
 				} else {
-					recService.reset();
-					recService.start();
 					recBtn.setText("Stop recording");
+					controller.startRecording();
 					recording = true;
 				}
 			}

@@ -2,8 +2,6 @@ package models;
 
 import database.Kayttaja;
 import database.KayttajaAccessObject;
-import database.Sitting;
-import database.SittingAccessObject;
 
 /**
  * Class contains methods for authenticating users and creating
@@ -31,13 +29,8 @@ public class UserAuth {
 		Kayttaja kayttaja = kayttajaDAO.userExists(user_name);
 		if (kayttaja == null || !kayttaja.getPassword().equals(pw)) {
 			return null;
-		} else {
-			SittingAccessObject sittingDAO = new SittingAccessObject();
-			Sitting sitting = new Sitting(kayttaja);
-			sittingDAO.createSitting(sitting);
-			System.out.println(kayttaja.getSittings().size());
-			return kayttaja;
 		}
+		return kayttaja;
 	}
 
 	/**
@@ -59,8 +52,7 @@ public class UserAuth {
 			Kayttaja newUser = new Kayttaja(user_name, pw);
 			kayttajaDAO.createKayttaja(newUser);
 			return newUser;
-		} else {
-			return null;
 		}
+		return null;
 	}
 }
