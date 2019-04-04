@@ -32,6 +32,7 @@
    <property name="show_sql">true</property>
    <mapping class="database.Kayttaja"/>
    <mapping class="database.Sitting"/>
+   <mapping class="database.WindowTime"/>
 
 </session-factory>
 </hibernate-configuration>

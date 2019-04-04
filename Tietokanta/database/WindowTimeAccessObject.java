@@ -4,24 +4,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-/**
- * SittingAccessObject will contain the methods for reading and writing
- * information into sittings.
- * 
- * @author Arttuhal & miikk
- * @since 13/03/2019
- */
-
-public class SittingAccessObject implements SittingDAO_IF {
+public class WindowTimeAccessObject {
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 
-	@Override
-	public boolean createSitting(Sitting sitting) {
+	public boolean createWindowTime(WindowTime windowTime) {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
-			istunto.save(sitting);
+			istunto.save(windowTime);
 			transaktio.commit();
 			return true;
 		} catch (Exception e) {
@@ -30,15 +21,15 @@ public class SittingAccessObject implements SittingDAO_IF {
 			throw e;
 		} finally {
 			istunto.close();
+			System.out.println("WT created");
 		}
 	}
 
-	@Override
-	public boolean updateSitting(Sitting sitting) {
+	public boolean updateWindowTime(WindowTime windowTime) {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
-			istunto.update(sitting);
+			istunto.update(windowTime);
 			transaktio.commit();
 			return true;
 		} catch (Exception e) {
@@ -47,7 +38,7 @@ public class SittingAccessObject implements SittingDAO_IF {
 			throw e;
 		} finally {
 			istunto.close();
+			System.out.println("WT updated");
 		}
 	}
-	
 }

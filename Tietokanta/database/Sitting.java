@@ -2,9 +2,11 @@ package database;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,8 +42,10 @@ public class Sitting {
 	@JoinColumn(name="userId", nullable=false)
 	private Kayttaja kayttaja;
 	
-	//@OneToMany
-	//private List<WindowTime> window_time;
+	//TODO: replace "fetch=FETCHType.EAGER" with a better solution. Current solution might cause problems with large data sets
+	@Column
+	@OneToMany(mappedBy="sitting", fetch=FetchType.EAGER)
+	private Set<WindowTime> windowTimes;
 
 	public Sitting() {
 		super();
@@ -76,5 +80,5 @@ public class Sitting {
 	public Kayttaja getKayttaja() {
 		return kayttaja;
 	}
-
+	
 }

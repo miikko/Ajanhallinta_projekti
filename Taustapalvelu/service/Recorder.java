@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
@@ -22,6 +24,8 @@ import com.sun.jna.ptr.IntByReference;
 import database.Kayttaja;
 import database.Sitting;
 import database.SittingAccessObject;
+import database.WindowTime;
+import database.WindowTimeAccessObject;
 import sun.awt.shell.ShellFolder;
 
 /**
@@ -48,9 +52,56 @@ public class Recorder extends Thread {
 		Sitting sitting = new Sitting(user, DATE_FORMAT.format(startDate));
 		SittingAccessObject sittingDAO = new SittingAccessObject();
 		sittingDAO.createSitting(sitting);
+		Set<WindowTime> windowTimes = new HashSet<>();
+		WindowTimeAccessObject wtDAO = new WindowTimeAccessObject();
+		WindowTime currWt = new WindowTime(sitting, getActiveProgramDescription());
+		if (currWt.getProgramName() != null) {
+			windowTimes.add(currWt);
+			wtDAO.createWindowTime(currWt);
+		}
 		long timerNanoSecs = System.nanoTime();
-		quit = false;
+		long wtStartTime = System.nanoTime();
 		while (!quit) {
+			//Add duration to current windowtime
+			if (currWt.getProgramName() != null) {
+				int secsPassed = (int) ((System.nanoTime() - wtStartTime) * Math.pow(10, -9));
+				currWt.addTime(0, 0, secsPassed);
+			}
+			//Check if the active window is still the same
+			String nextProgDescription = getActiveProgramDescription();
+			if (!currWt.getProgramName().equals(nextProgDescription)) {
+				//If it isn't save the windowtime to db and add it to the Set
+				if (currWt.getProgramName() != null && !windowTimes.contains(currWt)) {
+					wtDAO.createWindowTime(currWt);
+					windowTimes.add(currWt);
+				}
+				//Then check if the new windowtime is found in the Set
+				WindowTime nextWt = null;
+				for (WindowTime wt : windowTimes) {
+					if (wt.getProgramName().equals(nextProgDescription)) {
+						nextWt = wt;
+						break;
+					}
+				}
+				//If it is, select the matching windowtime as the current windowtime
+				if (nextWt != null) {
+					currWt = nextWt;
+				} else {
+					//else create a new windowtime, set it as current and add it to the Set
+					currWt = new WindowTime(sitting, nextProgDescription);
+					if (nextProgDescription != null) {
+						windowTimes.add(currWt);
+					}
+				}
+				wtStartTime = System.nanoTime();
+			} else if (currWt.getProgramName() != null){
+				wtDAO.updateWindowTime(currWt);
+			}
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			//Send updated sitting to database every 60 seconds
 			if (System.nanoTime() - timerNanoSecs >= 60 * Math.pow(10, 9)) {
 				//Sets the endDate in case program execution stops before the thread is done running
