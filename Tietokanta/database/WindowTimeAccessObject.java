@@ -4,15 +4,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
-public class WindowTimeAccessObject {
+public class WindowTimeAccessObject implements WindowTimeDAO_IF {
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 
-	public boolean createWindowTime(WindowTime windowTime) {
+	public boolean createWindowTime(WindowTime wt) {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
-			istunto.save(windowTime);
+			istunto.save(wt);
 			transaktio.commit();
 			return true;
 		} catch (Exception e) {
@@ -25,11 +25,11 @@ public class WindowTimeAccessObject {
 		}
 	}
 
-	public boolean updateWindowTime(WindowTime windowTime) {
+	public boolean updateWindowTime(WindowTime wt) {
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
-			istunto.update(windowTime);
+			istunto.update(wt);
 			transaktio.commit();
 			return true;
 		} catch (Exception e) {

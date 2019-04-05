@@ -212,7 +212,6 @@ public class View extends Application {
 			public void handle(ActionEvent arg0) {
 				String username = usernameTF.getText();
 				String password = passwordTF.getText();
-				System.out.println("Username: " + username + ", password: " + password);
 				if (controller.handleLogin(username, password)) {
 					createMainScreen();
 					controller.activateScreen("Main");

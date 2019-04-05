@@ -29,8 +29,10 @@ import database.WindowTimeAccessObject;
 import sun.awt.shell.ShellFolder;
 
 /**
- * Class uses native library functions to record user activity outside of this application.<br>
+ * Class uses native library functions to record user activity outside of this
+ * application.<br>
  * Linking Java and native C libraries is done with the JNA library.
+ * 
  * @author miikk
  * @since 12/3/2019
  */
@@ -41,70 +43,52 @@ public class Recorder extends Thread {
 	private boolean quit;
 	private Kayttaja user;
 	private final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+	private Set<WindowTime> windowTimes = new HashSet<>();
+	private WindowTimeAccessObject wtDAO;
+	private WindowTime currWt = null;
 
 	public Recorder(Kayttaja user) {
 		this.user = user;
 		this.setDaemon(true);
 	}
-	
+
 	public void run() {
 		Date startDate = new Date();
 		Sitting sitting = new Sitting(user, DATE_FORMAT.format(startDate));
 		SittingAccessObject sittingDAO = new SittingAccessObject();
 		sittingDAO.createSitting(sitting);
-		Set<WindowTime> windowTimes = new HashSet<>();
-		WindowTimeAccessObject wtDAO = new WindowTimeAccessObject();
-		WindowTime currWt = new WindowTime(sitting, getActiveProgramDescription());
-		if (currWt.getProgramName() != null) {
+		wtDAO = new WindowTimeAccessObject();
+		String currProgDescription = getActiveProgramDescription();
+		if (currProgDescription != null) {
+			currWt = new WindowTime(sitting, currProgDescription);
 			windowTimes.add(currWt);
 			wtDAO.createWindowTime(currWt);
 		}
 		long timerNanoSecs = System.nanoTime();
 		long wtStartTime = System.nanoTime();
 		while (!quit) {
-			//Add duration to current windowtime
-			if (currWt.getProgramName() != null) {
-				int secsPassed = (int) ((System.nanoTime() - wtStartTime) * Math.pow(10, -9));
-				currWt.addTime(0, 0, secsPassed);
-			}
-			//Check if the active window is still the same
 			String nextProgDescription = getActiveProgramDescription();
-			if (!currWt.getProgramName().equals(nextProgDescription)) {
-				//If it isn't save the windowtime to db and add it to the Set
-				if (currWt.getProgramName() != null && !windowTimes.contains(currWt)) {
-					wtDAO.createWindowTime(currWt);
-					windowTimes.add(currWt);
+			// Check if active window is still the same
+			if ((currWt == null && nextProgDescription == null)
+					|| (currWt != null && currWt.getProgramName().equals(nextProgDescription))) {
+				if (currWt != null) {
+					int secsPassed = (int) ((System.nanoTime() - wtStartTime) * Math.pow(10, -9));
+					currWt.addTime(0, 0, secsPassed);
+					wtDAO.updateWindowTime(currWt);
 				}
-				//Then check if the new windowtime is found in the Set
-				WindowTime nextWt = null;
-				for (WindowTime wt : windowTimes) {
-					if (wt.getProgramName().equals(nextProgDescription)) {
-						nextWt = wt;
-						break;
-					}
-				}
-				//If it is, select the matching windowtime as the current windowtime
-				if (nextWt != null) {
-					currWt = nextWt;
-				} else {
-					//else create a new windowtime, set it as current and add it to the Set
-					currWt = new WindowTime(sitting, nextProgDescription);
-					if (nextProgDescription != null) {
-						windowTimes.add(currWt);
-					}
-				}
+			} else {
+				handleActiveWindowChange(nextProgDescription, sitting);
 				wtStartTime = System.nanoTime();
-			} else if (currWt.getProgramName() != null){
-				wtDAO.updateWindowTime(currWt);
 			}
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			//Send updated sitting to database every 60 seconds
+			// Send updated sitting to database every 60 seconds
+			// Set the endDate in case application execution stops before the thread has
+			// finished running
 			if (System.nanoTime() - timerNanoSecs >= 60 * Math.pow(10, 9)) {
-				//Sets the endDate in case program execution stops before the thread is done running
 				Date endDate = new Date();
 				sitting.setEnd_date(DATE_FORMAT.format(endDate));
 				sittingDAO.updateSitting(sitting);
@@ -119,9 +103,38 @@ public class Recorder extends Thread {
 	public void quit() {
 		quit = true;
 	}
+
+	/**
+	 * This method should be called each time the user switches active windows.<br>
+	 * It changes the currWt-variable's value depending on the given parameters.<br>
+	 * Additionally it sends a new WindowTime object to the database if the current
+	 * active window has not been active in current Sitting.
+	 * 
+	 * @param nextProgDescription
+	 * @param sitting
+	 */
+	private void handleActiveWindowChange(String nextProgDescription, Sitting sitting) {
+		currWt = null;
+		if (nextProgDescription != null) {
+			for (WindowTime wt : windowTimes) {
+				if (nextProgDescription.equals(wt.getProgramName())) {
+					currWt = wt;
+					break;
+				}
+			}
+			if (currWt == null) {
+				currWt = new WindowTime(sitting, nextProgDescription);
+				windowTimes.add(currWt);
+				wtDAO.createWindowTime(currWt);
+			}
+		}
+	}
+
 	/**
 	 * Uses User32 library's native methods to get the active window's name.
-	 * @return active window's name (same as the text on the top left corner of the window).
+	 * 
+	 * @return active window's name (same as the text on the top left corner of the
+	 *         window).
 	 */
 	public String getActiveWindowName() {
 		char[] buffer = new char[MAX_NAME_LENGTH];
@@ -130,8 +143,10 @@ public class Recorder extends Thread {
 	}
 
 	/**
-	 * Uses native methods belonging to Kernel32 and User32 libraries to get the full path to executable file in control of the active window.<br>
+	 * Uses native methods belonging to Kernel32 and User32 libraries to get the
+	 * full path to executable file in control of the active window.<br>
 	 * In Windows OS path starts from "This PC".
+	 * 
 	 * @return full path to the active window's executable file.
 	 */
 	public String getActiveWindowFilePath() {
@@ -153,8 +168,11 @@ public class Recorder extends Thread {
 
 	/**
 	 * Gets the active window's description using PowerShell commands.<br>
-	 * The description in Windows OS is the same as in the Task-Manager's "Name"-column.<br>
-	 * @return currently active program's description. If description is not found/is missing returns null.
+	 * The description in Windows OS is the same as in the Task-Manager's
+	 * "Name"-column.<br>
+	 * 
+	 * @return currently active program's description. If description is not
+	 *         found/is missing returns null.
 	 */
 	public String getActiveProgramDescription() {
 		String description = null;
@@ -198,15 +216,17 @@ public class Recorder extends Thread {
 				}
 			}
 		}
-		if (description == null) {
-			return "Description missing";
+		if (description.trim().length() == 0) {
+			return null;
 		}
 		return description;
 	}
-	
+
 	/**
 	 * Uses ShellFolder to locate and store the active window's icon.
-	 * @return Java Swing icon of the active window. Returns null if icon is not found/is missing.
+	 * 
+	 * @return Java Swing icon of the active window. Returns null if icon is not
+	 *         found/is missing.
 	 */
 	public Icon getActiveWindowIcon() {
 		String path = getActiveWindowFilePath();
