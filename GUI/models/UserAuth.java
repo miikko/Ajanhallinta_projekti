@@ -55,4 +55,15 @@ public class UserAuth {
 		}
 		return null;
 	}
+	
+	public Kayttaja changeUserDetails(int id, String username, String pass1, String pass2) {
+		if(!pass1.equals(pass2) || username == "" || pass1 == "") {
+			return null;
+		}else {
+			KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
+			Kayttaja kayt = new Kayttaja(id, username, pass1);
+			kayttajaDAO.updateKayttaja(kayt);
+			return kayt;
+		}
+	}
 }

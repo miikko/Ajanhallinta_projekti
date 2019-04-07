@@ -77,6 +77,8 @@ public class View extends Application {
 	private StackPane barChart;
 	// Date picker variables
 	private DatePicker datePicker;
+	//Account variables
+	private VBox account;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -117,6 +119,7 @@ public class View extends Application {
 		createDatePicker();
 		createNavBar();
 		createDefaultContent();
+		createAccountContainer();
 		createOptionMenu();
 		mainScreen.setLeft(navBar);
 		mainScreen.setCenter(defaultContent);
@@ -143,6 +146,8 @@ public class View extends Application {
 		case "Default":
 			mainScreen.setCenter(defaultContent);
 			break;
+		case "Account":
+			mainScreen.setCenter(account);
 		default:
 			break;
 		}
@@ -279,6 +284,14 @@ public class View extends Application {
 	 */
 	private void createOptionMenu() {
 		optionMenu = new MenuButton("Options");
+		
+		MenuItem accountItem = new MenuItem("Account");
+		accountItem.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				updateMainScreen("Account");
+			}
+		});
 		MenuItem logoutItem = new MenuItem("Logout");
 		logoutItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -294,7 +307,39 @@ public class View extends Application {
 				controller.handleExit((Stage) scene.getWindow());
 			}
 		});
-		optionMenu.getItems().addAll(logoutItem, quitItem);
+		optionMenu.getItems().addAll(accountItem, logoutItem, quitItem);
+	}
+	
+	private void createAccountContainer() {
+		Label infoLabel = new Label("");
+		Label usern = new Label("New username");
+		Label pass1 = new Label("New password");
+		Label pass2 = new Label("Type same password");
+		TextField usernameField = new TextField();
+		PasswordField passwordField = new PasswordField();
+		PasswordField passwordField2 = new PasswordField();
+		Button changeBtn = new Button("Change");
+
+		changeBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String username = usernameField.getText();
+				String setPass1 = passwordField.getText();
+				String setPass2 = passwordField2.getText();
+				if (controller.handleUserChanges(username, setPass1, setPass2)) {
+					infoLabel.setText("Vaihto onnistui!");
+				} else {
+					infoLabel.setText("Vaihto epäonnistui.");
+				}
+				passwordField.clear();
+				passwordField2.clear();
+			}
+		});
+		
+		account = new VBox(30);
+		account.setSpacing(10);
+		account.setAlignment(Pos.CENTER);
+		account.getChildren().addAll(usern, usernameField,pass1, passwordField, pass2, passwordField2, changeBtn);
 	}
 	
 	/**

@@ -61,6 +61,17 @@ public class GUI_Controller {
 		}
 	}
 	
+	public boolean handleUserChanges(String username, String pass1, String pass2) {
+		user = uAuth.changeUserDetails(user.getId(), username, pass1, pass2);
+		if(user == null) {
+			System.out.println("Vaihto ei onnistunut");
+			return false;
+		}else {
+			System.out.println("Vaihto onnistui!");
+			return true;
+		}
+	}
+	
 	public boolean startRecording() {
 		if ((rec != null && rec.isAlive()) || user == null) {
 			return false;
