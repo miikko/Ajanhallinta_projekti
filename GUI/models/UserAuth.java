@@ -57,10 +57,12 @@ public class UserAuth {
 	}
 	
 	public Kayttaja changeUserDetails(int id, String username, String pass1, String pass2) {
+		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 		if(!pass1.equals(pass2) || username == "" || pass1 == "") {
 			return null;
+		}else if(kayttajaDAO.userExists(username) != null) {
+			return null;
 		}else {
-			KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 			Kayttaja kayt = new Kayttaja(id, username, pass1);
 			kayttajaDAO.updateKayttaja(kayt);
 			return kayt;

@@ -339,7 +339,7 @@ public class View extends Application {
 		account = new VBox(30);
 		account.setSpacing(10);
 		account.setAlignment(Pos.CENTER);
-		account.getChildren().addAll(usern, usernameField,pass1, passwordField, pass2, passwordField2, changeBtn);
+		account.getChildren().addAll(usern, usernameField,pass1, passwordField, pass2, passwordField2, changeBtn, infoLabel);
 	}
 	
 	/**
