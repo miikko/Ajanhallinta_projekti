@@ -1,7 +1,5 @@
 package database;
 
-import java.sql.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -13,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
 /**
@@ -44,7 +40,7 @@ public class Sitting {
 	
 	//TODO: replace "fetch=FETCHType.EAGER" with a better solution. Current solution might cause problems with large data sets
 	@Column
-	@OneToMany(mappedBy="sitting", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="sitting")//, fetch=FetchType.EAGER)
 	private Set<WindowTime> windowTimes;
 
 	public Sitting() {

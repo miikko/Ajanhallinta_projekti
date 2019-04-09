@@ -9,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.SecondaryTable;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ColumnTransformer;
@@ -40,7 +38,7 @@ public class Kayttaja {
 	
 	//TODO: replace "fetch=FETCHType.EAGER" with a better solution. Current solution might cause problems with large data sets
 	@Column
-	@OneToMany(mappedBy="kayttaja", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="kayttaja")//, fetch=FetchType.EAGER)
 	private Set<Sitting> sittings;
 	
 	public Kayttaja(String user_name, String password) {
