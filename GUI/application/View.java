@@ -44,7 +44,7 @@ import javafx.scene.text.Text;
  * Class is designed to show GUI content to user. <br>
  * View part in the MVC-framework
  * 
- * @author miikko & MrJoXuX
+ * @author miikko & MrJoXuX & JP
  * @since 11/03/2019
  */
 //TODO: Find a proper place to create screens
@@ -318,7 +318,8 @@ public class View extends Application {
 		TextField usernameField = new TextField();
 		PasswordField passwordField = new PasswordField();
 		PasswordField passwordField2 = new PasswordField();
-		Button changeBtn = new Button("Change");
+		Button changeBtn = new Button("Change username");
+		Button changeBtn2 = new Button("Change password");
 
 		changeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -326,7 +327,20 @@ public class View extends Application {
 				String username = usernameField.getText();
 				String setPass1 = passwordField.getText();
 				String setPass2 = passwordField2.getText();
-				if (controller.handleUserChanges(username, setPass1, setPass2)) {
+				if (controller.handleUserUsernameChanges(username)) {
+					infoLabel.setText("Vaihto onnistui!");
+				} else {
+					infoLabel.setText("Vaihto epäonnistui.");
+				}
+			}
+		});
+		
+		changeBtn2.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				String setPass1 = passwordField.getText();
+				String setPass2 = passwordField2.getText();
+				if (controller.handleUserPasswordChanges(setPass1, setPass2)) {
 					infoLabel.setText("Vaihto onnistui!");
 				} else {
 					infoLabel.setText("Vaihto epäonnistui.");
@@ -339,7 +353,7 @@ public class View extends Application {
 		account = new VBox(30);
 		account.setSpacing(10);
 		account.setAlignment(Pos.CENTER);
-		account.getChildren().addAll(usern, usernameField,pass1, passwordField, pass2, passwordField2, changeBtn, infoLabel);
+		account.getChildren().addAll(usern, usernameField,pass1, passwordField, pass2, passwordField2, changeBtn, changeBtn2, infoLabel);
 	}
 	
 	/**

@@ -61,15 +61,29 @@ public class GUI_Controller {
 		}
 	}
 	
-	public boolean handleUserChanges(String username, String pass1, String pass2) {
-		user = uAuth.changeUserDetails(user.getId(), username, pass1, pass2);
-		if(user == null) {
-			System.out.println("Vaihto ei onnistunut");
+	public boolean handleUserUsernameChanges(String username) {
+		Kayttaja tempUser = uAuth.changeUserUsername(user.getId(), username, user.getPassword());
+		if(tempUser == null) {
+			System.out.println("Nimen vaihto ei onnistunut");
 			return false;
 		}else {
-			System.out.println("Vaihto onnistui!");
+			System.out.println("Nimen vaihto onnistui!");
+			user = tempUser;
 			return true;
 		}
+	}
+	
+	public boolean handleUserPasswordChanges(String pass1, String pass2) {
+		Kayttaja tempUser = uAuth.changeUserPassword(user.getId(), user.getName(), pass1, pass2);
+			if(tempUser == null) {
+				System.out.println("Salasanan vaihto epäonnistui");
+				return false;
+			}else {
+				System.out.println("Salasanan vaihto onnistui");
+				user = tempUser;
+				return true;
+			}
+		
 	}
 	
 	public boolean startRecording() {

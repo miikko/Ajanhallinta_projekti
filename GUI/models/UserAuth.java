@@ -7,7 +7,7 @@ import database.KayttajaAccessObject;
  * Class contains methods for authenticating users and creating
  * Kayttaja-objects.
  * 
- * @author miikk
+ * @author miikk & JP
  * @since 24.3.2019
  */
 public class UserAuth {
@@ -56,11 +56,20 @@ public class UserAuth {
 		return null;
 	}
 	
-	public Kayttaja changeUserDetails(int id, String username, String pass1, String pass2) {
+	public Kayttaja changeUserUsername(int id, String username, String password) {
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		if(!pass1.equals(pass2) || username == "" || pass1 == "") {
+		if(kayttajaDAO.userExists(username) != null) {
 			return null;
-		}else if(kayttajaDAO.userExists(username) != null) {
+		}else {
+			Kayttaja kayt = new Kayttaja(id, username, password);
+			kayttajaDAO.updateKayttaja(kayt);
+			return kayt;
+		}
+	}
+	
+	public Kayttaja changeUserPassword(int id, String username, String pass1, String pass2) {
+		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
+		if(!pass1.equals(pass2) || pass1 == "") {
 			return null;
 		}else {
 			Kayttaja kayt = new Kayttaja(id, username, pass1);
