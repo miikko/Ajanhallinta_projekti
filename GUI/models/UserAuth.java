@@ -55,24 +55,24 @@ public class UserAuth {
 		}
 		return null;
 	}
-	
-	public Kayttaja changeUserUsername(int id, String username, String password) {
+
+	public Kayttaja changeUsername(int id, String username, String password) {
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		if(kayttajaDAO.userExists(username) != null) {
+		if (username.equals("") || password.equals("") || kayttajaDAO.userExists(username) != null) {
 			return null;
-		}else {
+		} else {
 			Kayttaja kayt = new Kayttaja(id, username, password);
 			kayttajaDAO.updateKayttaja(kayt);
 			return kayt;
 		}
 	}
-	
-	public Kayttaja changeUserPassword(int id, String username, String pass1, String pass2) {
+
+	public Kayttaja changePassword(int id, String username, String newPw, String newPwRepeated) {
 		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		if(!pass1.equals(pass2) || pass1 == "") {
+		if (!newPwRepeated.equals(newPw) || newPw.equals("")) {
 			return null;
-		}else {
-			Kayttaja kayt = new Kayttaja(id, username, pass1);
+		} else {
+			Kayttaja kayt = new Kayttaja(id, username, newPw);
 			kayttajaDAO.updateKayttaja(kayt);
 			return kayt;
 		}

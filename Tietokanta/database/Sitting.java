@@ -38,9 +38,8 @@ public class Sitting {
 	@JoinColumn(name="userId", nullable=false)
 	private Kayttaja kayttaja;
 	
-	//TODO: replace "fetch=FETCHType.EAGER" with a better solution. Current solution might cause problems with large data sets
 	@Column
-	@OneToMany(mappedBy="sitting")//, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="sitting")
 	private Set<WindowTime> windowTimes;
 
 	public Sitting() {

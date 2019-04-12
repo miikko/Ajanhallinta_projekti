@@ -49,7 +49,7 @@ import javafx.scene.text.Text;
  */
 //TODO: Find a proper place to create screens
 public class View extends Application {
-	
+
 	private GUI_Controller controller;
 	private Scene scene;
 	// Login screen variables
@@ -77,8 +77,8 @@ public class View extends Application {
 	private StackPane barChart;
 	// Date picker variables
 	private DatePicker datePicker;
-	//Account variables
-	private VBox account;
+	// Account variables
+	private VBox accountContainer;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -109,7 +109,7 @@ public class View extends Application {
 	/**
 	 * Creates the main screen that the user sees after logging in.<br>
 	 * Calls element builder functions and sets the contents to default.<br>
-	 * Also adds the main screen to controllers screen pool so it can be chosen
+	 * Additionally adds the main screen to controllers screen pool so it can be chosen
 	 * later.
 	 */
 	private void createMainScreen() {
@@ -145,9 +145,9 @@ public class View extends Application {
 			break;
 		case "Default":
 			mainScreen.setCenter(defaultContent);
-			break;
 		case "Account":
-			mainScreen.setCenter(account);
+			mainScreen.setCenter(accountContainer);
+			break;
 		default:
 			break;
 		}
@@ -248,15 +248,15 @@ public class View extends Application {
 		btnContainer.setStyle("-fx-border-color: black");
 		btnContainer.getChildren().addAll(loginBtn, regBtn);
 	}
-	
-	
+
 	/**
 	 * Creates and shows a popup with the given message and a confirm button.<br>
 	 * Clicking the button hides the popup and activates the given screen.
+	 * 
 	 * @param message
 	 * @param transitionScreenName
 	 */
-	//TODO: Find a more elegant way for creating a popup
+	// TODO: Find a more elegant way for creating a popup
 	private void createAndDisplayPopup(String message, String transitionScreenName) {
 		Stage popupStage = new Stage();
 		popupStage.initModality(Modality.APPLICATION_MODAL);
@@ -279,12 +279,13 @@ public class View extends Application {
 	}
 
 	/**
-	 * Creates a MenuButton for various options such as exiting the application and logging out.<br>
+	 * Creates a MenuButton for various options such as exiting the application and
+	 * logging out.<br>
 	 * On press, the controller is called to handle the action.
 	 */
 	private void createOptionMenu() {
 		optionMenu = new MenuButton("Options");
-		
+
 		MenuItem accountItem = new MenuItem("Account");
 		accountItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -298,7 +299,7 @@ public class View extends Application {
 			public void handle(ActionEvent arg0) {
 				controller.handleLogout();
 				controller.activateScreen("Login");
-			}	
+			}
 		});
 		MenuItem quitItem = new MenuItem("Quit");
 		quitItem.setOnAction(new EventHandler<ActionEvent>() {
@@ -309,7 +310,7 @@ public class View extends Application {
 		});
 		optionMenu.getItems().addAll(accountItem, logoutItem, quitItem);
 	}
-	
+
 	private void createAccountContainer() {
 		Label infoLabel = new Label("");
 		Label usern = new Label("New username");
@@ -318,29 +319,27 @@ public class View extends Application {
 		TextField usernameField = new TextField();
 		PasswordField passwordField = new PasswordField();
 		PasswordField passwordField2 = new PasswordField();
-		Button changeBtn = new Button("Change username");
-		Button changeBtn2 = new Button("Change password");
+		Button changeUnameBtn = new Button("Change username");
+		Button changePwBtn = new Button("Change password");
 
-		changeBtn.setOnAction(new EventHandler<ActionEvent>() {
+		changeUnameBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				String username = usernameField.getText();
-				String setPass1 = passwordField.getText();
-				String setPass2 = passwordField2.getText();
-				if (controller.handleUserUsernameChanges(username)) {
+				if (controller.handleUsernameChange(username)) {
 					infoLabel.setText("Vaihto onnistui!");
 				} else {
 					infoLabel.setText("Vaihto epäonnistui.");
 				}
 			}
 		});
-		
-		changeBtn2.setOnAction(new EventHandler<ActionEvent>() {
+
+		changePwBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				String setPass1 = passwordField.getText();
 				String setPass2 = passwordField2.getText();
-				if (controller.handleUserPasswordChanges(setPass1, setPass2)) {
+				if (controller.handlePasswordChange(setPass1, setPass2)) {
 					infoLabel.setText("Vaihto onnistui!");
 				} else {
 					infoLabel.setText("Vaihto epäonnistui.");
@@ -349,13 +348,14 @@ public class View extends Application {
 				passwordField2.clear();
 			}
 		});
-		
-		account = new VBox(30);
-		account.setSpacing(10);
-		account.setAlignment(Pos.CENTER);
-		account.getChildren().addAll(usern, usernameField,pass1, passwordField, pass2, passwordField2, changeBtn, changeBtn2, infoLabel);
+
+		accountContainer = new VBox();
+		accountContainer.setSpacing(10);
+		accountContainer.setAlignment(Pos.CENTER);
+		accountContainer.getChildren().addAll(usern, usernameField, pass1, passwordField, pass2, passwordField2, changeUnameBtn,
+				changePwBtn, infoLabel);
 	}
-	
+
 	/**
 	 * Creates a stopwatch that can be used to track the screentime of a certain
 	 * application.<br>
@@ -495,8 +495,10 @@ public class View extends Application {
 		defaultContent.setAlignment(Pos.CENTER);
 		defaultContent.getChildren().addAll(welcomeLbl, recBtn);
 	}
+
 	/**
-	 * Calls the chart creation methods and additionally creates a BorderPane container for the created charts.<br>
+	 * Calls the chart creation methods and additionally creates a BorderPane
+	 * container for the created charts.<br>
 	 * The container also contains a dropdown menu for selecting charts.
 	 */
 	private void createChartContainer() {
@@ -609,23 +611,23 @@ public class View extends Application {
 		barChart.getChildren().addAll(bChart);
 		chartTypes.add("Bar chart");
 	}
-	
+
 	private void createDatePicker() {
-        VBox vB = new VBox(20);
+		VBox vB = new VBox(20);
 
-        datePicker = new DatePicker();
+		datePicker = new DatePicker();
 
-        GridPane gPane = new GridPane();
-        gPane.setHgap(10);
-        gPane.setVgap(10);
+		GridPane gPane = new GridPane();
+		gPane.setHgap(10);
+		gPane.setVgap(10);
 
-        Label infoLabel = new Label("Select a past date:");
-        gPane.add(infoLabel, 0, 0);
+		Label infoLabel = new Label("Select a past date:");
+		gPane.add(infoLabel, 0, 0);
 
-        GridPane.setHalignment(infoLabel, HPos.CENTER);
-        gPane.add(datePicker, 0, 1);
-        vB.getChildren().add(gPane);
-    }
+		GridPane.setHalignment(infoLabel, HPos.CENTER);
+		gPane.add(datePicker, 0, 1);
+		vB.getChildren().add(gPane);
+	}
 
 	public void setRoot(Pane screen) {
 		scene.setRoot(screen);

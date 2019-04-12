@@ -54,15 +54,14 @@ public class GUI_Controller {
 	 */
 	public boolean handleRegister(String username, String password) {
 		user = uAuth.register(username, password);
-		if (user != null) {
-			return true;
-		} else {
+		if (user == null) {
 			return false;
 		}
+		return true;
 	}
 	
-	public boolean handleUserUsernameChanges(String username) {
-		Kayttaja tempUser = uAuth.changeUserUsername(user.getId(), username, user.getPassword());
+	public boolean handleUsernameChange(String username) {
+		Kayttaja tempUser = uAuth.changeUsername(user.getId(), username, user.getPassword());
 		if(tempUser == null) {
 			System.out.println("Nimen vaihto ei onnistunut");
 			return false;
@@ -73,8 +72,8 @@ public class GUI_Controller {
 		}
 	}
 	
-	public boolean handleUserPasswordChanges(String pass1, String pass2) {
-		Kayttaja tempUser = uAuth.changeUserPassword(user.getId(), user.getName(), pass1, pass2);
+	public boolean handlePasswordChange(String pass1, String pass2) {
+		Kayttaja tempUser = uAuth.changePassword(user.getId(), user.getName(), pass1, pass2);
 			if(tempUser == null) {
 				System.out.println("Salasanan vaihto epäonnistui");
 				return false;

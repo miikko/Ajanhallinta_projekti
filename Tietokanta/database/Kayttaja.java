@@ -36,9 +36,8 @@ public class Kayttaja {
 	//@ColumnTransformer(forColumn="password", read="pgp_sym_decrypt(password), current_setting('encrypt.key')", write="pgp_sym_encrypt(?), current_setting('encrypt.key')")
 	private String password;
 	
-	//TODO: replace "fetch=FETCHType.EAGER" with a better solution. Current solution might cause problems with large data sets
 	@Column
-	@OneToMany(mappedBy="kayttaja")//, fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="kayttaja")
 	private Set<Sitting> sittings;
 	
 	public Kayttaja(String user_name, String password) {
