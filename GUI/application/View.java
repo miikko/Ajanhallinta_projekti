@@ -47,12 +47,7 @@ public class View extends Application {
 	private GUI_Controller controller;
 	private Scene scene;
 	// Login screen variables
-	private BorderPane loginScreen;
-	private VBox tfContainer;
-	private HBox btnContainer;
-	private TextField usernameTF;
-	private PasswordField passwordTF;
-	private Label inputInfoLbl;
+	private LoginScreen loginScreen;
 	// Main screen variables
 	private BorderPane mainScreen;
 	private VBox navBar;
@@ -76,7 +71,8 @@ public class View extends Application {
 	public void start(Stage primaryStage) {
 		try {
 			controller = new GUI_Controller(this);
-			createLoginScreen(5);
+			loginScreen = new LoginScreen(controller, 5);
+			createMainScreen();
 			scene = new Scene(loginScreen, 1000, 700);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
@@ -90,11 +86,11 @@ public class View extends Application {
 
 	@Override
 	public void init() {
-
+		
 	}
 
 	public static void main(String[] args) {
-		Locale.setDefault(Locale.US);
+		//Locale.setDefault(Locale.US);
 		launch(args);
 	}
 
@@ -106,7 +102,7 @@ public class View extends Application {
 	 */
 	private void createMainScreen() {
 		mainScreen = new BorderPane();
-		createChartContainer();;
+		createChartContainer();
 		stopwatch = new Stopwatch();
 		createDatePicker();
 		createNavBar();
@@ -146,102 +142,6 @@ public class View extends Application {
 	}
 
 	/**
-	 * Creates the login screen that is the first screen the user sees when logging
-	 * in.<br>
-	 * This screen contains 2 text fields for username and password and 2 buttons
-	 * for logging in and registering.<br>
-	 * Also adds the login screen to controllers screen pool so it can be chosen
-	 * later, for example when logging out.
-	 * 
-	 * @param spacing
-	 */
-	private void createLoginScreen(int spacing) {
-		loginScreen = new BorderPane();
-		createLoginTextFields(spacing);
-		createLoginBtnContainer(spacing);
-		loginScreen.setCenter(tfContainer);
-		loginScreen.setBottom(btnContainer);
-		controller.addScreen("Login", loginScreen);
-	}
-
-	/**
-	 * Initializes the login text fields and the pop up label and puts them in a
-	 * container.
-	 * 
-	 * @param spacing
-	 */
-	private void createLoginTextFields(int spacing) {
-		EventHandler<KeyEvent> inputHandler = new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if (!inputInfoLbl.getText().equals("")) {
-					inputInfoLbl.setText("");
-				}
-			}
-		};
-		tfContainer = new VBox();
-		inputInfoLbl = new Label("");
-		HBox subContainer = new HBox(spacing);
-		usernameTF = new TextField();
-		usernameTF.setOnKeyTyped(inputHandler);
-		usernameTF.setPromptText("Username");
-		passwordTF = new PasswordField();
-		passwordTF.setPromptText("Password");
-		passwordTF.setOnKeyTyped(inputHandler);
-		subContainer.getChildren().addAll(usernameTF, passwordTF);
-		subContainer.setStyle("-fx-border-color: black");
-		subContainer.setAlignment(Pos.CENTER);
-		tfContainer.getChildren().addAll(inputInfoLbl, subContainer);
-		tfContainer.setAlignment(Pos.CENTER);
-	}
-
-	/**
-	 * Initializes the login buttons and puts them in a container.<br>
-	 * 
-	 * @param spacing
-	 */
-	private void createLoginBtnContainer(int spacing) {
-		btnContainer = new HBox(spacing);
-		btnContainer.setAlignment(Pos.CENTER);
-		Button loginBtn = new Button("Login");
-		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				String username = usernameTF.getText();
-				String password = passwordTF.getText();
-				if (controller.handleLogin(username, password)) {
-					createMainScreen();
-					controller.activateScreen("Main");
-				} else {
-					inputInfoLbl.setText("Invalid username and/or password.");
-				}
-				passwordTF.clear();
-			}
-		});
-		Button regBtn = new Button("Register");
-		regBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				String username = usernameTF.getText();
-				String password = passwordTF.getText();
-				if (controller.handleRegister(username, password)) {
-					createMainScreen();
-					createAndDisplayPopup("Registration successful!", "Main");
-				} else {
-					inputInfoLbl.setText("Selected username is already taken. Please choose another one.");
-				}
-				passwordTF.clear();
-			}
-
-		});
-		HBox.setMargin(loginBtn, new Insets(spacing));
-		HBox.setMargin(regBtn, new Insets(spacing));
-		btnContainer.setAlignment(Pos.CENTER);
-		btnContainer.setStyle("-fx-border-color: black");
-		btnContainer.getChildren().addAll(loginBtn, regBtn);
-	}
-
-	/**
 	 * Creates and shows a popup with the given message and a confirm button.<br>
 	 * Clicking the button hides the popup and activates the given screen.
 	 * 
@@ -249,7 +149,7 @@ public class View extends Application {
 	 * @param transitionScreenName
 	 */
 	// TODO: Find a more elegant way for creating a popup
-	private void createAndDisplayPopup(String message, String transitionScreenName) {
+	public void createAndDisplayPopup(String message, String transitionScreenName) {
 		Stage popupStage = new Stage();
 		popupStage.initModality(Modality.APPLICATION_MODAL);
 		VBox popup = new VBox();
@@ -393,8 +293,9 @@ public class View extends Application {
 	 */
 	private void createDefaultContent() {
 		defaultContent = new VBox();
-		String name = controller.getUserName();
-		welcomeLbl = new Label("Welcome " + name);
+		//String name = controller.getUserName();
+		//welcomeLbl = new Label("Welcome " + name);
+		welcomeLbl = new Label("TODO");
 		Button recBtn = new Button("Start recording");
 		recBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
