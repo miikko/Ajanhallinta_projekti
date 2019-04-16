@@ -2,9 +2,12 @@ package controllers;
 
 import java.util.HashMap;
 
+import application.ScreenFactory;
 import application.View;
 import database.ConnectionHandler;
 import database.Kayttaja;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import models.UserAuth;
@@ -15,7 +18,7 @@ public class GUI_Controller {
 	private View view;
 	private HashMap<String, Pane> screens = new HashMap<>();
 	private UserAuth uAuth;
-	// private static KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
+	private StringProperty usernameProperty = new SimpleStringProperty();
 	private ConnectionHandler connHandler;
 	private Kayttaja user;
 	private Recorder rec;
@@ -41,6 +44,8 @@ public class GUI_Controller {
 		if (user == null) {
 			return false;
 		}
+		usernameProperty.set(user.getName()); 
+		screens.put("Main", ScreenFactory.createScreen("Main", 10, this));
 		activateScreen("Main");
 		return true;
 	}
@@ -58,6 +63,8 @@ public class GUI_Controller {
 		if (user == null) {
 			return false;
 		}
+		usernameProperty.set(user.getName());
+		screens.put("Main", ScreenFactory.createScreen("Main", 10, this));
 		view.createAndDisplayPopup("Registration successful!", "Main");
 		return true;
 	}
@@ -70,6 +77,7 @@ public class GUI_Controller {
 		} else {
 			System.out.println("Nimen vaihto onnistui!");
 			user = tempUser;
+			usernameProperty.set(user.getName());
 			return true;
 		}
 	}
@@ -112,13 +120,14 @@ public class GUI_Controller {
 	}
 
 	// TODO: Complete method
-	public void handleExit(Stage stage) {
+	public void handleExit() {
 		handleLogout();
+		Stage stage = (Stage) view.getScene().getWindow();
 		stage.close();
 	}
 
-	public String getUserName() {
-		return user.getName();
+	public StringProperty getUsernameProperty() {
+		return usernameProperty;
 	}
 
 	/**

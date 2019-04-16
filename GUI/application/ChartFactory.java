@@ -6,7 +6,7 @@ import database.Sitting;
 import javafx.scene.layout.StackPane;
 
 /**
- * Abstract Factory for creating chartsa
+ * Abstract Factory for creating charts
  * 
  * @author miikk
  *
