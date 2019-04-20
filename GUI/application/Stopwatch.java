@@ -1,5 +1,6 @@
 package application;
 
+import controllers.GUI_Controller;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -12,18 +13,19 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 /**
- * Creates a stopwatch that can be used to track the screentime of a certain
- * application.<br>
- * Includes all the buttons and methods for the stopwatch to work independently.
+ * Creates a Stopwatch that can be used to start a Sitting and track its elapsed time.<br>
+ * A Sitting can be started by pressing the start recording button.
  * 
  * @author miikk & MrJoXuX
  *
  */
 class Stopwatch extends VBox {
 	private int hrs = 0, mins = 0, secs = 0, millis = 0;
-	private boolean pause = true;
+	private boolean recording;
+	private GUI_Controller controller;
 
-	public Stopwatch() {
+	public Stopwatch(GUI_Controller controller) {
+		this.controller = controller;
 		create();
 	}
 
@@ -38,33 +40,21 @@ class Stopwatch extends VBox {
 		}));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.setAutoReverse(false);
-		Button startButton = new Button("Start");
+		Button startButton = new Button("Start recording");
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				if (pause) {
-					timeline.play();
-					pause = false;
-					startButton.setText("Stop");
-				} else {
+				if (recording) {
 					timeline.pause();
-					pause = true;
-					startButton.setText("Start");
-				}
-			}
-		});
-		Button resetButton = new Button("Reset");
-		resetButton.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				mins = 0;
-				secs = 0;
-				millis = 0;
-				timeline.pause();
-				timerText.setText("00:00:00");
-				if (!pause) {
-					pause = true;
-					startButton.setText("Start");
+					controller.stopRecording();
+					timerText.setText("00:00:00");
+					startButton.setText("Start recording");
+					recording = false;
+				} else {
+					timeline.play();
+					controller.startRecording();
+					recording = true;
+					startButton.setText("Stop recording");
 				}
 			}
 		});
@@ -72,7 +62,7 @@ class Stopwatch extends VBox {
 
 		HBox swBtnContainer = new HBox(30);
 		swBtnContainer.setAlignment(Pos.CENTER);
-		swBtnContainer.getChildren().addAll(startButton, resetButton);
+		swBtnContainer.getChildren().addAll(startButton);
 		this.setAlignment(Pos.CENTER);
 		this.getChildren().addAll(timerText, swBtnContainer);
 	}

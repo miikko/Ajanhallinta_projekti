@@ -38,7 +38,6 @@ import javafx.scene.layout.VBox;
  * @author miikk & MrJoXuX & JP
  */
 class MainScreen extends BorderPane {
-	private Stopwatch stopwatch;
 	private BorderPane chartContainer;
 	private ObservableList<String> chartTypes;
 	private DatePicker calendar;
@@ -49,7 +48,6 @@ class MainScreen extends BorderPane {
 	private VBox accountContainer;
 	private Label infoLabel;
 	private TextField usernameField;
-	private boolean recording;
 	private GUI_Controller controller;
 
 	public MainScreen(GUI_Controller controller) {
@@ -63,7 +61,6 @@ class MainScreen extends BorderPane {
 
 	private void create() {
 		createChartContainer();
-		stopwatch = new Stopwatch();
 		createDatePicker();
 		createNavBar();
 		createDefaultContent();
@@ -180,13 +177,6 @@ class MainScreen extends BorderPane {
 				updateCenter(defaultContent);
 			}
 		});
-		Button swBtn = new Button("Stopwatch");
-		swBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateCenter(stopwatch);
-			}
-		});
 		Button chartBtn = new Button("Charts");
 		chartBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -201,7 +191,7 @@ class MainScreen extends BorderPane {
 				updateCenter(calendar);
 			}
 		});
-		navBar.getChildren().addAll(defaultBtn, swBtn, chartBtn, dateBtn);
+		navBar.getChildren().addAll(defaultBtn, chartBtn, dateBtn);
 	}
 
 	/**
@@ -211,23 +201,9 @@ class MainScreen extends BorderPane {
 	private void createDefaultContent() {
 		defaultContent = new VBox();
 		welcomeLbl = new Label("");
-		Button recBtn = new Button("Start recording");
-		recBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if (recording) {
-					recBtn.setText("Start recording");
-					controller.stopRecording();
-					recording = false;
-				} else {
-					recBtn.setText("Stop recording");
-					controller.startRecording();
-					recording = true;
-				}
-			}
-		});
+		Stopwatch stopwatch = new Stopwatch(controller);
 		defaultContent.setAlignment(Pos.CENTER);
-		defaultContent.getChildren().addAll(welcomeLbl, recBtn);
+		defaultContent.getChildren().addAll(welcomeLbl, stopwatch);
 	}
 
 	/**
