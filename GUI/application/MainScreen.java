@@ -1,32 +1,21 @@
 package application;
 
-import java.util.HashSet;
 
 import controllers.GUI_Controller;
-import database.Sitting;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 /**
@@ -38,9 +27,6 @@ import javafx.scene.layout.VBox;
  * @author miikk & MrJoXuX & JP
  */
 class MainScreen extends BorderPane {
-	private BorderPane chartContainer;
-	private ObservableList<String> chartTypes;
-	private DatePicker calendar;
 	private VBox navBar;
 	private VBox defaultContent;
 	private Label welcomeLbl;
@@ -48,6 +34,7 @@ class MainScreen extends BorderPane {
 	private VBox accountContainer;
 	private Label infoLabel;
 	private TextField usernameField;
+	private HistoryContainer historyContainer;
 	private GUI_Controller controller;
 
 	public MainScreen(GUI_Controller controller) {
@@ -60,12 +47,11 @@ class MainScreen extends BorderPane {
 	}
 
 	private void create() {
-		createChartContainer();
-		createDatePicker();
-		createNavBar();
 		createDefaultContent();
-		createAccountContainer();
+		createNavBar();
 		createOptionMenu();
+		historyContainer = new HistoryContainer(controller);
+		createAccountContainer();
 		this.setLeft(navBar);
 		this.setCenter(defaultContent);
 		this.setRight(optionMenu);
@@ -177,21 +163,14 @@ class MainScreen extends BorderPane {
 				updateCenter(defaultContent);
 			}
 		});
-		Button chartBtn = new Button("Charts");
-		chartBtn.setOnAction(new EventHandler<ActionEvent>() {
+		Button historyBtn = new Button("History");
+		historyBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				updateCenter(chartContainer);
+				updateCenter(historyContainer);
 			}
 		});
-		Button dateBtn = new Button("History");
-		dateBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateCenter(calendar);
-			}
-		});
-		navBar.getChildren().addAll(defaultBtn, chartBtn, dateBtn);
+		navBar.getChildren().addAll(defaultBtn, historyBtn);
 	}
 
 	/**
@@ -210,12 +189,12 @@ class MainScreen extends BorderPane {
 	 * Calls the chart creation methods and additionally creates a BorderPane
 	 * container for the created charts.<br>
 	 * The container also contains a dropdown menu for selecting charts.
-	 */
+	 *//*
 	private void createChartContainer() {
 		chartContainer = new BorderPane();
 		chartTypes = FXCollections.observableArrayList();
-		StackPane pieChart = BarChartFactory.getInstance().createChart(new HashSet<Sitting>());
-		StackPane barChart = PieChartFactory.getInstance().createChart(new HashSet<Sitting>());
+		StackPane pieChart = PieChartFactory.getInstance().createChart(new HashSet<Sitting>());
+		StackPane barChart = BarChartFactory.getInstance().createChart(new HashSet<Sitting>());
 		chartTypes.add("Pie chart");
 		chartTypes.add("Bar chart");
 		final ComboBox<String> comboBox = new ComboBox<>(chartTypes);
@@ -231,22 +210,5 @@ class MainScreen extends BorderPane {
 			}
 		});
 		chartContainer.setTop(comboBox);
-	}
-
-	private void createDatePicker() {
-		VBox vB = new VBox(20);
-
-		calendar = new DatePicker();
-
-		GridPane gPane = new GridPane();
-		gPane.setHgap(10);
-		gPane.setVgap(10);
-
-		Label infoLabel = new Label("Select a past date:");
-		gPane.add(infoLabel, 0, 0);
-
-		GridPane.setHalignment(infoLabel, HPos.CENTER);
-		gPane.add(calendar, 0, 1);
-		vB.getChildren().add(gPane);
-	}
+	}*/
 }

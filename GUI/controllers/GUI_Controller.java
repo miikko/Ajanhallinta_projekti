@@ -1,11 +1,14 @@
 package controllers;
 
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.Set;
 
 import application.ScreenFactory;
 import application.View;
 import database.ConnectionHandler;
 import database.Kayttaja;
+import database.Sitting;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
@@ -110,6 +113,11 @@ public class GUI_Controller {
 		}
 		rec.quit();
 		return true;
+	}
+	
+	//TODO: Complete method
+	public Set<Sitting> getSittings(LocalDate sDate, LocalDate eDate) {
+		return null;
 	}
 
 	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on
