@@ -25,7 +25,6 @@ import database.Kayttaja;
 import database.Sitting;
 import database.SittingAccessObject;
 import database.WindowTime;
-import database.WindowTimeAccessObject;
 import sun.awt.shell.ShellFolder;
 
 /**
@@ -44,7 +43,7 @@ public class Recorder extends Thread {
 	private Kayttaja user;
 	private final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private Set<WindowTime> windowTimes = new HashSet<>();
-	private WindowTimeAccessObject wtDAO;
+	private SittingAccessObject wtSittingDAO;
 	private WindowTime currWt = null;
 
 	public Recorder(Kayttaja user) {
@@ -57,12 +56,12 @@ public class Recorder extends Thread {
 		Sitting sitting = new Sitting(user, DATE_FORMAT.format(startDate));
 		SittingAccessObject sittingDAO = new SittingAccessObject();
 		sittingDAO.createSitting(sitting);
-		wtDAO = new WindowTimeAccessObject();
+		wtSittingDAO = new SittingAccessObject();
 		String currProgDescription = getActiveProgramDescription();
 		if (currProgDescription != null) {
 			currWt = new WindowTime(sitting, currProgDescription);
 			windowTimes.add(currWt);
-			wtDAO.createWindowTime(currWt);
+			wtSittingDAO.createWindowTime(currWt);
 		}
 		long timerNanoSecs = System.nanoTime();
 		long wtStartTime = System.nanoTime();
@@ -74,7 +73,7 @@ public class Recorder extends Thread {
 				if (currWt != null) {
 					int secsPassed = (int) ((System.nanoTime() - wtStartTime) * Math.pow(10, -9));
 					currWt.addTime(0, 0, secsPassed);
-					wtDAO.updateWindowTime(currWt);
+					wtSittingDAO.updateWindowTime(currWt);
 				}
 			} else {
 				handleActiveWindowChange(nextProgDescription, sitting);
@@ -125,7 +124,7 @@ public class Recorder extends Thread {
 			if (currWt == null) {
 				currWt = new WindowTime(sitting, nextProgDescription);
 				windowTimes.add(currWt);
-				wtDAO.createWindowTime(currWt);
+				wtSittingDAO.createWindowTime(currWt);
 			}
 		}
 	}

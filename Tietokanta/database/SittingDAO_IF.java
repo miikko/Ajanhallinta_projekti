@@ -1,8 +1,17 @@
 package database;
 
-public interface SittingDAO_IF {
+import java.util.Date;
+import java.util.Set;
+
+interface SittingDAO_IF {
 
 	boolean createSitting(Sitting sitting);
 	
-	public abstract boolean updateSitting(Sitting sitting);
+	boolean updateSitting(Sitting sitting);
+	
+	Set<Sitting> readSittings(Date start_date, Date end_date, int userId);
+	
+	boolean createWindowTime(WindowTime wt);
+	
+	boolean updateWindowTime(WindowTime wt);
 }

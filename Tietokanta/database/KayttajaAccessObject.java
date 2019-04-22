@@ -155,14 +155,13 @@ public class KayttajaAccessObject implements KayttajaDAO_IF {
 	public Kayttaja userExists(String user_name) {
 		Session istunto = istuntotehdas.openSession();
 		try {
-			try {
-				transaktio = istunto.beginTransaction();
-				Kayttaja kayttaja = (Kayttaja) istunto.createQuery("from Kayttaja where user_name =:user_name")
-						.setParameter("user_name", user_name).getSingleResult();
-				return kayttaja;
-			} catch (NoResultException nre) {
-				return null;
-			}
+
+			transaktio = istunto.beginTransaction();
+			Kayttaja kayttaja = (Kayttaja) istunto.createQuery("from Kayttaja where user_name =:user_name")
+					.setParameter("user_name", user_name).getSingleResult();
+			return kayttaja;
+		} catch (NoResultException nre) {
+			return null;
 		} catch (Exception e) {
 			if (transaktio != null)
 				transaktio.rollback();
