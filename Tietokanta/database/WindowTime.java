@@ -80,10 +80,6 @@ public class WindowTime {
 		return duration;
 	}
 
-	public void setDuration(String duration) {
-		this.duration = duration;
-	}
-
 	public Sitting getSitting() {
 		return sitting;
 	}
@@ -93,7 +89,7 @@ public class WindowTime {
 	}
 
 	/**
-	 * Adds the given time and modifies the duration-variable accordingly
+	 * Adds the given time to the duration
 	 * 
 	 * @param h
 	 * @param min
@@ -115,15 +111,39 @@ public class WindowTime {
 	}
 
 	public int getHours() {
-		return hours;
+		if (duration == null) {
+			return 0;
+		}
+		return Integer.parseInt(duration.split(":")[0]);
+		//return hours;
 	}
 
 	public int getMinutes() {
-		return minutes;
+		if (duration == null) {
+			return 0;
+		}
+		return Integer.parseInt(duration.split(":")[1]);
+		//return minutes;
 	}
 
 	public int getSeconds() {
-		return seconds;
+		if (duration == null) {
+			return 0;
+		}
+		return Integer.parseInt(duration.split(":")[2]);
+		//return seconds;
+	}
+	
+	public void setSeconds(int secs) {
+		seconds += secs;
+		while (seconds >= 60) {
+			seconds -= 60;
+			minutes++;
+		}
+		while (minutes >= 60) {
+			minutes -= 60;
+			hours++;
+		}
 	}
 
 }

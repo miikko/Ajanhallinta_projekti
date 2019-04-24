@@ -64,21 +64,21 @@ public class Recorder extends Thread {
 			wtSittingDAO.createWindowTime(currWt);
 		}
 		long timerNanoSecs = System.nanoTime();
-		long wtStartTime = System.nanoTime();
+		long wtIntervalTime = System.nanoTime();
 		while (!quit) {
 			String nextProgDescription = getActiveProgramDescription();
 			// Check if active window is still the same
 			if ((currWt == null && nextProgDescription == null)
 					|| (currWt != null && currWt.getProgramName().equals(nextProgDescription))) {
 				if (currWt != null) {
-					int secsPassed = (int) ((System.nanoTime() - wtStartTime) * Math.pow(10, -9));
+					int secsPassed = (int) ((System.nanoTime() - wtIntervalTime) * Math.pow(10, -9));
 					currWt.addTime(0, 0, secsPassed);
 					wtSittingDAO.updateWindowTime(currWt);
 				}
 			} else {
 				handleActiveWindowChange(nextProgDescription, sitting);
-				wtStartTime = System.nanoTime();
 			}
+			wtIntervalTime = System.nanoTime();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {

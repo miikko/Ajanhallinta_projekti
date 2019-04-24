@@ -39,7 +39,7 @@ public class Sitting {
 	private Kayttaja kayttaja;
 	
 	@Column
-	@OneToMany(mappedBy="sitting")
+	@OneToMany(fetch=FetchType.EAGER, mappedBy="sitting")
 	private Set<WindowTime> windowTimes;
 
 	public Sitting() {
@@ -74,6 +74,10 @@ public class Sitting {
 
 	public Kayttaja getKayttaja() {
 		return kayttaja;
+	}
+	
+	public Set<WindowTime> getWindowTimes() {
+		return windowTimes;
 	}
 	
 }

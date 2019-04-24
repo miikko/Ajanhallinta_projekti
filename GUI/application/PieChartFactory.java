@@ -1,8 +1,11 @@
 package application;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import database.Sitting;
+import database.WindowTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -14,8 +17,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 /**
- * Factory class that creates pie charts that can be used to show the elapsed screen time of a
- * user.<br>
+ * Factory class that creates PieCharts. PieCharts are used to display the relative amount of time the user has spent on each program.<br>
  * Uses the Singleton pattern. 
  * 
  * @author miikk & MrJoXuX
@@ -37,9 +39,13 @@ class PieChartFactory implements ChartFactory {
 	@Override
 	public StackPane createChart(Set<Sitting> sittings) {
 		StackPane pieChart = new StackPane();
-		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(new PieChart.Data("YouTube", 13),
-				new PieChart.Data("Twitch", 25), new PieChart.Data("Netflix", 10), new PieChart.Data("ViaPlay", 22),
-				new PieChart.Data("Ruutu", 30));
+		Set<PieChart.Data> slices = formSlices(sittings);
+		if (slices.size() == 0) {
+			Label infoLabel = new Label("No data to show");
+			pieChart.getChildren().add(infoLabel);
+			return pieChart;
+		}
+		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(slices);
 		final PieChart chart = new PieChart(pieChartData);
 		chart.setTitle("Used time on different applications");
 		final Label caption = new Label("");
@@ -60,5 +66,35 @@ class PieChartFactory implements ChartFactory {
 		pieChart.getChildren().addAll(chart, caption);
 		return pieChart;
 	}
-
+	// TODO: Come up with a clever way to round slice shares
+	/**Extracts and groups WindowTimes with the same name from the given sittings.<br>
+	 * Then it calculates the percentage value for each group comparing the total time in the group to the total time in all of the extracted WindowTimes.<br>
+	 * Finally, creates a PieChart.Data-object out of each group which contain the program name and the calculated value. These are then added to the to be returned Set. 
+	 * @param sittings
+	 * @return a Set of PieChart.Data with each item belonging to a unique program.
+	 */
+	private Set<PieChart.Data> formSlices(Set<Sitting> sittings) {
+		HashMap<String, Long> secsPerProgram = new HashMap<>();
+		Set<PieChart.Data> slices = new HashSet<>();
+		long totalTimeInSecs = 0;
+		for (Sitting sitting : sittings) {
+			Set<WindowTime> wts = sitting.getWindowTimes();
+			for (WindowTime wt : wts) {
+				String pName = wt.getProgramName();
+				long secsInThisWindow = wt.getHours() * 3600 + wt.getMinutes() * 60 + wt.getSeconds();
+				totalTimeInSecs += secsInThisWindow;
+				if (!secsPerProgram.containsKey(pName)) {
+					secsPerProgram.put(pName, 0L);
+				}
+				secsPerProgram.put(pName, secsPerProgram.get(pName) + secsInThisWindow);
+			}
+		}
+		if (totalTimeInSecs > 0) {
+			for (String pName : secsPerProgram.keySet()) {
+				double share = Math.round(((double) secsPerProgram.get(pName) / totalTimeInSecs) * 100);
+				slices.add(new PieChart.Data(pName, share));
+			}
+		}
+		return slices;
+	}
 }

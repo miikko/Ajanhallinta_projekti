@@ -59,6 +59,9 @@ public class HistoryContainer extends VBox {
 	private void createCharts(Set<Sitting> sittings) {
 		chartContainer = new BorderPane();
 		chartTypes = FXCollections.observableArrayList();
+		for (Sitting sitting : sittings) {
+			System.out.println(sitting.getStart_date());
+		}
 		StackPane pieChart = PieChartFactory.getInstance().createChart(sittings);
 		StackPane barChart = BarChartFactory.getInstance().createChart(sittings);
 		chartTypes.add("Pie chart");

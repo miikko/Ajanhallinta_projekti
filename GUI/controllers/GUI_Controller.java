@@ -1,6 +1,8 @@
 package controllers;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -9,6 +11,7 @@ import application.View;
 import database.ConnectionHandler;
 import database.Kayttaja;
 import database.Sitting;
+import database.SittingAccessObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
@@ -117,7 +120,13 @@ public class GUI_Controller {
 	
 	//TODO: Complete method
 	public Set<Sitting> getSittings(LocalDate sDate, LocalDate eDate) {
-		return null;
+		if (user == null) {
+			return null;
+		}
+		SittingAccessObject sittingDAO = new SittingAccessObject();
+		Date startDate = Date.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date endDate = Date.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		return sittingDAO.readSittings(startDate, endDate, user.getId());
 	}
 
 	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on
