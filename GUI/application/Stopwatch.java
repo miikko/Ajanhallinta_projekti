@@ -51,9 +51,9 @@ class Stopwatch extends VBox {
 					startButton.setText("Start recording");
 					recording = false;
 				} else {
-					timeline.play();
 					controller.startRecording();
 					recording = true;
+					timeline.play();
 					startButton.setText("Stop recording");
 				}
 			}

@@ -50,13 +50,13 @@ public class Recorder extends Thread {
 		this.user = user;
 		this.setDaemon(true);
 	}
-
+	
+	@Override
 	public void run() {
 		Date startDate = new Date();
 		Sitting sitting = new Sitting(user, DATE_FORMAT.format(startDate));
-		SittingAccessObject sittingDAO = new SittingAccessObject();
-		sittingDAO.createSitting(sitting);
 		wtSittingDAO = new SittingAccessObject();
+		wtSittingDAO.createSitting(sitting);
 		String currProgDescription = getActiveProgramDescription();
 		if (currProgDescription != null) {
 			currWt = new WindowTime(sitting, currProgDescription);
@@ -66,6 +66,11 @@ public class Recorder extends Thread {
 		long timerNanoSecs = System.nanoTime();
 		long wtIntervalTime = System.nanoTime();
 		while (!quit) {
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			String nextProgDescription = getActiveProgramDescription();
 			// Check if active window is still the same
 			if ((currWt == null && nextProgDescription == null)
@@ -79,24 +84,19 @@ public class Recorder extends Thread {
 				handleActiveWindowChange(nextProgDescription, sitting);
 			}
 			wtIntervalTime = System.nanoTime();
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			// Send updated sitting to database every 60 seconds
 			// Set the endDate in case application execution stops before the thread has
 			// finished running
 			if (System.nanoTime() - timerNanoSecs >= 60 * Math.pow(10, 9)) {
 				Date endDate = new Date();
 				sitting.setEnd_date(DATE_FORMAT.format(endDate));
-				sittingDAO.updateSitting(sitting);
+				wtSittingDAO.updateSitting(sitting);
 				timerNanoSecs = System.nanoTime();
 			}
 		}
 		Date endDate = new Date();
 		sitting.setEnd_date(DATE_FORMAT.format(endDate));
-		sittingDAO.updateSitting(sitting);
+		wtSittingDAO.updateSitting(sitting);
 	}
 
 	public void quit() {
