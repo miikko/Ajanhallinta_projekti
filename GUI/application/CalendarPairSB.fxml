@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <Pane prefHeight="750.0" prefWidth="1000.0" BorderPane.alignment="CENTER">
+         <children>
+            <DatePicker id="startPicker" layoutX="225.0" layoutY="400.0" prefHeight="40.0" prefWidth="225.0" />
+            <DatePicker id="endPicker" layoutX="575.0" layoutY="400.0" prefHeight="40.0" prefWidth="225.0" />
+            <Button id="homeButton" layoutX="15.0" layoutY="20.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="Home">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </Button>
+            <Button id="historyButton" layoutX="15.0" layoutY="75.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="125.0" text="History">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </Button>
+            <Label layoutX="252.0" layoutY="326.0" text="Select starting date">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="618.0" layoutY="326.0" text="Select end date">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </Label>
+            <MenuButton id="optMenu" layoutX="835.0" layoutY="20.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="150.0" text="Options">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Account" />
+                <MenuItem mnemonicParsing="false" text="Logout" />
+                  <MenuItem mnemonicParsing="false" text="Quit" />
+              </items>
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </MenuButton>
+            <Button id="searchButton" layoutX="470.0" layoutY="475.0" mnemonicParsing="false" text="Search">
+               <font>
+                  <Font name="Arial" size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </center>
+</BorderPane>
