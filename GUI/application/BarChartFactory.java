@@ -1,8 +1,15 @@
 package application;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 import database.Sitting;
+import database.WindowTime;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -17,6 +24,9 @@ import javafx.scene.layout.StackPane;
  * @author miikk & MrJoXuX
  */
 class BarChartFactory implements ChartFactory {
+	
+	private final String[] WEEKDAYS = new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+	private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 
 	private BarChartFactory() {
 
@@ -34,54 +44,66 @@ class BarChartFactory implements ChartFactory {
 	public StackPane createChart(Set<Sitting> sittings, String startDateStr, String endDateStr) {
 		StackPane barChart = new StackPane();
 
-		final String monday = "Monday";
-		final String tuesday = "Tuesday";
-		final String wednesday = "Wednesday";
-		final String thursday = "Thursday";
-		final String friday = "Friday";
-		final String saturday = "Saturday";
-		final String sunday = "Sunday";
-
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		final BarChart<String, Number> bChart = new BarChart<String, Number>(xAxis, yAxis);
-		bChart.setTitle("Used time on different applications");
+		bChart.setTitle("Used time on different applications from " + startDateStr + " to " + endDateStr);
 		xAxis.setLabel("Day of the week");
 		yAxis.setLabel("Hours");
-
-		XYChart.Series<String, Number> platform1 = new XYChart.Series<>();
-		platform1.setName("Netflix");
-		platform1.getData().add(new XYChart.Data<>(monday, 7.2));
-		platform1.getData().add(new XYChart.Data<>(tuesday, 8.7));
-		platform1.getData().add(new XYChart.Data<>(wednesday, 3.0));
-		platform1.getData().add(new XYChart.Data<>(thursday, 4.4));
-		platform1.getData().add(new XYChart.Data<>(friday, 5.2));
-		platform1.getData().add(new XYChart.Data<>(saturday, 1.1));
-		platform1.getData().add(new XYChart.Data<>(sunday, 1.1));
-
-		XYChart.Series<String, Number> platform2 = new XYChart.Series<>();
-		platform2.setName("Twitch");
-		platform2.getData().add(new XYChart.Data<>(monday, 2.2));
-		platform2.getData().add(new XYChart.Data<>(tuesday, 3.2));
-		platform2.getData().add(new XYChart.Data<>(wednesday, 4.8));
-		platform2.getData().add(new XYChart.Data<>(thursday, 1.1));
-		platform2.getData().add(new XYChart.Data<>(friday, 0.9));
-		platform2.getData().add(new XYChart.Data<>(saturday, 7.2));
-		platform2.getData().add(new XYChart.Data<>(sunday, 2.2));
-		XYChart.Series<String, Number> platform3 = new XYChart.Series<>();
-		platform3.setName("YouTube");
-		platform3.getData().add(new XYChart.Data<>(monday, 4.4));
-		platform3.getData().add(new XYChart.Data<>(tuesday, 3.3));
-		platform3.getData().add(new XYChart.Data<>(wednesday, 7.1));
-		platform3.getData().add(new XYChart.Data<>(thursday, 4.9));
-		platform3.getData().add(new XYChart.Data<>(friday, 9.2));
-		platform3.getData().add(new XYChart.Data<>(saturday, 6.8));
-		platform3.getData().add(new XYChart.Data<>(sunday, 4.4));
-
-		bChart.getData().addAll(platform1, platform2, platform3);
+		bChart.getData().addAll(organizeData(sittings));
 
 		barChart.getChildren().addAll(bChart);
 		return barChart;
 	}
+	
+	private Set<XYChart.Series<String, Number>> organizeData(Set<Sitting> sittings) {
+		Set<XYChart.Series<String, Number>> programs = new HashSet<>();
+		// Group WindowTimes together based on program name
+		HashMap<String, Set<WindowTime>> nameGroupedWts = new HashMap<>();
+		HashMap<String, Set<WindowTime>> dayGroupedWts = new HashMap<>();
+		for (String weekDay : WEEKDAYS) {
+			dayGroupedWts.put(weekDay, new HashSet<WindowTime>());
+		}
+		for (Sitting sitting : sittings) {
+			Set<WindowTime> wts = sitting.getWindowTimes();
+			LocalDate startDate = LocalDate.parse(sitting.getStart_date(), DATE_FORMATTER);
+			String weekDay = WEEKDAYS[startDate.getDayOfWeek().getValue() - 1];
+			dayGroupedWts.get(weekDay).addAll(wts);
+			for (WindowTime wt : wts) {
+				String progName = wt.getProgramName();
+				if (!nameGroupedWts.containsKey(progName)) {
+					nameGroupedWts.put(progName, new HashSet<WindowTime>());
+				}
+				nameGroupedWts.get(progName).add(wt);
+			}
+		}
+		//Create a XYChart.Series for each key
+		for (String progName : nameGroupedWts.keySet()) {
+			Set<WindowTime> namedWts = nameGroupedWts.get(progName);
+			XYChart.Series<String, Number> thisProg = new XYChart.Series<>();
+			thisProg.setName(progName);
+			for (String weekday : WEEKDAYS) {
+				double hours = 0;
+				Set<WindowTime> wtsForThisWeekday = dayGroupedWts.get(weekday);
+				for (WindowTime wt : wtsForThisWeekday) {
+					if (namedWts.contains(wt)) {
+						hours += wt.getHours() + ((double) wt.getMinutes() / 60) + ((double) wt.getSeconds() / 3600);
+					}
+				}
+				thisProg.getData().add(new XYChart.Data<String, Number>(weekday, round(hours, 1)));
+				
+			}
+			programs.add(thisProg);
+		}
+		return programs;
+	}
 
+	private double round(double value, int decimals) {
+		if (decimals < 0) {
+			throw new IllegalArgumentException();
+		}
+		BigDecimal bd = new BigDecimal(value);
+		bd.setScale(decimals, RoundingMode.HALF_UP);
+		return bd.doubleValue();
+	}
 }
