@@ -31,7 +31,7 @@ class BarChartFactory implements ChartFactory {
 	}
 
 	@Override
-	public StackPane createChart(Set<Sitting> sittings) {
+	public StackPane createChart(Set<Sitting> sittings, String startDateStr, String endDateStr) {
 		StackPane barChart = new StackPane();
 
 		final String monday = "Monday";

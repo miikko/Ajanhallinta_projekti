@@ -1,5 +1,6 @@
 package application;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 import controllers.GUI_Controller;
@@ -29,41 +30,44 @@ public class HistoryContainer extends VBox {
 		this.setAlignment(Pos.CENTER);
 		create();
 	}
-	
+
 	private void create() {
 		calendarPair = new CalendarPair();
 		confirmBtn = new Button("Confirm");
 		confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				createCharts(controller.getSittings(calendarPair.getStartDate(), calendarPair.getEndDate()));
+				createCharts(calendarPair.getStartDate(), calendarPair.getEndDate());
 				displayCharts();
 			}
 		});
 		this.getChildren().addAll(calendarPair, confirmBtn);
 	}
-	
+
 	private void displayCharts() {
 		this.getChildren().setAll(chartContainer);
 	}
-	
+
 	private void displayCalendars() {
 		this.getChildren().setAll(calendarPair, confirmBtn);
 	}
-	
+
 	/**
-	 * Calls the chart creation methods and puts the created charts in a BorderPane container.<br>
-	 * The container also contains a dropdown menu for selecting charts and a return button.
+	 * Calls the chart creation methods and puts the created charts in a BorderPane
+	 * container.<br>
+	 * The container also contains a dropdown menu for selecting charts and a return
+	 * button.
+	 * 
 	 * @param sittings
 	 */
-	private void createCharts(Set<Sitting> sittings) {
+	private void createCharts(LocalDate startDate, LocalDate endDate) {
 		chartContainer = new BorderPane();
+		Set<Sitting> sittings = controller.getSittings(startDate, endDate);
 		chartTypes = FXCollections.observableArrayList();
-		for (Sitting sitting : sittings) {
-			System.out.println(sitting.getStart_date());
-		}
-		StackPane pieChart = PieChartFactory.getInstance().createChart(sittings);
-		StackPane barChart = BarChartFactory.getInstance().createChart(sittings);
+		StackPane pieChart = PieChartFactory.getInstance().createChart(sittings, startDate.toString(),
+				endDate.toString());
+		StackPane barChart = BarChartFactory.getInstance().createChart(sittings, startDate.toString(),
+				endDate.toString());
 		chartTypes.add("Pie chart");
 		chartTypes.add("Bar chart");
 		final ComboBox<String> comboBox = new ComboBox<>(chartTypes);

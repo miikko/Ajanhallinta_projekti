@@ -13,7 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-public class CalendarPair extends HBox {
+class CalendarPair extends HBox {
 	private VBox sCalendar;
 	private VBox eCalendar;
 	private DatePicker sDatePicker;
@@ -38,7 +38,7 @@ public class CalendarPair extends HBox {
 		sDatePicker = new DatePicker();
 		sDatePicker.setValue(currDate);
 		startDate = currDate;
-		// Prevents users from clicking dates that are in the future. Does not prevent
+		// Prevents users from clicking invalid dates. Does not prevent
 		// users from typing invalid dates.
 		sDatePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
 			@Override
@@ -79,6 +79,8 @@ public class CalendarPair extends HBox {
 		eDatePicker = new DatePicker();
 		eDatePicker.setValue(currDate);
 		endDate = currDate;
+		// Prevents users from clicking invalid dates. Does not prevent
+		// users from typing invalid dates.
 		eDatePicker.setDayCellFactory(new Callback<DatePicker, DateCell>() {
 			@Override
 			public DateCell call(final DatePicker datePicker) {

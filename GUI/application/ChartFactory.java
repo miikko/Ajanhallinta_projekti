@@ -13,6 +13,6 @@ import javafx.scene.layout.StackPane;
  */
 interface ChartFactory {
 
-	public StackPane createChart(Set<Sitting> sittings);
+	public StackPane createChart(Set<Sitting> sittings, String startDateStr, String endDateStr);
 	
 }

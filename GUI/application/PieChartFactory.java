@@ -9,6 +9,7 @@ import database.WindowTime;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.geometry.Side;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Label;
@@ -17,8 +18,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 /**
- * Factory class that creates PieCharts. PieCharts are used to display the relative amount of time the user has spent on each program.<br>
- * Uses the Singleton pattern. 
+ * Factory class that creates PieCharts. PieCharts are used to display the
+ * relative amount of time the user has spent on each program.<br>
+ * Uses the Singleton pattern.
  * 
  * @author miikk & MrJoXuX
  */
@@ -36,8 +38,9 @@ class PieChartFactory implements ChartFactory {
 		private static final PieChartFactory INSTANCE = new PieChartFactory();
 	}
 
+	//TODO: Piechart transforms needlessly when application window is resized, Chart title doesn't resize itself. 
 	@Override
-	public StackPane createChart(Set<Sitting> sittings) {
+	public StackPane createChart(Set<Sitting> sittings, String startDateStr, String endDateStr) {
 		StackPane pieChart = new StackPane();
 		Set<PieChart.Data> slices = formSlices(sittings);
 		if (slices.size() == 0) {
@@ -47,7 +50,7 @@ class PieChartFactory implements ChartFactory {
 		}
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(slices);
 		final PieChart chart = new PieChart(pieChartData);
-		chart.setTitle("Used time on different applications");
+		chart.setTitle("Used time on different applications from " + startDateStr + " to " + endDateStr);
 		final Label caption = new Label("");
 		caption.setTextFill(Color.BLACK);
 		caption.setStyle("-fx-font: 20 arial;");
@@ -55,8 +58,11 @@ class PieChartFactory implements ChartFactory {
 			data.getNode().addEventHandler(MouseEvent.MOUSE_PRESSED, new EventHandler<MouseEvent>() {
 				@Override
 				public void handle(MouseEvent e) {
-					caption.setTranslateX(e.getSceneX() - caption.getLayoutX() - 10);
-					caption.setTranslateY(e.getSceneY() - caption.getLayoutY() - 10);
+					Bounds pieChartBoundsInScene = pieChart.localToScene(pieChart.getBoundsInLocal());
+					double pieChartCenterX = pieChartBoundsInScene.getMaxX() - (pieChart.getWidth() / 2);
+					double pieChartCenterY = pieChartBoundsInScene.getMaxY() - (pieChart.getHeight() / 2);
+					caption.setTranslateX(e.getSceneX() - pieChartCenterX);
+					caption.setTranslateY(e.getSceneY() - pieChartCenterY);
 					caption.setText(data.getPieValue() + "%");
 				}
 			});
@@ -66,10 +72,17 @@ class PieChartFactory implements ChartFactory {
 		pieChart.getChildren().addAll(chart, caption);
 		return pieChart;
 	}
+
 	// TODO: Come up with a clever way to round slice shares
-	/**Extracts and groups WindowTimes with the same name from the given sittings.<br>
-	 * Then it calculates the percentage value for each group comparing the total time in the group to the total time in all of the extracted WindowTimes.<br>
-	 * Finally, creates a PieChart.Data-object out of each group which contain the program name and the calculated value. These are then added to the to be returned Set. 
+	/**
+	 * Extracts and groups WindowTimes with the same name from the given
+	 * sittings.<br>
+	 * Then it calculates the percentage value for each group comparing the total
+	 * time in the group to the total time in all of the extracted WindowTimes.<br>
+	 * Finally, creates a PieChart.Data-object out of each group which contain the
+	 * program name and the calculated value. These are then added to the to be
+	 * returned Set.
+	 * 
 	 * @param sittings
 	 * @return a Set of PieChart.Data with each item belonging to a unique program.
 	 */
