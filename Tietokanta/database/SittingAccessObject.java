@@ -15,7 +15,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
- * SittingAccessObject will contain the methods for reading and writing
+ * SittingAccessObject contains the methods for reading and writing
  * information into sittings.
  * 
  * @author Arttuhal & miikk

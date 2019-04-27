@@ -33,6 +33,7 @@
    <mapping class="database.Kayttaja"/>
    <mapping class="database.Sitting"/>
    <mapping class="database.WindowTime"/>
+   <mapping class="database.UserGroup"/>
 
 </session-factory>
 </hibernate-configuration>
