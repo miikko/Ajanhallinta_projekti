@@ -5,6 +5,8 @@ import java.util.List;
 public interface UserGroupDAO_IF {
 
 	boolean createGroup (UserGroup userGroup);
+	
+	boolean deleteGroup(UserGroup userGroup);
 
 	boolean updateGroup(UserGroup userGroup);
 	

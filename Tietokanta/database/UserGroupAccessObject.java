@@ -56,6 +56,23 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 	}
 
 	@Override
+	public boolean deleteGroup(UserGroup userGroup) {
+		Session istunto = istuntotehdas.openSession();
+		try {
+			transaktio = istunto.beginTransaction();
+			istunto.delete(userGroup);
+			transaktio.commit();
+			return true;
+		} catch (Exception e) {
+			if (transaktio != null)
+				transaktio.rollback();
+			throw e;
+		} finally {
+			istunto.close();
+		}
+	}
+
+	@Override
 	public List<UserGroup> readGroups(int adminId) {
 		List<UserGroup> userGroups = new ArrayList<UserGroup>();
 		Session istunto = istuntotehdas.openSession();
