@@ -23,7 +23,6 @@ public class HistoryContainer extends VBox {
 	private Button confirmBtn;
 	private GUI_Controller controller;
 	private BorderPane chartContainer;
-	private ObservableList<String> chartTypes;
 
 	public HistoryContainer(GUI_Controller controller) {
 		this.controller = controller;
@@ -61,9 +60,9 @@ public class HistoryContainer extends VBox {
 	 * @param sittings
 	 */
 	private void createCharts(LocalDate startDate, LocalDate endDate) {
+		ObservableList<String> chartTypes = FXCollections.observableArrayList();
 		chartContainer = new BorderPane();
 		Set<Sitting> sittings = controller.getSittings(startDate, endDate);
-		chartTypes = FXCollections.observableArrayList();
 		StackPane pieChart = PieChartFactory.getInstance().createChart(sittings, startDate.toString(),
 				endDate.toString());
 		StackPane barChart = BarChartFactory.getInstance().createChart(sittings, startDate.toString(),

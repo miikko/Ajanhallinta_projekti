@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import application.ScreenFactory;
@@ -11,6 +12,7 @@ import application.View;
 import database.DatabaseHandler;
 import database.Kayttaja;
 import database.Sitting;
+import database.UserGroup;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
@@ -123,6 +125,13 @@ public class GUI_Controller {
 		Date startDate = Date.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		Date endDate = Date.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		return dbHandler.fetchSittings(startDate, endDate, user.getId());
+	}
+	
+	public List<UserGroup> getUserGroups() {
+		if (user == null) {
+			return null;
+		}
+		return dbHandler.fetchUserGroups(user.getId());
 	}
 
 	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on

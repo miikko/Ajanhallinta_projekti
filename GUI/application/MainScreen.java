@@ -35,6 +35,7 @@ class MainScreen extends BorderPane {
 	private Label infoLabel;
 	private TextField usernameField;
 	private HistoryContainer historyContainer;
+	private GroupContainer groupContainer;
 	private GUI_Controller controller;
 
 	public MainScreen(GUI_Controller controller) {
@@ -47,10 +48,11 @@ class MainScreen extends BorderPane {
 	}
 
 	private void create() {
+		historyContainer = new HistoryContainer(controller);
+		groupContainer = new GroupContainer(controller);
 		createDefaultContent();
 		createNavBar();
 		createOptionMenu();
-		historyContainer = new HistoryContainer(controller);
 		createAccountContainer();
 		this.setLeft(navBar);
 		this.setCenter(defaultContent);
@@ -159,20 +161,21 @@ class MainScreen extends BorderPane {
 	private void createNavBar() {
 		navBar = new VBox();
 		Button defaultBtn = new Button("Main menu");
-		defaultBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateCenter(defaultContent);
-			}
-		});
+		defaultBtn.setOnAction(createNavBarBtnHandler(defaultContent));
 		Button historyBtn = new Button("History");
-		historyBtn.setOnAction(new EventHandler<ActionEvent>() {
+		historyBtn.setOnAction(createNavBarBtnHandler(historyContainer));
+		Button groupsBtn = new Button("Groups");
+		groupsBtn.setOnAction(createNavBarBtnHandler(groupContainer));
+		navBar.getChildren().addAll(defaultBtn, historyBtn, groupsBtn);
+	}
+	
+	private EventHandler<ActionEvent> createNavBarBtnHandler(Node destination) {
+		return new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				updateCenter(historyContainer);
+				updateCenter(destination);
 			}
-		});
-		navBar.getChildren().addAll(defaultBtn, historyBtn);
+		};
 	}
 
 	/**

@@ -1,6 +1,8 @@
 package database;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,6 +15,7 @@ public class DatabaseHandler {
 
 	private KayttajaAccessObject userObject;
 	private SittingAccessObject sittingObject;
+	private UserGroupAccessObject groupObject;
 	private ConnectionHandler connHandler;
 	
 	public DatabaseHandler() {
@@ -20,6 +23,7 @@ public class DatabaseHandler {
 		connHandler.openTunnel();
 		userObject = new KayttajaAccessObject();
 		sittingObject = new SittingAccessObject();
+		groupObject = new UserGroupAccessObject();
 	}
 	
 	//User methods
@@ -58,6 +62,21 @@ public class DatabaseHandler {
 	
 	public boolean updateWindowTime(WindowTime wt) {
 		return sittingObject.updateWindowTime(wt);
+	}
+	
+	//UserGroup methods
+	
+	public boolean sendUserGroup(UserGroup group) {
+		return false;
+	}
+	
+	public List<UserGroup> fetchUserGroups(int adminId) {
+		List<UserGroup> groups = new ArrayList<>();
+		return groups;
+	}
+	
+	public boolean addUserToGroup(UserGroup group, int userId) {
+		return false;
 	}
 	
 	/**
