@@ -134,6 +134,14 @@ public class GUI_Controller {
 		return dbHandler.fetchUserGroups(user.getId());
 	}
 
+	public boolean addUserToGroup(UserGroup userGroup, int userId) {
+		if (user.getId() == userId || dbHandler.fetchUser(userId) == null) {
+			return false;
+		}
+		userGroup.addUserId(userId);
+		return true;
+	}
+	
 	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on
 	// next timer check
 	public void handleLogout() {

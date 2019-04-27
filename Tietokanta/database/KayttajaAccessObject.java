@@ -74,6 +74,30 @@ class KayttajaAccessObject implements KayttajaDAO_IF {
 		}
 
 	}
+	
+	@Override
+	public Kayttaja readKayttaja(int userId) {
+		Session istunto = istuntotehdas.openSession();
+		try {
+			try {
+				transaktio = istunto.beginTransaction();
+				Kayttaja kayttaja = (Kayttaja) istunto.createQuery("from Kayttaja where userId =:userId")
+						.setParameter("userId", userId).getSingleResult();
+				transaktio.commit();
+				return kayttaja;
+			} catch (NoResultException nre) {
+				System.out.println("Ei käyttäjää");
+				return null;
+			}
+		} catch (Exception e) {
+			if (transaktio != null) {
+				transaktio.rollback();
+			}
+			throw e;
+		} finally {
+			istunto.close();
+		}
+	}
 
 	/**
 	 * This method returns all user object from the user table. return returnArray
@@ -141,27 +165,6 @@ class KayttajaAccessObject implements KayttajaDAO_IF {
 				System.out.println("Ei löytynyt käyttäjää");
 				return false;
 			}
-		} catch (Exception e) {
-			if (transaktio != null)
-				transaktio.rollback();
-			throw e;
-		} finally {
-			istunto.close();
-		}
-	}
-
-	// Palauttaa käyttäjän usernamella käyttäjä objectin usernamen ja
-	// salasanan jos se löytyy, muuten palauttaa nullin.
-	public Kayttaja userExists(String user_name) {
-		Session istunto = istuntotehdas.openSession();
-		try {
-
-			transaktio = istunto.beginTransaction();
-			Kayttaja kayttaja = (Kayttaja) istunto.createQuery("from Kayttaja where user_name =:user_name")
-					.setParameter("user_name", user_name).getSingleResult();
-			return kayttaja;
-		} catch (NoResultException nre) {
-			return null;
 		} catch (Exception e) {
 			if (transaktio != null)
 				transaktio.rollback();

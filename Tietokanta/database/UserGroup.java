@@ -43,6 +43,11 @@ public class UserGroup {
 		super();
 	}
 
+	public UserGroup(int adminId) {
+		super();
+		this.adminId = adminId;
+	}
+	
 	public UserGroup(int adminId, String groupName) {
 		super();
 		this.adminId = adminId;

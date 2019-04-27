@@ -33,7 +33,11 @@ public class DatabaseHandler {
 	}
 	
 	public Kayttaja fetchUser(String username) {
-		return userObject.userExists(username);
+		return userObject.readKayttaja(username);
+	}
+	
+	public Kayttaja fetchUser(int userId) {
+		return userObject.readKayttaja(userId);
 	}
 	
 	public boolean updateUser(Kayttaja user) {
