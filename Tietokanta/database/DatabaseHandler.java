@@ -1,14 +1,64 @@
 package database;
 
+import java.util.Date;
+import java.util.Set;
+
 /**
  * This class handles the link between the GUI, the database and the service
  * 
- * @author Arttuhal
+ * @author Arttuhal & miikk
  * @since 13/03/2019
  */
 public class DatabaseHandler {
 
-	private KayttajaAccessObject userObject = new KayttajaAccessObject();
+	private KayttajaAccessObject userObject;
+	private SittingAccessObject sittingObject;
+	private ConnectionHandler connHandler;
+	
+	public DatabaseHandler() {
+		connHandler = ConnectionHandler.getInstance();
+		connHandler.openTunnel();
+		userObject = new KayttajaAccessObject();
+		sittingObject = new SittingAccessObject();
+	}
+	
+	//User methods
+	
+	public boolean sendUser(Kayttaja user) {
+		return userObject.createKayttaja(user);
+	}
+	
+	public Kayttaja fetchUser(String username) {
+		return userObject.userExists(username);
+	}
+	
+	public boolean updateUser(Kayttaja user) {
+		return userObject.updateKayttaja(user);
+	}
+	
+	//Sitting methods
+	
+	public boolean sendSitting(Sitting sitting) {
+		return sittingObject.createSitting(sitting);
+	}
+	
+	public Set<Sitting> fetchSittings(Date startDate, Date endDate, int userId) {
+		return sittingObject.readSittings(startDate, endDate, userId);
+	}
+	
+	public boolean updateSitting(Sitting sitting) {
+		return sittingObject.updateSitting(sitting);
+	}
+	
+	//WindowTime methods
+	
+	public boolean sendWindowTime(WindowTime wt) {
+		return sittingObject.createWindowTime(wt);
+	}
+	
+	public boolean updateWindowTime(WindowTime wt) {
+		return sittingObject.updateWindowTime(wt);
+	}
 	
 	/**
 	 * This method receives recorded data from the service and sends it to the active sitting in the database.

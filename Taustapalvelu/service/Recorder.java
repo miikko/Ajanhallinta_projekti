@@ -21,9 +21,9 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.ptr.IntByReference;
 
+import database.DatabaseHandler;
 import database.Kayttaja;
 import database.Sitting;
-import database.SittingAccessObject;
 import database.WindowTime;
 import sun.awt.shell.ShellFolder;
 
@@ -43,11 +43,12 @@ public class Recorder extends Thread {
 	private Kayttaja user;
 	private final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private Set<WindowTime> windowTimes = new HashSet<>();
-	private SittingAccessObject wtSittingDAO;
+	private DatabaseHandler dbHandler;
 	private WindowTime currWt = null;
 
-	public Recorder(Kayttaja user) {
+	public Recorder(Kayttaja user, DatabaseHandler dbHandler) {
 		this.user = user;
+		this.dbHandler = dbHandler;
 		this.setDaemon(true);
 	}
 	
@@ -55,13 +56,12 @@ public class Recorder extends Thread {
 	public void run() {
 		Date startDate = new Date();
 		Sitting sitting = new Sitting(user, DATE_FORMAT.format(startDate));
-		wtSittingDAO = new SittingAccessObject();
-		wtSittingDAO.createSitting(sitting);
+		dbHandler.sendSitting(sitting);
 		String currProgDescription = getActiveProgramDescription();
 		if (currProgDescription != null) {
 			currWt = new WindowTime(sitting, currProgDescription);
 			windowTimes.add(currWt);
-			wtSittingDAO.createWindowTime(currWt);
+			dbHandler.sendWindowTime(currWt);
 		}
 		long timerNanoSecs = System.nanoTime();
 		long wtIntervalTime = System.nanoTime();
@@ -78,7 +78,7 @@ public class Recorder extends Thread {
 				if (currWt != null) {
 					int secsPassed = (int) ((System.nanoTime() - wtIntervalTime) * Math.pow(10, -9));
 					currWt.addTime(0, 0, secsPassed);
-					wtSittingDAO.updateWindowTime(currWt);
+					dbHandler.updateWindowTime(currWt);
 				}
 			} else {
 				handleActiveWindowChange(nextProgDescription, sitting);
@@ -90,13 +90,13 @@ public class Recorder extends Thread {
 			if (System.nanoTime() - timerNanoSecs >= 60 * Math.pow(10, 9)) {
 				Date endDate = new Date();
 				sitting.setEnd_date(DATE_FORMAT.format(endDate));
-				wtSittingDAO.updateSitting(sitting);
+				dbHandler.updateSitting(sitting);
 				timerNanoSecs = System.nanoTime();
 			}
 		}
 		Date endDate = new Date();
 		sitting.setEnd_date(DATE_FORMAT.format(endDate));
-		wtSittingDAO.updateSitting(sitting);
+		dbHandler.updateSitting(sitting);
 	}
 
 	public void quit() {
@@ -124,7 +124,7 @@ public class Recorder extends Thread {
 			if (currWt == null) {
 				currWt = new WindowTime(sitting, nextProgDescription);
 				windowTimes.add(currWt);
-				wtSittingDAO.createWindowTime(currWt);
+				dbHandler.sendWindowTime(currWt);
 			}
 		}
 	}

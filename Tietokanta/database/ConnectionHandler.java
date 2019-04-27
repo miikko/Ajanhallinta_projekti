@@ -25,7 +25,7 @@ import com.jcraft.jsch.Session;
  * @author miikko
  * @since 23.3.2019
  */
-public class ConnectionHandler {
+class ConnectionHandler {
 	private JSch jsch;
 	private Session session;
 	private final int LPORT = 4444;

@@ -104,6 +104,7 @@ class MainScreen extends BorderPane {
 	}
 
 	private void createAccountContainer() {
+		Label idLbl = new Label("Your Id: " + controller.getUserId()); 
 		infoLabel = new Label("");
 		Label usern = new Label("New username");
 		Label pass1 = new Label("New password");
@@ -120,6 +121,7 @@ class MainScreen extends BorderPane {
 				String username = usernameField.getText();
 				if (controller.handleUsernameChange(username)) {
 					infoLabel.setText("Vaihto onnistui!");
+					usernameField.clear();
 				} else {
 					infoLabel.setText("Vaihto epäonnistui.");
 				}
@@ -144,7 +146,7 @@ class MainScreen extends BorderPane {
 		accountContainer = new VBox();
 		accountContainer.setSpacing(10);
 		accountContainer.setAlignment(Pos.CENTER);
-		accountContainer.getChildren().addAll(usern, usernameField, pass1, passwordField, pass2, passwordField2,
+		accountContainer.getChildren().addAll(idLbl, usern, usernameField, pass1, passwordField, pass2, passwordField2,
 				changeUnameBtn, changePwBtn, infoLabel);
 	}
 
@@ -184,31 +186,4 @@ class MainScreen extends BorderPane {
 		defaultContent.setAlignment(Pos.CENTER);
 		defaultContent.getChildren().addAll(welcomeLbl, stopwatch);
 	}
-
-	/**
-	 * Calls the chart creation methods and additionally creates a BorderPane
-	 * container for the created charts.<br>
-	 * The container also contains a dropdown menu for selecting charts.
-	 *//*
-	private void createChartContainer() {
-		chartContainer = new BorderPane();
-		chartTypes = FXCollections.observableArrayList();
-		StackPane pieChart = PieChartFactory.getInstance().createChart(new HashSet<Sitting>());
-		StackPane barChart = BarChartFactory.getInstance().createChart(new HashSet<Sitting>());
-		chartTypes.add("Pie chart");
-		chartTypes.add("Bar chart");
-		final ComboBox<String> comboBox = new ComboBox<>(chartTypes);
-		comboBox.setPromptText("Select chart type");
-		comboBox.valueProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> arg0, String arg1, String arg2) {
-				if (arg2.equals("Pie chart")) {
-					chartContainer.setCenter(pieChart);
-				} else if (arg2.equals("Bar chart")) {
-					chartContainer.setCenter(barChart);
-				}
-			}
-		});
-		chartContainer.setTop(comboBox);
-	}*/
 }

@@ -22,7 +22,7 @@ import org.hibernate.Transaction;
  * @since 13/03/2019
  */
 
-public class SittingAccessObject implements SittingDAO_IF {
+class SittingAccessObject implements SittingDAO_IF {
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 

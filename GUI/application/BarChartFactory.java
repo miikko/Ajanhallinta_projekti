@@ -14,6 +14,7 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 
 /**
@@ -43,15 +44,19 @@ class BarChartFactory implements ChartFactory {
 	@Override
 	public StackPane createChart(Set<Sitting> sittings, String startDateStr, String endDateStr) {
 		StackPane barChart = new StackPane();
-
+		Set<XYChart.Series<String, Number>> data = organizeData(sittings);
+		if (data.size() == 0) {
+			Label infoLbl = new Label("No data to show");
+			barChart.getChildren().add(infoLbl);
+			return barChart;
+		}
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		final BarChart<String, Number> bChart = new BarChart<String, Number>(xAxis, yAxis);
 		bChart.setTitle("Used time on different applications from " + startDateStr + " to " + endDateStr);
 		xAxis.setLabel("Day of the week");
 		yAxis.setLabel("Hours");
-		bChart.getData().addAll(organizeData(sittings));
-
+		bChart.getData().addAll(data);
 		barChart.getChildren().addAll(bChart);
 		return barChart;
 	}

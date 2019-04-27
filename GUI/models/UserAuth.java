@@ -1,7 +1,7 @@
 package models;
 
+import database.DatabaseHandler;
 import database.Kayttaja;
-import database.KayttajaAccessObject;
 
 /**
  * Class contains methods for authenticating users and creating
@@ -11,9 +11,10 @@ import database.KayttajaAccessObject;
  * @since 24.3.2019
  */
 public class UserAuth {
+	private DatabaseHandler dbHandler;
 
-	public UserAuth() {
-
+	public UserAuth(DatabaseHandler dbHandler) {
+		this.dbHandler = dbHandler;
 	}
 
 	/**
@@ -25,8 +26,7 @@ public class UserAuth {
 	 * @return the user with matching credentials or null if no such user is found.
 	 */
 	public Kayttaja login(String user_name, String pw) {
-		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		Kayttaja kayttaja = kayttajaDAO.userExists(user_name);
+		Kayttaja kayttaja = dbHandler.fetchUser(user_name);
 		if (kayttaja == null || !kayttaja.getPassword().equals(pw)) {
 			return null;
 		}
@@ -47,33 +47,30 @@ public class UserAuth {
 			System.out.println("Ei saa tyhjää");
 			return null;
 		}
-		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		if (kayttajaDAO.userExists(user_name) == null) {
+		if (dbHandler.fetchUser(user_name) == null) {
 			Kayttaja newUser = new Kayttaja(user_name, pw);
-			kayttajaDAO.createKayttaja(newUser);
+			dbHandler.sendUser(newUser);
 			return newUser;
 		}
 		return null;
 	}
 
 	public Kayttaja changeUsername(int id, String username, String password) {
-		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
-		if (username.equals("") || password.equals("") || kayttajaDAO.userExists(username) != null) {
+		if (username.equals("") || password.equals("") || dbHandler.fetchUser(username) != null) {
 			return null;
 		} else {
 			Kayttaja kayt = new Kayttaja(id, username, password);
-			kayttajaDAO.updateKayttaja(kayt);
+			dbHandler.updateUser(kayt);
 			return kayt;
 		}
 	}
 
 	public Kayttaja changePassword(int id, String username, String newPw, String newPwRepeated) {
-		KayttajaAccessObject kayttajaDAO = new KayttajaAccessObject();
 		if (!newPwRepeated.equals(newPw) || newPw.equals("")) {
 			return null;
 		} else {
 			Kayttaja kayt = new Kayttaja(id, username, newPw);
-			kayttajaDAO.updateKayttaja(kayt);
+			dbHandler.updateUser(kayt);
 			return kayt;
 		}
 	}

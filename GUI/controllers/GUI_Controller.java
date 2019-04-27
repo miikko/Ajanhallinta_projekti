@@ -8,10 +8,9 @@ import java.util.Set;
 
 import application.ScreenFactory;
 import application.View;
-import database.ConnectionHandler;
+import database.DatabaseHandler;
 import database.Kayttaja;
 import database.Sitting;
-import database.SittingAccessObject;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
@@ -25,16 +24,14 @@ public class GUI_Controller {
 	private HashMap<String, Pane> screens = new HashMap<>();
 	private UserAuth uAuth;
 	private StringProperty usernameProperty = new SimpleStringProperty();
-	private ConnectionHandler connHandler;
 	private Kayttaja user;
 	private Recorder rec;
+	private DatabaseHandler dbHandler;
 
 	public GUI_Controller(View view) {
 		this.view = view;
-		// TODO: Move this call to a more proper place.
-		connHandler = ConnectionHandler.getInstance();
-		connHandler.openTunnel();
-		uAuth = new UserAuth();
+		dbHandler = new DatabaseHandler();
+		uAuth = new UserAuth(dbHandler);
 	}
 
 	/**
@@ -105,7 +102,7 @@ public class GUI_Controller {
 		if ((rec != null && rec.isAlive()) || user == null) {
 			return false;
 		}
-		rec = new Recorder(user);
+		rec = new Recorder(user, dbHandler);
 		rec.start();
 		return true;
 	}
@@ -123,10 +120,9 @@ public class GUI_Controller {
 		if (user == null) {
 			return null;
 		}
-		SittingAccessObject sittingDAO = new SittingAccessObject();
 		Date startDate = Date.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 		Date endDate = Date.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
-		return sittingDAO.readSittings(startDate, endDate, user.getId());
+		return dbHandler.fetchSittings(startDate, endDate, user.getId());
 	}
 
 	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on
@@ -145,6 +141,13 @@ public class GUI_Controller {
 
 	public StringProperty getUsernameProperty() {
 		return usernameProperty;
+	}
+	
+	public Integer getUserId() {
+		if (user == null) {
+			return null;
+		}
+		return user.getId();
 	}
 
 	/**
