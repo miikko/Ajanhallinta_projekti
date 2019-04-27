@@ -18,7 +18,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
-public class HistoryContainer extends VBox {
+class HistoryContainer extends VBox {
 	private CalendarPair calendarPair;
 	private Button confirmBtn;
 	private GUI_Controller controller;

@@ -155,7 +155,6 @@ class MainScreen extends BorderPane {
 	/**
 	 * Initializes the navigation bar that can be seen on the left side of the
 	 * screen once a user has logged in.<br>
-	 * Creates both the spacing and the buttons included to the bar.
 	 * 
 	 */
 	private void createNavBar() {
@@ -165,7 +164,13 @@ class MainScreen extends BorderPane {
 		Button historyBtn = new Button("History");
 		historyBtn.setOnAction(createNavBarBtnHandler(historyContainer));
 		Button groupsBtn = new Button("Groups");
-		groupsBtn.setOnAction(createNavBarBtnHandler(groupContainer));
+		groupsBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent arg0) {
+				groupContainer.refresh();
+				updateCenter(groupContainer);
+			}
+		});
 		navBar.getChildren().addAll(defaultBtn, historyBtn, groupsBtn);
 	}
 	

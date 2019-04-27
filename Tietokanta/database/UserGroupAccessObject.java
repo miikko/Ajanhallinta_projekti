@@ -74,20 +74,13 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 
 	@Override
 	public List<UserGroup> readGroups(int adminId) {
-		List<UserGroup> userGroups = new ArrayList<UserGroup>();
 		Session istunto = istuntotehdas.openSession();
 		try {
 			transaktio = istunto.beginTransaction();
 			@SuppressWarnings("unchecked")
-			List<UserGroup> tempGroupList = istunto.createQuery("from UserGroup").getResultList();
+			List<UserGroup> userGroups = (List<UserGroup>) istunto.createQuery("from UserGroup where adminId =:adminId").setParameter("adminId", adminId).getResultList();
 			transaktio.commit();
-			for (UserGroup tempUserGroup : tempGroupList) {
-				if (adminId == tempUserGroup.getAdminId()) {
-					userGroups.add(tempUserGroup);
-				}
-			}
 			return userGroups;
-
 		} catch (Exception e) {
 			if (transaktio != null)
 				transaktio.rollback();
@@ -95,7 +88,6 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 		} finally {
 			istunto.close();
 		}
-
 	}
 
 //	@Override

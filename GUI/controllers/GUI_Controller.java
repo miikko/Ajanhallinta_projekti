@@ -134,12 +134,32 @@ public class GUI_Controller {
 		return dbHandler.fetchUserGroups(user.getId());
 	}
 
-	public boolean addUserToGroup(UserGroup userGroup, int userId) {
-		if (user.getId() == userId || dbHandler.fetchUser(userId) == null) {
+	public boolean addUserToGroup(UserGroup userGroup, String userIdStr) {
+		int userId = 0;
+		try {
+			userId = Integer.parseInt(userIdStr);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		if (user.getId() == userId || userGroup.getUserIds().contains(userId) || dbHandler.fetchUser(userId) == null) {
 			return false;
 		}
 		userGroup.addUserId(userId);
 		return true;
+	}
+	
+	public boolean saveUserGroup(UserGroup userGroup) {
+		String groupName = userGroup.getGroupName();
+		if (userGroup.getUserIds().size() == 0 || groupName == null || groupName.equals("")) {
+			return false;
+		}
+		List<UserGroup> userGroups = dbHandler.fetchUserGroups(user.getId());
+		for (UserGroup group : userGroups) {
+			if (group.getGroupName().equals(groupName)) {
+				return false;
+			}
+		}
+		return dbHandler.sendUserGroup(userGroup);
 	}
 	
 	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on
