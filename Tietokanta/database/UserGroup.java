@@ -31,6 +31,8 @@ public class UserGroup {
 	public UserGroup() {
 		super();
 	}
+	
+	
 
 	public int getGroupId() {
 		return groupId;
