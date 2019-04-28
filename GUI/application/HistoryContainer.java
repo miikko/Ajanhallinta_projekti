@@ -5,6 +5,7 @@ import java.util.Set;
 
 import controllers.GUI_Controller;
 import database.Sitting;
+import database.UserGroup;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -23,9 +24,17 @@ class HistoryContainer extends VBox {
 	private Button confirmBtn;
 	private GUI_Controller controller;
 	private BorderPane chartContainer;
+	private UserGroup userGroup;
 
 	public HistoryContainer(GUI_Controller controller) {
 		this.controller = controller;
+		this.setAlignment(Pos.CENTER);
+		create();
+	}
+	
+	public HistoryContainer(GUI_Controller controller, UserGroup userGroup) {
+		this.controller = controller;
+		this.userGroup = userGroup;
 		this.setAlignment(Pos.CENTER);
 		create();
 	}
@@ -62,7 +71,12 @@ class HistoryContainer extends VBox {
 	private void createCharts(LocalDate startDate, LocalDate endDate) {
 		ObservableList<String> chartTypes = FXCollections.observableArrayList();
 		chartContainer = new BorderPane();
-		Set<Sitting> sittings = controller.getSittings(startDate, endDate);
+		Set<Sitting> sittings = null;
+		if (userGroup == null) {
+			sittings = controller.getSittings(startDate, endDate);
+		} else {
+			sittings = controller.getGroupSittings(startDate, endDate, userGroup);
+		}
 		StackPane pieChart = PieChartFactory.getInstance().createChart(sittings, startDate.toString(),
 				endDate.toString());
 		StackPane barChart = BarChartFactory.getInstance().createChart(sittings, startDate.toString(),

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -127,6 +128,19 @@ public class GUI_Controller {
 		return dbHandler.fetchSittings(startDate, endDate, user.getId());
 	}
 	
+	public Set<Sitting> getGroupSittings(LocalDate sDate, LocalDate eDate, UserGroup group) {
+		if (group == null) {
+			return null;
+		}
+		Set<Sitting> sittings = new HashSet<>();
+		Date startDate = Date.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		Date endDate = Date.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		for (int userId : group.getUserIds()) {
+			sittings.addAll(dbHandler.fetchSittings(startDate, endDate, userId));
+		}
+		return sittings;
+	}
+	
 	public List<UserGroup> getUserGroups() {
 		if (user == null) {
 			return null;
@@ -148,6 +162,20 @@ public class GUI_Controller {
 		return true;
 	}
 	
+	public boolean removeUserFromGroup(UserGroup group, String userIdStr) {
+		int userId = 0;
+		try {
+			userId = Integer.parseInt(userIdStr);
+		} catch (NumberFormatException e) {
+			return false;
+		}
+		if (user.getId() == userId) {
+			return false;
+		}
+		group.removeUserId(userId);
+		return true;
+	}
+	
 	public boolean saveUserGroup(UserGroup userGroup) {
 		String groupName = userGroup.getGroupName();
 		if (userGroup.getUserIds().size() == 0 || groupName == null || groupName.equals("")) {
@@ -160,6 +188,13 @@ public class GUI_Controller {
 			}
 		}
 		return dbHandler.sendUserGroup(userGroup);
+	}
+	
+	public boolean removeUserGroup(UserGroup userGroup) {
+		if (userGroup == null) {
+			return false;
+		}
+		return dbHandler.deleteGroup(userGroup);
 	}
 	
 	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on

@@ -81,4 +81,8 @@ public class DatabaseHandler {
 		return groupObject.updateGroup(group);
 	}
 	
+	public boolean deleteGroup(UserGroup group) {
+		return groupObject.deleteGroup(group);
+	}
+	
 }

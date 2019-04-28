@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,16 +29,13 @@ public class UserGroup {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private int groupId;
 
-	@Column(name = "userId")
-	private int userId;
-
 	@Column(name = "adminId")
 	private int adminId;
 
 	@Column(name = "groupName")
 	private String groupName;
 
-	@ElementCollection
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Column(name = "userIds")
 	private List<Integer> userIds = new ArrayList<Integer>();
 
@@ -66,6 +64,10 @@ public class UserGroup {
 
 	public void addUserId(int userId) {
 		userIds.add(userId);
+	}
+	
+	public void removeUserId(int userId) {
+		userIds.remove(new Integer(userId));
 	}
 
 	public int getAdminId() {
