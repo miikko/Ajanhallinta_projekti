@@ -18,40 +18,54 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
+/**
+ * A Container-Class for creating, removing and viewing owned UserGroups.<br>
+ * This class extends the VBox-class.
+ * 
+ * @author miikk
+ *
+ */
 class GroupContainer extends VBox {
 	private GUI_Controller controller;
-	private VBox startContent;
+	private HBox startContent;
 	private VBox groupCreationContent;
-	private VBox groupInspectionContent;
 	private ObservableList<String> comboBoxItems;
 	private UserGroup newUserGroup;
 	private UserGroup selectedUserGroup;
 	private List<UserGroup> userGroups;
 	private final Insets MARGIN = new Insets(5, 5, 5, 5);
-	
+
 	public GroupContainer(GUI_Controller controller) {
 		this.setAlignment(Pos.CENTER);
 		this.controller = controller;
 		createStartContent();
 		createGroupCreationContent();
-		createGroupInspectionContent();
-		displayStartContent();
+		displayContent(startContent);
 	}
-	
+
+	/**
+	 * Creates a HBox that contains buttons for creating groups, removing groups and
+	 * for viewing the selected group's history.<br>
+	 * Group selection is done by using a dropdown menu which shows names of owned
+	 * groups.
+	 */
 	private void createStartContent() {
-		startContent = new VBox();
+		startContent = new HBox();
 		startContent.setAlignment(Pos.CENTER);
-		Button inspectGroupBtn = new Button("View group");
-		inspectGroupBtn.setDisable(true);
+		Button removeGroupBtn = new Button("Remove group");
+		removeGroupBtn.setDisable(true);
+		Button groupStatsBtn = new Button("Show group history");
+		groupStatsBtn.setDisable(true);
+		Button createNewGroupBtn = new Button("Create new group");
+		VBox btnContainer = new VBox();
+		btnContainer.getChildren().addAll(createNewGroupBtn, removeGroupBtn, groupStatsBtn);
+		for (Node child : btnContainer.getChildren()) {
+			VBox.setMargin(child, MARGIN);
+		}
 		userGroups = controller.getUserGroups();
-		/*
-		Label infoLbl = new Label("You don't have any groups");
-		if (userGroups.size() > 0) {
-			infoLbl.setVisible(false);
-			infoLbl.setManaged(false);
-		}*/
 		comboBoxItems = FXCollections.observableArrayList();
 		for (UserGroup group : userGroups) {
 			comboBoxItems.add(group.getGroupName());
@@ -61,43 +75,62 @@ class GroupContainer extends VBox {
 		comboBox.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				for (UserGroup group : userGroups) {
-					if (newValue.equals(group.getGroupName())) {
-						selectedUserGroup = group;
-						break;
+				if (newValue != null) {
+					for (UserGroup group : userGroups) {
+						if (newValue.equals(group.getGroupName())) {
+							selectedUserGroup = group;
+							break;
+						}
 					}
 				}
 				if (selectedUserGroup == null) {
-					inspectGroupBtn.setDisable(true);
+					removeGroupBtn.setDisable(true);
+					groupStatsBtn.setDisable(true);
 				} else {
-					inspectGroupBtn.setDisable(false);
+					removeGroupBtn.setDisable(false);
+					groupStatsBtn.setDisable(false);
 				}
 			}
 		});
-		Button createNewGroupBtn = new Button("Create new group");
 		createNewGroupBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				newUserGroup = new UserGroup(controller.getUserId());
-				displayGroupCreationContent();
+				displayContent(groupCreationContent);
 			}
 		});
-		inspectGroupBtn.setOnAction(new EventHandler<ActionEvent>() {
+		removeGroupBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				displayGroupInspectionContent();
+				controller.removeUserGroup(selectedUserGroup);
+				refresh();
 			}
 		});
-		startContent.getChildren().addAll(/*infoLbl,*/ comboBox, createNewGroupBtn, inspectGroupBtn);
+		groupStatsBtn.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				displayContent(new HistoryContainer(controller, selectedUserGroup));
+			}
+		});
+		startContent.getChildren().addAll(comboBox, btnContainer);
+		for (Node child : startContent.getChildren()) {
+			HBox.setMargin(child, MARGIN);
+		}
 	}
-	
+
+	/**
+	 * Creates a VBox that contains text fields meant for specifying the group name
+	 * and user ids. Also has buttons for adding users to group and creating the
+	 * group<br>
+	 * 
+	 */
 	private void createGroupCreationContent() {
 		groupCreationContent = new VBox();
 		groupCreationContent.setAlignment(Pos.CENTER);
 		Label infoLbl = new Label("");
 		groupCreationContent.getChildren().add(infoLbl);
 		Button confirmBtn = new Button("Create");
-		//Button is disabled while there are no group members
+		// Button is disabled while there are no group members
 		confirmBtn.setDisable(true);
 		TextField nameTextField = new TextField();
 		nameTextField.setPromptText("Group name");
@@ -123,9 +156,10 @@ class GroupContainer extends VBox {
 			public void handle(ActionEvent arg0) {
 				newUserGroup.setGroupName(nameTextField.getText());
 				if (controller.saveUserGroup(newUserGroup)) {
-					displayStartContent();
+					refresh();
 				} else {
-					infoLbl.setText("Failed to create a new group, check that there is atleast one other member and that the name is unique");
+					infoLbl.setText(
+							"Failed to create a new group, check that there is atleast one other member and that the name is unique");
 				}
 			}
 		});
@@ -134,7 +168,14 @@ class GroupContainer extends VBox {
 			VBox.setMargin(node, MARGIN);
 		}
 	}
-	
+
+	/**
+	 * Creates a HBox that contains the specified user id and a remove button.
+	 * 
+	 * @param userIdStr The users id in String form
+	 * @return a HBox with the user id and a button for removing the user from the
+	 *         unfinished group
+	 */
 	private HBox createUserTab(String userIdStr) {
 		HBox userTab = new HBox();
 		Label idLbl = new Label(userIdStr);
@@ -150,34 +191,22 @@ class GroupContainer extends VBox {
 		userTab.getChildren().addAll(idLbl, removeBtn);
 		return userTab;
 	}
-	
-	
-	private void createGroupInspectionContent() {
-		groupInspectionContent = new VBox();
-		Label infoLbl = new Label("");
-		Button removeGroupBtn = new Button("Remove group");
-		removeGroupBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				if (controller.removeUserGroup(selectedUserGroup)) {
-					infoLbl.setText("");
-					displayStartContent();
-				} else {
-					infoLbl.setText("Failed to remove group");
-				}
-			}
-		});
-		Button statsBtn = new Button("Show group history");
-		statsBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				groupInspectionContent.getChildren().setAll(new HistoryContainer(controller, selectedUserGroup));
-			}
-		});
-		groupInspectionContent.getChildren().addAll(removeGroupBtn, statsBtn);
+
+	/**
+	 * Changes the current container content to the content given as a parameter.
+	 * 
+	 * @param content a Pane that this container is going to display
+	 */
+	private void displayContent(Pane content) {
+		this.getChildren().setAll(content);
 	}
-	
-	private void displayStartContent() {
+
+	/**
+	 * Resets the selections and updates the UserGroup names in startContents
+	 * dropdown menu.<br>
+	 * Then displays the startContent
+	 */
+	public void refresh() {
 		newUserGroup = null;
 		selectedUserGroup = null;
 		comboBoxItems.clear();
@@ -185,18 +214,6 @@ class GroupContainer extends VBox {
 		for (UserGroup group : userGroups) {
 			comboBoxItems.add(group.getGroupName());
 		}
-		this.getChildren().setAll(startContent);
-	}
-	
-	private void displayGroupCreationContent() {
-		this.getChildren().setAll(groupCreationContent);
-	}
-	
-	private void displayGroupInspectionContent() {
-		this.getChildren().setAll(groupInspectionContent);
-	}
-	
-	public void refresh() {
-		displayStartContent();
+		displayContent(startContent);
 	}
 }
