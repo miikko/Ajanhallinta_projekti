@@ -5,8 +5,9 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * DateUtil handles date and time conversions from and to string format while maintaining the correct format.
- * It also has methods for showing the current date and the weekday of a specific date.
+ * DateUtil handles date and time conversions from and to string format while
+ * maintaining the correct format. It also has methods for showing the current
+ * date and the weekday of a specific date.
  * 
  * @author Arttuhal
  * @since 28/04/2019
@@ -15,10 +16,12 @@ import java.time.format.DateTimeFormatter;
 public class DateUtil {
 	private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-	private static final String[] WEEKDAYS = new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+	private static final String[] WEEKDAYS = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+			"Saturday", "Sunday" };
 
 	/**
-	 * This method converts a given date to a string in the correct format. Doesn't include time.
+	 * This method converts a given date to a string in the correct format. Doesn't
+	 * include time.
 	 * 
 	 * @param date The date to convert.
 	 * @return dateString The converted date in "yyyy/MM/dd" string format.
@@ -29,7 +32,8 @@ public class DateUtil {
 	}
 
 	/**
-	 * This method converts a given date to a string in the correct format. Includes time.
+	 * This method converts a given date to a string in the correct format. Includes
+	 * time.
 	 * 
 	 * @param date The date and time to convert.
 	 * @return dateString The converted date in "yyyy/MM/dd HH:mm:ss" string format.
@@ -40,7 +44,8 @@ public class DateUtil {
 	}
 
 	/**
-	 * This method converts a string containing date information into a LocalDate object. Doesn't include time.
+	 * This method converts a string containing date information into a LocalDate
+	 * object. Doesn't include time.
 	 * 
 	 * @param dateString The string to convert.
 	 */
@@ -49,7 +54,8 @@ public class DateUtil {
 	}
 
 	/**
-	 * This method converts a string containing date information into a LocalDate object. Includes time.
+	 * This method converts a string containing date information into a LocalDate
+	 * object. Includes time.
 	 * 
 	 * @param dateString The string to convert.
 	 */
@@ -58,14 +64,16 @@ public class DateUtil {
 	}
 
 	/**
-	 * This method returns the current date in a string, formatted to the correct time format. Doesn't include time.
+	 * This method returns the current date in a string, formatted to the correct
+	 * time format. Doesn't include time.
 	 */
 	public static String currentDate() {
 		return dateToString(LocalDate.now());
 	}
 
 	/**
-	 * This method returns the current date in a string, formatted to the correct time format. Includes time.
+	 * This method returns the current date in a string, formatted to the correct
+	 * time format. Includes time.
 	 */
 	public static String currentDateTime() {
 		return dateToString(LocalDateTime.now());
@@ -81,7 +89,7 @@ public class DateUtil {
 		String weekDay = WEEKDAYS[date.getDayOfWeek().getValue() - 1];
 		return weekDay;
 	}
-	
+
 	/**
 	 * This method returns the weekday of a given specific date in a string format.
 	 * 
@@ -91,6 +99,10 @@ public class DateUtil {
 	public static String weekdayUtil(LocalDateTime date) {
 		String weekDay = WEEKDAYS[date.getDayOfWeek().getValue() - 1];
 		return weekDay;
+	}
+
+	public static String[] getWeekdays() {
+		return WEEKDAYS;
 	}
 
 }

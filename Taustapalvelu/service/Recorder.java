@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,6 +19,7 @@ import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
 import com.sun.jna.ptr.IntByReference;
 
+import controllers.DateUtil;
 import database.DatabaseHandler;
 import database.Kayttaja;
 import database.Sitting;
@@ -41,7 +40,6 @@ public class Recorder extends Thread {
 	private final User32 USER32 = User32.INSTANCE;
 	private boolean quit;
 	private Kayttaja user;
-	private final DateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 	private Set<WindowTime> windowTimes = new HashSet<>();
 	private DatabaseHandler dbHandler;
 	private WindowTime currWt = null;
@@ -54,8 +52,8 @@ public class Recorder extends Thread {
 	
 	@Override
 	public void run() {
-		Date startDate = new Date();
-		Sitting sitting = new Sitting(user, DATE_FORMAT.format(startDate));
+		LocalDateTime startDate = LocalDateTime.now();
+		Sitting sitting = new Sitting(user, DateUtil.dateToString(startDate));
 		dbHandler.sendSitting(sitting);
 		String currProgDescription = getActiveProgramDescription();
 		if (currProgDescription != null) {
@@ -88,14 +86,14 @@ public class Recorder extends Thread {
 			// Set the endDate in case application execution stops before the thread has
 			// finished running
 			if (System.nanoTime() - timerNanoSecs >= 60 * Math.pow(10, 9)) {
-				Date endDate = new Date();
-				sitting.setEnd_date(DATE_FORMAT.format(endDate));
+				LocalDateTime endDate = LocalDateTime.now();
+				sitting.setEnd_date(DateUtil.dateToString(endDate));
 				dbHandler.updateSitting(sitting);
 				timerNanoSecs = System.nanoTime();
 			}
 		}
-		Date endDate = new Date();
-		sitting.setEnd_date(DATE_FORMAT.format(endDate));
+		LocalDateTime endDate = LocalDateTime.now();
+		sitting.setEnd_date(DateUtil.dateToString(endDate));
 		dbHandler.updateSitting(sitting);
 	}
 

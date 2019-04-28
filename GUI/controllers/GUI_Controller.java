@@ -1,8 +1,9 @@
 package controllers;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -123,8 +124,11 @@ public class GUI_Controller {
 		if (user == null) {
 			return null;
 		}
-		Date startDate = Date.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		Date endDate = Date.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		// Commented lines based on the Date variable and replaced with LocalDateTime, kept in case of undiscovered bugs
+//		LocalDateTime startDate = LocalDateTime.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//		LocalDateTime endDate = LocalDateTime.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		LocalDateTime startDate = LocalDateTime.of(sDate, LocalTime.MIN);
+		LocalDateTime endDate = LocalDateTime.of(eDate.plusDays(1), LocalTime.MIN);
 		return dbHandler.fetchSittings(startDate, endDate, user.getId());
 	}
 	
@@ -133,8 +137,10 @@ public class GUI_Controller {
 			return null;
 		}
 		Set<Sitting> sittings = new HashSet<>();
-		Date startDate = Date.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-		Date endDate = Date.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+//		LocalDateTime startDate = LocalDateTime.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+//		LocalDateTime endDate = LocalDateTime.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		LocalDateTime startDate = LocalDateTime.of(sDate, LocalTime.MIN);
+		LocalDateTime endDate = LocalDateTime.of(eDate.plusDays(1), LocalTime.MIN);
 		for (int userId : group.getUserIds()) {
 			sittings.addAll(dbHandler.fetchSittings(startDate, endDate, userId));
 		}

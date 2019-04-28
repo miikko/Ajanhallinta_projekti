@@ -1,9 +1,7 @@
 package database;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,9 +12,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import controllers.DateUtil;
+
 /**
- * SittingAccessObject contains the methods for reading and writing
- * information into sittings.
+ * SittingAccessObject contains the methods for reading and writing information
+ * into sittings.
  * 
  * @author Arttuhal & miikk
  * @since 13/03/2019
@@ -71,18 +71,21 @@ class SittingAccessObject implements SittingDAO_IF {
 	}
 
 	/**
-	 * This method returns all the sittings within a specific time frame from a specified user.
+	 * This method returns all the sittings within a specific time frame from a
+	 * specified user.
 	 * 
 	 * @param start_date This sets the start of the wanted time frame.
-	 * @param end_date This sets the end of the wanted time frame.
-	 * @param userId UserId is used to specify the user from which the sittings are read.
-	 * @return resultSet This is a set containing all the sittings that match the search criteria.
+	 * @param end_date   This sets the end of the wanted time frame.
+	 * @param userId     UserId is used to specify the user from which the sittings
+	 *                   are read.
+	 * @return resultSet This is a set containing all the sittings that match the
+	 *         search criteria.
 	 */
 	@Override
-	public Set<Sitting> readSittings(Date start_date, Date end_date, int userId) {
+	public Set<Sitting> readSittings(LocalDateTime start_date, LocalDateTime end_date, int userId) {
 		Session istunto = istuntotehdas.openSession();
 		Set<Sitting> resultSet = new HashSet<Sitting>();
-		List<Sitting> sittingList;		
+		List<Sitting> sittingList;
 		try {
 			transaktio = istunto.beginTransaction();
 			@SuppressWarnings("unchecked")
@@ -101,22 +104,15 @@ class SittingAccessObject implements SittingDAO_IF {
 		} finally {
 			istunto.close();
 		}
-		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		
+
 		for (Sitting sitting : sittingList) {
-			try {
-				Date sittingStartDate = formatter.parse(sitting.getStart_date());
-				Date sittingEndDate = formatter.parse(sitting.getEnd_date());
-				if(sittingStartDate.after(start_date) && sittingEndDate.before(end_date)) {
-					resultSet.add(sitting);
-				}
-				
-			} catch (ParseException e) {
-				e.printStackTrace();
+			LocalDateTime sittingStartDate = DateUtil.stringToDateTime(sitting.getStart_date());
+			LocalDateTime sittingEndDate = DateUtil.stringToDateTime(sitting.getEnd_date());
+			if (sittingStartDate.isAfter(start_date) && sittingEndDate.isBefore(end_date)) {
+				resultSet.add(sitting);
 			}
 		}
-		
+
 		return resultSet;
 
 	}
@@ -168,5 +164,13 @@ class SittingAccessObject implements SittingDAO_IF {
 			System.out.println("WT updated");
 		}
 	}
+	
+//	@Override
+//	public Set<WindowTime>readWindowTimes(LocalDateTime start_date, LocalDateTime end_date, int userId){
+//		Session istunto = istuntotehdas.openSession();
+//		Set<WindowTime> resultSet = new HashSet<WindowTime>();
+//		
+//		
+//	}
 
 }

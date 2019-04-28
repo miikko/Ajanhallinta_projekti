@@ -1,6 +1,6 @@
 package database;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -49,7 +49,7 @@ public class DatabaseHandler {
 		return sittingObject.createSitting(sitting);
 	}
 	
-	public Set<Sitting> fetchSittings(Date startDate, Date endDate, int userId) {
+	public Set<Sitting> fetchSittings(LocalDateTime startDate, LocalDateTime endDate, int userId) {
 		return sittingObject.readSittings(startDate, endDate, userId);
 	}
 	

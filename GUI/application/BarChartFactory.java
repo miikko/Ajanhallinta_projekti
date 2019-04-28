@@ -2,12 +2,12 @@ package application;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import controllers.DateUtil;
 import database.Sitting;
 import database.WindowTime;
 import javafx.scene.chart.BarChart;
@@ -26,8 +26,7 @@ import javafx.scene.layout.StackPane;
  */
 class BarChartFactory implements ChartFactory {
 	
-	private final String[] WEEKDAYS = new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
-	private final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+	private final String[] WEEKDAYS = DateUtil.getWeekdays();
 
 	private BarChartFactory() {
 
@@ -71,8 +70,8 @@ class BarChartFactory implements ChartFactory {
 		}
 		for (Sitting sitting : sittings) {
 			Set<WindowTime> wts = sitting.getWindowTimes();
-			LocalDate startDate = LocalDate.parse(sitting.getStart_date(), DATE_FORMATTER);
-			String weekDay = WEEKDAYS[startDate.getDayOfWeek().getValue() - 1];
+			LocalDateTime startDate = DateUtil.stringToDateTime(sitting.getStart_date());
+			String weekDay = DateUtil.weekdayUtil(startDate);
 			dayGroupedWts.get(weekDay).addAll(wts);
 			for (WindowTime wt : wts) {
 				String progName = wt.getProgramName();

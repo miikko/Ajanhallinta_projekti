@@ -1,6 +1,6 @@
 package database;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 interface SittingDAO_IF {
@@ -9,9 +9,11 @@ interface SittingDAO_IF {
 	
 	boolean updateSitting(Sitting sitting);
 	
-	Set<Sitting> readSittings(Date start_date, Date end_date, int userId);
+	Set<Sitting> readSittings(LocalDateTime start_date, LocalDateTime end_date, int userId);
 	
 	boolean createWindowTime(WindowTime wt);
 	
 	boolean updateWindowTime(WindowTime wt);
+
+	//Set<WindowTime> readWindowTimes(LocalDateTime start_date, LocalDateTime end_date, int userId);
 }
