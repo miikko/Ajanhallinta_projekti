@@ -26,6 +26,11 @@ class SittingAccessObject implements SittingDAO_IF {
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 
+	/**
+	 * This method creates a new sitting.
+	 * 
+	 * @param sitting This is the new sitting that will be created.
+	 */
 	@Override
 	public boolean createSitting(Sitting sitting) {
 		Session istunto = istuntotehdas.openSession();
@@ -43,6 +48,11 @@ class SittingAccessObject implements SittingDAO_IF {
 		}
 	}
 
+	/**
+	 * This method updates the objects of a pre-existing sitting.
+	 * 
+	 * @param sitting This is the specified sitting that will be updated.
+	 */
 	@Override
 	public boolean updateSitting(Sitting sitting) {
 		Session istunto = istuntotehdas.openSession();
@@ -60,6 +70,14 @@ class SittingAccessObject implements SittingDAO_IF {
 		}
 	}
 
+	/**
+	 * This method returns all the sittings within a specific time frame from a specified user.
+	 * 
+	 * @param start_date This sets the start of the wanted time frame.
+	 * @param end_date This sets the end of the wanted time frame.
+	 * @param userId UserId is used to specify the user from which the sittings are read.
+	 * @return resultSet This is a set containing all the sittings that match the search criteria.
+	 */
 	@Override
 	public Set<Sitting> readSittings(Date start_date, Date end_date, int userId) {
 		Session istunto = istuntotehdas.openSession();
@@ -105,6 +123,11 @@ class SittingAccessObject implements SittingDAO_IF {
 
 	// WindowTime methods
 
+	/**
+	 * This method creates a new WindowTime object.
+	 * 
+	 * @param wt This is the new WindowTime that will be created.
+	 */
 	@Override
 	public boolean createWindowTime(WindowTime wt) {
 		Session istunto = istuntotehdas.openSession();
@@ -123,6 +146,11 @@ class SittingAccessObject implements SittingDAO_IF {
 		}
 	}
 
+	/**
+	 * This method updates a pre-existing WindowTime object.
+	 * 
+	 * @param wt This is the WindowTime object that will be updated.
+	 */
 	@Override
 	public boolean updateWindowTime(WindowTime wt) {
 		Session istunto = istuntotehdas.openSession();

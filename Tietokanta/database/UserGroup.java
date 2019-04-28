@@ -12,7 +12,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 /**
- * This class includes user groups.
+ * UserGroup contains the information (user ids, admin ids and group names) 
+ * necessary to create user groups for spectating screen time stats of
+ * multiple users within a group.
  * 
  * @author Arttuhal
  * @since 27/04/2019

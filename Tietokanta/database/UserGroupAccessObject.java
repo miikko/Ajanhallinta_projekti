@@ -11,7 +11,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 /**
- * UserGroupAccessObject contains methods for reading and writing user groups.
+ * UserGroupAccessObject contains methods for reading, writing and deleting user groups.
  * 
  * @author Arttuhal
  * @since 27/04/2019
@@ -21,6 +21,11 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 
+	/**
+	 * This method creates a new user group.
+	 * 
+	 * @param userGroup This is the new userGroup that will be created.
+	 */
 	@Override
 	public boolean createGroup(UserGroup userGroup) {
 		Session istunto = istuntotehdas.openSession();
@@ -38,6 +43,11 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 		}
 	}
 
+	/**
+	 * This method updates a pre-existing user group.
+	 * 
+	 * @param userGroup This is the specified user group that will be updated.
+	 */
 	@Override
 	public boolean updateGroup(UserGroup userGroup) {
 		Session istunto = istuntotehdas.openSession();
@@ -55,6 +65,11 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 		}
 	}
 
+	/**
+	 * This method deletes a pre-existing user group.
+	 * 
+	 * @param userGroup This is used to define the user group that will be deleted.
+	 */
 	@Override
 	public boolean deleteGroup(UserGroup userGroup) {
 		Session istunto = istuntotehdas.openSession();
@@ -72,6 +87,12 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 		}
 	}
 
+	/**
+	 * This method returns all the user groups with a specific admin user.
+	 * 
+	 * @param adminId Admin id is the user id that filters out only the specific user groups.
+	 * @return userGroups This is a list of all the user groups with the given admin user.
+	 */
 	@Override
 	public List<UserGroup> readGroups(int adminId) {
 		Session istunto = istuntotehdas.openSession();
