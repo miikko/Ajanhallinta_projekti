@@ -17,7 +17,7 @@ import javax.persistence.Table;
  * necessary to create user groups for spectating screen time stats of
  * multiple users within a group.
  * 
- * @author Arttuhal
+ * @author Arttuhal & miikk
  * @since 27/04/2019
  */
 

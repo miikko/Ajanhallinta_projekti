@@ -13,7 +13,7 @@ import org.hibernate.Transaction;
 /**
  * UserGroupAccessObject contains methods for reading, writing and deleting user groups.
  * 
- * @author Arttuhal
+ * @author Arttuhal & miikk
  * @since 27/04/2019
  */
 
