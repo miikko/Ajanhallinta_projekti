@@ -164,13 +164,51 @@ class SittingAccessObject implements SittingDAO_IF {
 			System.out.println("WT updated");
 		}
 	}
-	
-//	@Override
-//	public Set<WindowTime>readWindowTimes(LocalDateTime start_date, LocalDateTime end_date, int userId){
-//		Session istunto = istuntotehdas.openSession();
-//		Set<WindowTime> resultSet = new HashSet<WindowTime>();
-//		
-//		
-//	}
+
+	/**
+	 * This method returns all WindowTime objects from the same day of the week as
+	 * the given parameter.
+	 * 
+	 * @param weekday This is the day of the week from which all WindowTime objects
+	 *                are selected, given as an integer.
+	 * @param userId  This is the userId from which the Sittings/WindowTimes are
+	 *                searched.
+	 * @return resultSet This is a set of WindowTime objects with the given day of
+	 *         the week.
+	 */
+	@Override
+	public Set<WindowTime> readWindowTimes(int weekday, int userId) {
+		Session istunto = istuntotehdas.openSession();
+		Set<WindowTime> resultSet = new HashSet<WindowTime>();
+		List<Sitting> sittingList;
+		try {
+			transaktio = istunto.beginTransaction();
+			@SuppressWarnings("unchecked")
+
+			List<Sitting> resultsList = istunto.createQuery("from Sitting where userId =:userId")
+					.setParameter("userId", userId).getResultList();
+			transaktio.commit();
+			sittingList = new ArrayList<Sitting>(resultsList);
+
+		} catch (NoResultException nre) {
+			return null;
+		} catch (Exception e) {
+			if (transaktio != null)
+				transaktio.rollback();
+			throw e;
+		} finally {
+			istunto.close();
+		}
+
+		for (Sitting sitting : sittingList) {
+			LocalDateTime sDate = DateUtil.stringToDateTime(sitting.getStart_date());
+			LocalDateTime eDate = DateUtil.stringToDateTime(sitting.getEnd_date());
+			if (sDate.getDayOfWeek().getValue() == weekday || eDate.getDayOfWeek().getValue() == weekday) {
+				resultSet.addAll(sitting.getWindowTimes());
+			}
+		}
+
+		return resultSet;
+	}
 
 }

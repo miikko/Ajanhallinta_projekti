@@ -15,5 +15,5 @@ interface SittingDAO_IF {
 	
 	boolean updateWindowTime(WindowTime wt);
 
-	//Set<WindowTime> readWindowTimes(LocalDateTime start_date, LocalDateTime end_date, int userId);
+	Set<WindowTime> readWindowTimes(int weekday, int userId);
 }
