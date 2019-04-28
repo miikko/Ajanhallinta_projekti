@@ -7,7 +7,7 @@ import java.util.Set;
 /**
  * This class handles the link between the GUI, the database and the service
  * 
- * @author Arttuhal & miikk
+ * @author miikk
  * @since 13/03/2019
  */
 public class DatabaseHandler {

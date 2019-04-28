@@ -3,7 +3,6 @@ package controllers;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -22,6 +21,13 @@ import javafx.stage.Stage;
 import models.UserAuth;
 import service.Recorder;
 
+/**
+ * Controller class for most GUI-package classes.<br>
+ * Contains handling methods for login, user info changing, recording and database calls from GUI-package classes.<br>
+ * Also stores the logged in user as a Kayttaja-object. 
+ * @author miikk & Arttuhal
+ *
+ */
 public class GUI_Controller {
 
 	private View view;
@@ -210,7 +216,7 @@ public class GUI_Controller {
 		user = null;
 	}
 
-	// TODO: Complete method
+	
 	public void handleExit() {
 		handleLogout();
 		Stage stage = (Stage) view.getScene().getWindow();
@@ -221,6 +227,9 @@ public class GUI_Controller {
 		return usernameProperty;
 	}
 	
+	/**
+	 * @return the current user's id, or null if no user is logged in.
+	 */
 	public Integer getUserId() {
 		if (user == null) {
 			return null;
@@ -229,10 +238,10 @@ public class GUI_Controller {
 	}
 
 	/**
-	 * Adds a screen with the given parameters to the mapping
+	 * Adds a screen with the given parameters to the screen-mapping.
 	 * 
-	 * @param name
-	 * @param screen
+	 * @param name  String that works as a key in the screen-mapping.
+	 * @param screen The Pane to be stored.
 	 */
 	public void addScreen(String name, Pane screen) {
 		screens.put(name, screen);
