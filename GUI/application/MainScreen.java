@@ -26,7 +26,7 @@ import javafx.scene.layout.VBox;
  * 
  * @author miikk & MrJoXuX & JP
  */
-class MainScreen extends BorderPane {
+public class MainScreen extends BorderPane {
 	private VBox navBar;
 	private VBox defaultContent;
 	private Label welcomeLbl;
@@ -79,8 +79,10 @@ class MainScreen extends BorderPane {
 	 */
 	private void createOptionMenu() {
 		optionMenu = new MenuButton("Options");
+		optionMenu.setId("optionMenu");
 
 		MenuItem accountItem = new MenuItem("Account");
+		accountItem.setId("accountItem");
 		accountItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -88,6 +90,7 @@ class MainScreen extends BorderPane {
 			}
 		});
 		MenuItem logoutItem = new MenuItem("Logout");
+		logoutItem.setId("logoutItem");
 		logoutItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -96,6 +99,7 @@ class MainScreen extends BorderPane {
 			}
 		});
 		MenuItem quitItem = new MenuItem("Quit");
+		quitItem.setId("quitItem");
 		quitItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {

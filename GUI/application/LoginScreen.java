@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
  * 
  * @author miikk
  */
-class LoginScreen extends BorderPane {
+public class LoginScreen extends BorderPane {
 	private GUI_Controller controller;
 	private VBox tfContainer;
 	private HBox btnContainer;
@@ -80,6 +80,20 @@ class LoginScreen extends BorderPane {
 		btnContainer = new HBox(spacing);
 		btnContainer.setAlignment(Pos.CENTER);
 		Button loginBtn = new Button("Login");
+		loginBtn.setId("LoginButton");
+		handleLoginButton(loginBtn);
+		Button regBtn = new Button("Register");
+		regBtn.setId("RegisterButton");
+		handleRegisterButton(regBtn);
+		HBox.setMargin(loginBtn, new Insets(spacing));
+		HBox.setMargin(regBtn, new Insets(spacing));
+		btnContainer.setAlignment(Pos.CENTER);
+		btnContainer.setStyle("-fx-border-color: black");
+		btnContainer.getChildren().addAll(loginBtn, regBtn);
+		this.setBottom(btnContainer);
+	}
+	
+	private void handleLoginButton(Button loginBtn) {
 		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -91,7 +105,9 @@ class LoginScreen extends BorderPane {
 				passwordTF.clear();
 			}
 		});
-		Button regBtn = new Button("Register");
+	}
+	
+	public void handleRegisterButton(Button regBtn) {
 		regBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -104,11 +120,5 @@ class LoginScreen extends BorderPane {
 			}
 
 		});
-		HBox.setMargin(loginBtn, new Insets(spacing));
-		HBox.setMargin(regBtn, new Insets(spacing));
-		btnContainer.setAlignment(Pos.CENTER);
-		btnContainer.setStyle("-fx-border-color: black");
-		btnContainer.getChildren().addAll(loginBtn, regBtn);
-		this.setBottom(btnContainer);
 	}
 }
