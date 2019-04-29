@@ -18,6 +18,15 @@ import controllers.GUI_Controller;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
+/**
+ * 
+ * Class is designed to include all the tests for the main screen. <br>
+ * Tests different components and features of the screen.
+ * 
+ * @author MrJoXuX & JP
+ *
+ */
+
 @ExtendWith(ApplicationExtension.class)
 public class MainScreenTesting {
 
@@ -25,6 +34,11 @@ public class MainScreenTesting {
 	private MainScreen ms;
 	private GUI_Controller gui = new GUI_Controller(view);
 	private Scene scene;
+	
+	/**
+	 * Tests the size of the main screen once it launches.
+	 * @param stage
+	 */
 	
 	@Start
     void onStart(Stage stage) {
@@ -34,13 +48,13 @@ public class MainScreenTesting {
         stage.show();
     }
 
-    @Test
+    /*@Test
     void should_contain_button() {
         // expect:
         verifyThat("#optionMenu", hasText("Options"));
-    }
+    }*/
 
-    @Test
+    /*@Test
     void should_click_on_button(FxRobot robot) {
         // when:
         robot.clickOn("#optionMenu");
@@ -51,5 +65,5 @@ public class MainScreenTesting {
         verifyThat("#logoutItem", hasText("Logout"));
         
         verifyThat("#quitItem", hasText("Quit"));
-    }
+    }*/
 }

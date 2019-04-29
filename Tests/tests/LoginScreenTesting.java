@@ -18,6 +18,15 @@ import controllers.GUI_Controller;
 import static org.testfx.api.FxAssert.verifyThat;
 import static org.testfx.matcher.control.LabeledMatchers.hasText;
 
+/**
+ * 
+ * Class is designed to include all the tests for the login screen. <br>
+ * Tests different components and features of the screen.
+ * 
+ * @author MrJoXuX & JP
+ *
+ */
+
 @ExtendWith(ApplicationExtension.class)
 public class LoginScreenTesting{
 
@@ -34,10 +43,20 @@ public class LoginScreenTesting{
 		stage.show();
 	}
 	
+	/**
+	 * Tests whether the login screen has <br>
+	 * the login button.
+	 */
+	
 	@Test
 	public void hasLoginButton() {
 		verifyThat("#LoginButton", hasText("Login"));
 	}
+	
+	/**
+	 * Tests whether the login screen has <br>
+	 * the register button.
+	 */
 	
 	@Test
 	public void hasRegisterButton() {
