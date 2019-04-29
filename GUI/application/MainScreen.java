@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -15,6 +16,7 @@ import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -150,10 +152,28 @@ public class MainScreen extends BorderPane {
 		});
 
 		accountContainer = new VBox();
-		accountContainer.setSpacing(10);
+		VBox areaMiddle = new VBox();
+        areaMiddle.setBackground(Background.EMPTY);
+        areaMiddle.setPrefSize(100, 200);
+        areaMiddle.setSpacing(5);
+        areaMiddle.setAlignment(Pos.CENTER);
+        String style = "-fx-background-color: rgba(167, 197, 204, 0.5);";
+        areaMiddle.setStyle(style);
+        areaMiddle.setPadding(new Insets(5));
+        areaMiddle.getChildren().addAll(usern, usernameField, changeUnameBtn);
+        
+        VBox areaBottomMiddle = new VBox();
+        areaBottomMiddle.setBackground(Background.EMPTY);
+        areaBottomMiddle.setPrefSize(100, 250);
+        areaBottomMiddle.setSpacing(5);
+        areaBottomMiddle.setStyle(style);
+        areaBottomMiddle.setAlignment(Pos.CENTER);
+        areaBottomMiddle.setPadding(new Insets(5));
+        areaBottomMiddle.getChildren().addAll(pass1, passwordField, pass2, passwordField2,
+				changePwBtn);
+		accountContainer.setSpacing(20);
 		accountContainer.setAlignment(Pos.CENTER);
-		accountContainer.getChildren().addAll(idLbl, usern, usernameField, pass1, passwordField, pass2, passwordField2,
-				changeUnameBtn, changePwBtn, infoLabel);
+		accountContainer.getChildren().addAll(idLbl, areaMiddle, areaBottomMiddle, infoLabel);
 	}
 
 	/**
