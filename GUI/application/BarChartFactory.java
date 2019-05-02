@@ -43,7 +43,7 @@ class BarChartFactory implements ChartFactory {
 	@Override
 	public StackPane createChart(Set<Sitting> sittings, String startDateStr, String endDateStr) {
 		StackPane barChart = new StackPane();
-		Set<XYChart.Series<String, Number>> data = organizeData(sittings);
+		Set<XYChart.Series<String, Number>> data = formBars(sittings);
 		if (data.size() == 0) {
 			Label infoLbl = new Label("No data to show");
 			barChart.getChildren().add(infoLbl);
@@ -60,28 +60,10 @@ class BarChartFactory implements ChartFactory {
 		return barChart;
 	}
 	
-	private Set<XYChart.Series<String, Number>> organizeData(Set<Sitting> sittings) {
+	private Set<XYChart.Series<String, Number>> formBars(Set<Sitting> sittings) {
 		Set<XYChart.Series<String, Number>> programs = new HashSet<>();
-		// Group WindowTimes together based on program name
-		HashMap<String, Set<WindowTime>> nameGroupedWts = new HashMap<>();
-		HashMap<String, Set<WindowTime>> dayGroupedWts = new HashMap<>();
-		for (String weekDay : WEEKDAYS) {
-			dayGroupedWts.put(weekDay, new HashSet<WindowTime>());
-		}
-		for (Sitting sitting : sittings) {
-			Set<WindowTime> wts = sitting.getWindowTimes();
-			LocalDateTime startDate = DateUtil.stringToDateTime(sitting.getStart_date());
-			String weekDay = DateUtil.weekdayUtil(startDate);
-			dayGroupedWts.get(weekDay).addAll(wts);
-			for (WindowTime wt : wts) {
-				String progName = wt.getProgramName();
-				if (!nameGroupedWts.containsKey(progName)) {
-					nameGroupedWts.put(progName, new HashSet<WindowTime>());
-				}
-				nameGroupedWts.get(progName).add(wt);
-			}
-		}
-		//Create a XYChart.Series for each key
+		HashMap<String, Set<WindowTime>> nameGroupedWts = groupWtsByProgName(sittings);
+		HashMap<String, Set<WindowTime>> dayGroupedWts = groupWtsByWeekDay(sittings);
 		for (String progName : nameGroupedWts.keySet()) {
 			Set<WindowTime> namedWts = nameGroupedWts.get(progName);
 			XYChart.Series<String, Number> thisProg = new XYChart.Series<>();
@@ -100,6 +82,35 @@ class BarChartFactory implements ChartFactory {
 			programs.add(thisProg);
 		}
 		return programs;
+	}
+	
+	private HashMap<String, Set<WindowTime>> groupWtsByProgName(Set<Sitting> sittings) {
+		HashMap<String, Set<WindowTime>> nameGroupedWts = new HashMap<>();
+		for (Sitting sitting : sittings) {
+			Set<WindowTime> wts = sitting.getWindowTimes();
+			for (WindowTime wt : wts) {
+				String progName = wt.getProgramName();
+				if (!nameGroupedWts.containsKey(progName)) {
+					nameGroupedWts.put(progName, new HashSet<WindowTime>());
+				}
+				nameGroupedWts.get(progName).add(wt);
+			}
+		}
+		return nameGroupedWts;
+	}
+	
+	private HashMap<String, Set<WindowTime>> groupWtsByWeekDay(Set<Sitting> sittings) {
+		HashMap<String, Set<WindowTime>> dayGroupedWts = new HashMap<>();
+		for (String weekDay : WEEKDAYS) {
+			dayGroupedWts.put(weekDay, new HashSet<WindowTime>());
+		}
+		for (Sitting sitting : sittings) {
+			Set<WindowTime> wts = sitting.getWindowTimes();
+			LocalDateTime startDate = DateUtil.stringToDateTime(sitting.getStart_date());
+			String weekDay = DateUtil.weekdayUtil(startDate);
+			dayGroupedWts.get(weekDay).addAll(wts);
+		}
+		return dayGroupedWts;
 	}
 
 	private double round(double value, int decimals) {

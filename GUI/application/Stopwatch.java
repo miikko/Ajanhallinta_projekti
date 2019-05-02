@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import service.WindowUtil;
 
 /**
  * Creates a Stopwatch that can be used to start a Sitting and track its elapsed time.<br>
@@ -47,6 +48,10 @@ public class Stopwatch extends VBox {
 				if (recording) {
 					timeline.pause();
 					controller.stopRecording();
+					hrs = 0;
+					mins = 0;
+					secs = 0;
+					millis = 0;
 					timerText.setText("00:00:00");
 					startButton.setText("Start recording");
 					recording = false;
@@ -59,7 +64,6 @@ public class Stopwatch extends VBox {
 			}
 		});
 		timerText.setId("timerNum");
-
 		HBox swBtnContainer = new HBox(30);
 		swBtnContainer.setAlignment(Pos.CENTER);
 		swBtnContainer.getChildren().addAll(startButton);

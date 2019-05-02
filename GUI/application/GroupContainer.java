@@ -22,7 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
- * A Container-Class for creating, removing and viewing owned UserGroups.<br>
+ * A Container-Class for creating, removing and viewing UserGroups.<br>
  * This class extends the VBox-class.
  * 
  * @author miikk
