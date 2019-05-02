@@ -41,6 +41,7 @@ class HistoryContainer extends VBox {
 
 	private void create() {
 		calendarPair = new CalendarPair();
+		calendarPair.setId("calPair");
 		confirmBtn = new Button("Confirm");
 		confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

@@ -37,7 +37,7 @@ public class View extends Application {
 			loginScreen = new LoginScreen(controller, 5);
 			scene = new Scene(loginScreen, 1000, 700);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
+			//scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
 			primaryStage.setTitle("Ajanhallintapalvelu");
 			primaryStage.setScene(scene);
 			primaryStage.show();
@@ -80,7 +80,7 @@ public class View extends Application {
 		popup.setAlignment(Pos.CENTER);
 		popup.setPadding(new Insets(15));
 		Scene popupScene = new Scene(popup);
-		popupScene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
+		popupScene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 		popupStage.setScene(popupScene);
 		popupStage.show();
 	}

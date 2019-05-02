@@ -54,12 +54,16 @@ class GroupContainer extends VBox {
 	 */
 	private void createStartContent() {
 		startContent = new HBox();
+		startContent.setId("groupStart");
 		startContent.setAlignment(Pos.CENTER);
 		Button removeGroupBtn = new Button("Remove group");
+		removeGroupBtn.setId("removeGroup");
 		removeGroupBtn.setDisable(true);
-		Button groupStatsBtn = new Button("Show group history");
+		Button groupStatsBtn = new Button("Group history");
+		groupStatsBtn.setId("groupStat");
 		groupStatsBtn.setDisable(true);
 		Button createNewGroupBtn = new Button("Create new group");
+		createNewGroupBtn.setId("newGroup");
 		VBox btnContainer = new VBox();
 		btnContainer.getChildren().addAll(createNewGroupBtn, removeGroupBtn, groupStatsBtn);
 		for (Node child : btnContainer.getChildren()) {

@@ -1,1 +1,90 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
+
+.root {
+     -fx-background-image: url("../../../assets/MetallicBG.jpg");
+     -fx-background-position: center;
+     -fx-background-repeat: no-repeat;
+     -fx-background-size: cover;
+     -fx-font-weight: bold;
+     -fx-font-size: 25px;
+}
+
+
+.button {
+    /*-fx-text-fill: white;*/
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+    -fx-background-color: linear-gradient(#77DAFF, #00BBFF);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+    -fx-pref-width: 150.0px;
+    -fx-pref-height: 50.0px;
+}
+
+.button:hover {
+    -fx-background-color: linear-gradient(#00BBFF, #77DAFF);
+}
+
+.combo-box {
+	/*-fx-text-fill: white;*/
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-background-color: linear-gradient(#77DAFF, #00BBFF);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+/*.combo-box .list-cell {
+	-fx-text-fill: white;
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-background-color: linear-gradient(#00BBFF, #2A5058);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}*/
+
+.combo-box:hover {
+    -fx-background-color: linear-gradient(#00BBFF, #77DAFF);
+}
+
+.menu-button {
+	/*-fx-text-fill: white;*/
+    -fx-font-family: "Arial Narrow";
+    -fx-font-weight: bold;
+    -fx-font-size: 25;
+    -fx-background-color: linear-gradient(#77DAFF, #00BBFF);
+    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
+}
+
+.menu-button:hover {
+    -fx-background-color: linear-gradient(#00BBFF, #77DAFF);
+}
+
+#timerNum {
+	-fx-font-size: 75;
+}
+
+#naviBar {
+	-fx-spacing: 20.0px;
+}
+
+#appName {
+	-fx-font-size: 60.0px;
+	-fx-font-style: italic;
+}
+
+#groupStart {
+}
+
+#removeGroup {
+	-fx-pref-width: 175.0px; 
+}
+
+#groupStat {
+	-fx-pref-width: 175.0px; 
+}
+
+#newGroup {
+	-fx-pref-width: 175.0px; 
+
+}

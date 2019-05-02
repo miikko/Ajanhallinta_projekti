@@ -183,6 +183,7 @@ public class MainScreen extends BorderPane {
 	 */
 	private void createNavBar() {
 		navBar = new VBox();
+		navBar.setId("naviBar");
 		Button defaultBtn = new Button("Main menu");
 		defaultBtn.setOnAction(createNavBarBtnHandler(defaultContent));
 		Button historyBtn = new Button("History");

@@ -31,6 +31,7 @@ public class LoginScreen extends BorderPane {
 	private TextField usernameTF;
 	private PasswordField passwordTF;
 	private Label inputInfoLbl;
+	private Label appName;
 
 	public LoginScreen(GUI_Controller controller, int spacing) {
 		this.controller = controller;
@@ -54,6 +55,8 @@ public class LoginScreen extends BorderPane {
 				}
 			}
 		};
+		appName = new Label("Time Manager");
+		appName.setId("appName");
 		tfContainer = new VBox();
 		inputInfoLbl = new Label("");
 		HBox subContainer = new HBox(spacing);
@@ -66,7 +69,7 @@ public class LoginScreen extends BorderPane {
 		subContainer.getChildren().addAll(usernameTF, passwordTF);
 		subContainer.setStyle("-fx-border-color: black");
 		subContainer.setAlignment(Pos.CENTER);
-		tfContainer.getChildren().addAll(inputInfoLbl, subContainer);
+		tfContainer.getChildren().addAll(appName, inputInfoLbl, subContainer);
 		tfContainer.setAlignment(Pos.CENTER);
 		this.setCenter(tfContainer);
 	}
