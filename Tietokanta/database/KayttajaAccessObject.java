@@ -62,7 +62,6 @@ class KayttajaAccessObject implements KayttajaDAO_IF {
 				transaktio.commit();
 				return kayttaja;
 			} catch (NoResultException nre) {
-				System.out.println("Ei käyttäjää");
 				return null;
 			}
 		} catch (Exception e) {
@@ -86,7 +85,6 @@ class KayttajaAccessObject implements KayttajaDAO_IF {
 				transaktio.commit();
 				return kayttaja;
 			} catch (NoResultException nre) {
-				System.out.println("Ei käyttäjää");
 				return null;
 			}
 		} catch (Exception e) {

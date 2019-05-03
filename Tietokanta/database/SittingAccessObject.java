@@ -94,9 +94,6 @@ class SittingAccessObject implements SittingDAO_IF {
 					.setParameter("userId", userId).getResultList();
 			transaktio.commit();
 			sittingList = new ArrayList<Sitting>(resultsList);
-
-		} catch (NoResultException nre) {
-			return null;
 		} catch (Exception e) {
 			if (transaktio != null)
 				transaktio.rollback();
@@ -190,8 +187,6 @@ class SittingAccessObject implements SittingDAO_IF {
 			transaktio.commit();
 			sittingList = new ArrayList<Sitting>(resultsList);
 
-		} catch (NoResultException nre) {
-			return null;
 		} catch (Exception e) {
 			if (transaktio != null)
 				transaktio.rollback();

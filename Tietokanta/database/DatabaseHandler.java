@@ -15,6 +15,7 @@ public class DatabaseHandler {
 	private KayttajaAccessObject userObject;
 	private SittingAccessObject sittingObject;
 	private UserGroupAccessObject groupObject;
+	private RestrictionAccessObject restrictObject;
 	private ConnectionHandler connHandler;
 	
 	public DatabaseHandler() {
@@ -23,6 +24,7 @@ public class DatabaseHandler {
 		userObject = new KayttajaAccessObject();
 		sittingObject = new SittingAccessObject();
 		groupObject = new UserGroupAccessObject();
+		restrictObject = new RestrictionAccessObject();
 	}
 	
 	//User methods
@@ -83,6 +85,24 @@ public class DatabaseHandler {
 	
 	public boolean deleteGroup(UserGroup group) {
 		return groupObject.deleteGroup(group);
+	}
+	
+	//Restriction methods
+	
+	public boolean sendRestriction(Restriction restriction) {
+		return restrictObject.createRestriction(restriction);
+	}
+	
+	public List<Restriction> fetchRestrictions(int userId, String weekday) {
+		return restrictObject.readRestrictions(weekday, userId);
+	}
+	
+	public boolean updateRestriction(Restriction restriction) {
+		return restrictObject.updateRestriction(restriction);
+	}
+	
+	public boolean deleteRestriction(Restriction restriction) {
+		return restrictObject.deleteRestriction(restriction);
 	}
 	
 }

@@ -31,27 +31,25 @@ import javafx.scene.layout.VBox;
 public class MainScreen extends BorderPane {
 	private VBox navBar;
 	private VBox defaultContent;
-	private Label welcomeLbl;
 	private MenuButton optionMenu;
 	private VBox accountContainer;
 	private Label infoLabel;
 	private TextField usernameField;
 	private HistoryContainer historyContainer;
 	private GroupContainer groupContainer;
+	private RestrictionContainer restrictContainer;
 	private GUI_Controller controller;
 
 	public MainScreen(GUI_Controller controller) {
 		this.controller = controller;
 		create();
-		StringProperty welcomeProp = new SimpleStringProperty();
-		welcomeProp.bind(Bindings.concat("Welcome ").concat(controller.getUsernameProperty()));
-		welcomeLbl.textProperty().bind(welcomeProp);
 		controller.addScreen("Main", this);
 	}
 
 	private void create() {
 		historyContainer = new HistoryContainer(controller);
 		groupContainer = new GroupContainer(controller);
+		restrictContainer = new RestrictionContainer(controller);
 		createDefaultContent();
 		createNavBar();
 		createOptionMenu();
@@ -196,7 +194,9 @@ public class MainScreen extends BorderPane {
 				updateCenter(groupContainer);
 			}
 		});
-		navBar.getChildren().addAll(defaultBtn, historyBtn, groupsBtn);
+		Button restrictBtn = new Button("Restrictions");
+		restrictBtn.setOnAction(createNavBarBtnHandler(restrictContainer));
+		navBar.getChildren().addAll(defaultBtn, historyBtn, groupsBtn, restrictBtn);
 	}
 	
 	private EventHandler<ActionEvent> createNavBarBtnHandler(Node destination) {
@@ -214,7 +214,10 @@ public class MainScreen extends BorderPane {
 	 */
 	private void createDefaultContent() {
 		defaultContent = new VBox();
-		welcomeLbl = new Label("");
+		Label welcomeLbl = new Label("");
+		StringProperty welcomeProp = new SimpleStringProperty();
+		welcomeProp.bind(Bindings.concat("Welcome ").concat(controller.getUsernameProperty()));
+		welcomeLbl.textProperty().bind(welcomeProp);
 		Stopwatch stopwatch = new Stopwatch(controller);
 		defaultContent.setAlignment(Pos.CENTER);
 		defaultContent.getChildren().addAll(welcomeLbl, stopwatch);

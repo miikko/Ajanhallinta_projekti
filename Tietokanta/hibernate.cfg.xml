@@ -34,6 +34,7 @@
    <mapping class="database.Sitting"/>
    <mapping class="database.WindowTime"/>
    <mapping class="database.UserGroup"/>
+   <mapping class="database.Restriction"/>
 
 </session-factory>
 </hibernate-configuration>

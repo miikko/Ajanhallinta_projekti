@@ -110,45 +110,5 @@ class UserGroupAccessObject implements UserGroupDAO_IF {
 			istunto.close();
 		}
 	}
-
-//	@Override
-//	public boolean addUser(int userId) {
-//		Session istunto = istuntotehdas.openSession();
-//		try {
-//			transaktio = istunto.beginTransaction();
-//			istunto.save(userId);
-//			transaktio.commit();
-//			return true;
-//
-//		} catch (NoResultException nre) {
-//			return false;
-//		} catch (Exception e) {
-//			if (transaktio != null)
-//				transaktio.rollback();
-//			throw e;
-//		} finally {
-//			istunto.close();
-//		}
-//	}
-//	
-//	@Override
-//	public boolean addAdmin(int adminId) {
-//		Session istunto = istuntotehdas.openSession();
-//		try {
-//			transaktio = istunto.beginTransaction();
-//			istunto.save(adminId);
-//			transaktio.commit();
-//			return true;
-//
-//		} catch (NoResultException nre) {
-//			return false;
-//		} catch (Exception e) {
-//			if (transaktio != null)
-//				transaktio.rollback();
-//			throw e;
-//		} finally {
-//			istunto.close();
-//		}
-//	}
-
+	
 }
