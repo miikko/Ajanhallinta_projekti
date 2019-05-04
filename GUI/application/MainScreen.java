@@ -2,6 +2,7 @@ package application;
 
 
 import controllers.GUI_Controller;
+import controllers.LanguageUtil;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -78,10 +79,10 @@ public class MainScreen extends BorderPane {
 	 * On press, the controller is called to handle the action.
 	 */
 	private void createOptionMenu() {
-		optionMenu = new MenuButton("Options");
+		optionMenu = new MenuButton(LanguageUtil.translate("Options"));
 		optionMenu.setId("optionMenu");
 
-		MenuItem accountItem = new MenuItem("Account");
+		MenuItem accountItem = new MenuItem(LanguageUtil.translate("Account"));
 		accountItem.setId("accountItem");
 		accountItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -89,7 +90,7 @@ public class MainScreen extends BorderPane {
 				updateCenter(accountContainer);
 			}
 		});
-		MenuItem logoutItem = new MenuItem("Logout");
+		MenuItem logoutItem = new MenuItem(LanguageUtil.translate("Logout"));
 		logoutItem.setId("logoutItem");
 		logoutItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -98,7 +99,7 @@ public class MainScreen extends BorderPane {
 				controller.activateScreen("Login");
 			}
 		});
-		MenuItem quitItem = new MenuItem("Quit");
+		MenuItem quitItem = new MenuItem(LanguageUtil.translate("Quit"));
 		quitItem.setId("quitItem");
 		quitItem.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -110,26 +111,26 @@ public class MainScreen extends BorderPane {
 	}
 
 	private void createAccountContainer() {
-		Label idLbl = new Label("Your Id: " + controller.getUserId()); 
+		Label idLbl = new Label(LanguageUtil.translate("Your Id: ") + controller.getUserId()); 
 		infoLabel = new Label("");
-		Label usern = new Label("New username");
-		Label pass1 = new Label("New password");
-		Label pass2 = new Label("Type same password");
+		Label usern = new Label(LanguageUtil.translate("New username"));
+		Label pass1 = new Label(LanguageUtil.translate("New password"));
+		Label pass2 = new Label(LanguageUtil.translate("Type same password"));
 		usernameField = new TextField();
 		PasswordField passwordField = new PasswordField();
 		PasswordField passwordField2 = new PasswordField();
-		Button changeUnameBtn = new Button("Change username");
-		Button changePwBtn = new Button("Change password");
+		Button changeUnameBtn = new Button(LanguageUtil.translate("Change username"));
+		Button changePwBtn = new Button(LanguageUtil.translate("Change password"));
 
 		changeUnameBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				String username = usernameField.getText();
 				if (controller.handleUsernameChange(username)) {
-					infoLabel.setText("Username was changed successfully!");
+					infoLabel.setText(LanguageUtil.translate("Username was changed successfully!"));
 					usernameField.clear();
 				} else {
-					infoLabel.setText("Failed to change username.");
+					infoLabel.setText(LanguageUtil.translate("Failed to change username."));
 				}
 			}
 		});
@@ -140,9 +141,9 @@ public class MainScreen extends BorderPane {
 				String setPass1 = passwordField.getText();
 				String setPass2 = passwordField2.getText();
 				if (controller.handlePasswordChange(setPass1, setPass2)) {
-					infoLabel.setText("Password was changed successfully!");
+					infoLabel.setText(LanguageUtil.translate("Password was changed successfully!"));
 				} else {
-					infoLabel.setText("Failed to change password.");
+					infoLabel.setText(LanguageUtil.translate("Failed to change password."));
 				}
 				passwordField.clear();
 				passwordField2.clear();
@@ -182,13 +183,13 @@ public class MainScreen extends BorderPane {
 	private void createNavBar() {
 		navBar = new VBox();
 		navBar.setId("naviBar");
-		Button defaultBtn = new Button("Main menu");
+		Button defaultBtn = new Button(LanguageUtil.translate("Main menu"));
 		defaultBtn.setId("mainmenuBtn");
 		defaultBtn.setOnAction(createNavBarBtnHandler(defaultContent));
-		Button historyBtn = new Button("History");
+		Button historyBtn = new Button(LanguageUtil.translate("History"));
 		historyBtn.setId("historyBtn");
 		historyBtn.setOnAction(createNavBarBtnHandler(historyContainer));
-		Button groupsBtn = new Button("Groups");
+		Button groupsBtn = new Button(LanguageUtil.translate("Groups"));
 		groupsBtn.setId("groupsBtn");
 		groupsBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -197,7 +198,7 @@ public class MainScreen extends BorderPane {
 				updateCenter(groupContainer);
 			}
 		});
-		Button restrictBtn = new Button("Restrictions");
+		Button restrictBtn = new Button(LanguageUtil.translate("Restrictions"));
 		restrictBtn.setOnAction((ActionEvent event) -> {
 			restrictContainer.refresh();
 			updateCenter(restrictContainer);
@@ -222,7 +223,7 @@ public class MainScreen extends BorderPane {
 		defaultContent = new VBox();
 		Label welcomeLbl = new Label("");
 		StringProperty welcomeProp = new SimpleStringProperty();
-		welcomeProp.bind(Bindings.concat("Welcome ").concat(controller.getUsernameProperty()));
+		welcomeProp.bind(Bindings.concat(LanguageUtil.translate("Welcome ")).concat(controller.getUsernameProperty()));
 		welcomeLbl.textProperty().bind(welcomeProp);
 		Stopwatch stopwatch = new Stopwatch(controller);
 		defaultContent.setAlignment(Pos.CENTER);

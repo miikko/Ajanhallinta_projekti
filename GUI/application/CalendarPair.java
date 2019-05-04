@@ -2,6 +2,7 @@ package application;
 
 import java.time.LocalDate;
 
+import controllers.LanguageUtil;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -34,7 +35,7 @@ class CalendarPair extends HBox {
 	private void createStartCalendar() {
 		sCalendar = new VBox(10);
 		sCalendar.setAlignment(Pos.CENTER);
-		Label startInfoLbl = new Label("Select starting date");
+		Label startInfoLbl = new Label(LanguageUtil.translate("Select starting date"));
 		sDatePicker = new DatePicker();
 		sDatePicker.setValue(currDate);
 		startDate = currDate;
@@ -75,7 +76,7 @@ class CalendarPair extends HBox {
 	private void createEndCalendar() {
 		eCalendar = new VBox(10);
 		eCalendar.setAlignment(Pos.CENTER);
-		Label endInfoLbl = new Label("Select end date");
+		Label endInfoLbl = new Label(LanguageUtil.translate("Select end date"));
 		eDatePicker = new DatePicker();
 		eDatePicker.setValue(currDate);
 		endDate = currDate;

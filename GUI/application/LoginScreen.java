@@ -1,6 +1,7 @@
 package application;
 
 import controllers.GUI_Controller;
+import controllers.LanguageUtil;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -55,7 +56,7 @@ public class LoginScreen extends BorderPane {
 				}
 			}
 		};
-		appName = new Label("Time Manager");
+		appName = new Label(LanguageUtil.translate("Time Manager"));
 		appName.setId("appName");
 		tfContainer = new VBox();
 		inputInfoLbl = new Label("");
@@ -64,10 +65,10 @@ public class LoginScreen extends BorderPane {
 		usernameTF = new TextField();
 		usernameTF.setId("userText");
 		usernameTF.setOnKeyTyped(inputHandler);
-		usernameTF.setPromptText("Username");
+		usernameTF.setPromptText(LanguageUtil.translate("Username"));
 		passwordTF = new PasswordField();
 		passwordTF.setId("passText");
-		passwordTF.setPromptText("Password");
+		passwordTF.setPromptText(LanguageUtil.translate("Password"));
 		passwordTF.setOnKeyTyped(inputHandler);
 		subContainer.getChildren().addAll(usernameTF, passwordTF);
 		subContainer.setStyle("-fx-border-color: black");
@@ -85,10 +86,10 @@ public class LoginScreen extends BorderPane {
 	private void createLoginBtnContainer(int spacing) {
 		btnContainer = new HBox(spacing);
 		btnContainer.setAlignment(Pos.CENTER);
-		Button loginBtn = new Button("Login");
+		Button loginBtn = new Button(LanguageUtil.translate("Login"));
 		loginBtn.setId("LoginButton");
 		handleLoginButton(loginBtn);
-		Button regBtn = new Button("Register");
+		Button regBtn = new Button(LanguageUtil.translate("Register"));
 		regBtn.setId("RegisterButton");
 		handleRegisterButton(regBtn);
 		HBox.setMargin(loginBtn, new Insets(spacing));
@@ -106,7 +107,7 @@ public class LoginScreen extends BorderPane {
 				String username = usernameTF.getText();
 				String password = passwordTF.getText();
 				if (!controller.handleLogin(username, password)) {
-					inputInfoLbl.setText("Invalid username and/or password.");
+					inputInfoLbl.setText(LanguageUtil.translate("Invalid username and/or password."));
 				}
 				passwordTF.clear();
 			}
@@ -120,9 +121,9 @@ public class LoginScreen extends BorderPane {
 				String username = usernameTF.getText();
 				String password = passwordTF.getText();
 				if (!controller.handleRegister(username, password)) {
-					inputInfoLbl.setText("Selected username is already taken. Please choose another one.");
+					inputInfoLbl.setText(LanguageUtil.translate("Selected username is already taken. Please choose another one."));
 				}else {
-					inputInfoLbl.setText("Registration succesful!");
+					inputInfoLbl.setText(LanguageUtil.translate("Registration succesful!"));
 				}
 				passwordTF.clear();
 			}

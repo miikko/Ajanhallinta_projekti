@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 import controllers.GUI_Controller;
+import controllers.LanguageUtil;
 import database.Sitting;
 import database.UserGroup;
 import javafx.beans.value.ChangeListener;
@@ -42,7 +43,7 @@ class HistoryContainer extends VBox {
 	private void create() {
 		calendarPair = new CalendarPair();
 		calendarPair.setId("calPair");
-		confirmBtn = new Button("Confirm");
+		confirmBtn = new Button(LanguageUtil.translate("Confirm"));
 		confirmBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
@@ -82,22 +83,22 @@ class HistoryContainer extends VBox {
 				endDate.toString());
 		StackPane barChart = BarChartFactory.getInstance().createChart(sittings, startDate.toString(),
 				endDate.toString());
-		chartTypes.add("Pie chart");
-		chartTypes.add("Bar chart");
+		chartTypes.add(LanguageUtil.translate("Pie chart"));
+		chartTypes.add(LanguageUtil.translate("Bar chart"));
 		final ComboBox<String> comboBox = new ComboBox<>(chartTypes);
-		comboBox.setPromptText("Select chart type");
+		comboBox.setPromptText(LanguageUtil.translate("Select chart type"));
 		comboBox.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if (newValue.equals("Pie chart")) {
+				if (newValue.equals(LanguageUtil.translate("Pie chart"))) {
 					chartContainer.setCenter(pieChart);
-				} else if (newValue.equals("Bar chart")) {
+				} else if (newValue.equals(LanguageUtil.translate("Bar chart"))) {
 					chartContainer.setCenter(barChart);
 				}
 			}
 		});
-		comboBox.setValue("Pie chart");
-		Button returnBtn = new Button("Return");
+		comboBox.setValue(LanguageUtil.translate("Pie chart"));
+		Button returnBtn = new Button(LanguageUtil.translate("Return"));
 		returnBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {

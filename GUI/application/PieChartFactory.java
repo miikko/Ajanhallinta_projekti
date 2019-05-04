@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import controllers.LanguageUtil;
 import database.Sitting;
 import database.WindowTime;
 import javafx.collections.FXCollections;
@@ -44,13 +45,13 @@ class PieChartFactory implements ChartFactory {
 		StackPane pieChart = new StackPane();
 		Set<PieChart.Data> slices = formSlices(sittings);
 		if (slices.size() == 0) {
-			Label infoLabel = new Label("No data to show");
+			Label infoLabel = new Label(LanguageUtil.translate("No data to show"));
 			pieChart.getChildren().add(infoLabel);
 			return pieChart;
 		}
 		ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList(slices);
 		final PieChart chart = new PieChart(pieChartData);
-		chart.setTitle("Used time on different applications from " + startDateStr + " to " + endDateStr);
+		chart.setTitle(LanguageUtil.translate("Used time on different applications from ") + startDateStr + LanguageUtil.translate(" to ") + endDateStr);
 		final Label caption = new Label("");
 		caption.setTextFill(Color.BLACK);
 		caption.setStyle("-fx-font: 20 arial;");

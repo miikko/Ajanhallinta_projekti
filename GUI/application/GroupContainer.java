@@ -3,6 +3,7 @@ package application;
 import java.util.List;
 
 import controllers.GUI_Controller;
+import controllers.LanguageUtil;
 import database.UserGroup;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -56,13 +57,13 @@ class GroupContainer extends VBox {
 		startContent = new HBox();
 		startContent.setId("groupStart");
 		startContent.setAlignment(Pos.CENTER);
-		Button removeGroupBtn = new Button("Remove group");
+		Button removeGroupBtn = new Button(LanguageUtil.translate("Remove group"));
 		removeGroupBtn.setId("removeGroup");
 		removeGroupBtn.setDisable(true);
-		Button groupStatsBtn = new Button("Group history");
+		Button groupStatsBtn = new Button(LanguageUtil.translate("Group history"));
 		groupStatsBtn.setId("groupStat");
 		groupStatsBtn.setDisable(true);
-		Button createNewGroupBtn = new Button("Create new group");
+		Button createNewGroupBtn = new Button(LanguageUtil.translate("Create new group"));
 		createNewGroupBtn.setId("newGroup");
 		VBox btnContainer = new VBox();
 		btnContainer.getChildren().addAll(createNewGroupBtn, removeGroupBtn, groupStatsBtn);
@@ -133,25 +134,25 @@ class GroupContainer extends VBox {
 		groupCreationContent.setAlignment(Pos.CENTER);
 		Label infoLbl = new Label("");
 		groupCreationContent.getChildren().add(infoLbl);
-		Button confirmBtn = new Button("Create");
+		Button confirmBtn = new Button(LanguageUtil.translate("Create"));
 		// Button is disabled while there are no group members
 		confirmBtn.setDisable(true);
 		TextField nameTextField = new TextField();
-		nameTextField.setPromptText("Group name");
+		nameTextField.setPromptText(LanguageUtil.translate("Group name"));
 		TextField userIdTextField = new TextField();
-		userIdTextField.setPromptText("User Id");
-		Button addBtn = new Button("Add user");
+		userIdTextField.setPromptText(LanguageUtil.translate("User Id"));
+		Button addBtn = new Button(LanguageUtil.translate("Add user"));
 		addBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
 				String userIdStr = userIdTextField.getText();
 				if (controller.addUserToGroup(newUserGroup, userIdStr)) {
-					infoLbl.setText("User added");
+					infoLbl.setText(LanguageUtil.translate("User added"));
 					groupCreationContent.getChildren().add(1, createUserTab(userIdStr));
 					confirmBtn.setDisable(false);
 					userIdTextField.clear();
 				} else {
-					infoLbl.setText("The Id you entered is not valid");
+					infoLbl.setText(LanguageUtil.translate("The Id you entered is not valid"));
 				}
 			}
 		});
@@ -163,7 +164,7 @@ class GroupContainer extends VBox {
 					refresh();
 				} else {
 					infoLbl.setText(
-							"Failed to create a new group, check that there is atleast one other member and that the name is unique");
+							LanguageUtil.translate("Failed to create a new group, check that there is atleast one other member and that the name is unique"));
 				}
 			}
 		});
@@ -183,7 +184,7 @@ class GroupContainer extends VBox {
 	private HBox createUserTab(String userIdStr) {
 		HBox userTab = new HBox();
 		Label idLbl = new Label(userIdStr);
-		Button removeBtn = new Button("Remove");
+		Button removeBtn = new Button(LanguageUtil.translate("Remove"));
 		removeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {

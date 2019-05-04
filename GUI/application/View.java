@@ -3,6 +3,7 @@ package application;
 import java.util.Locale;
 
 import controllers.GUI_Controller;
+import controllers.LanguageUtil;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -71,7 +72,7 @@ public class View extends Application {
 		Stage popupStage = new Stage();
 		popupStage.initModality(Modality.APPLICATION_MODAL);
 		VBox popup = new VBox();
-		Button confButton = new Button("Confirm");
+		Button confButton = new Button(LanguageUtil.translate("Confirm"));
 		confButton.setId("confirmButton");
 		confButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override

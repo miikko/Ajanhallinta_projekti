@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import controllers.DateUtil;
+import controllers.LanguageUtil;
 import database.Sitting;
 import database.WindowTime;
 import javafx.scene.chart.BarChart;
@@ -45,16 +46,16 @@ class BarChartFactory implements ChartFactory {
 		StackPane barChart = new StackPane();
 		Set<XYChart.Series<String, Number>> data = formBars(sittings);
 		if (data.size() == 0) {
-			Label infoLbl = new Label("No data to show");
+			Label infoLbl = new Label(LanguageUtil.translate("No data to show"));
 			barChart.getChildren().add(infoLbl);
 			return barChart;
 		}
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		final BarChart<String, Number> bChart = new BarChart<String, Number>(xAxis, yAxis);
-		bChart.setTitle("Used time on different applications from " + startDateStr + " to " + endDateStr);
-		xAxis.setLabel("Day of the week");
-		yAxis.setLabel("Hours");
+		bChart.setTitle(LanguageUtil.translate("Used time on different applications from ") + startDateStr + LanguageUtil.translate(" to ") + endDateStr);
+		xAxis.setLabel(LanguageUtil.translate("Day of the week"));
+		yAxis.setLabel(LanguageUtil.translate("Hours"));
 		bChart.getData().addAll(data);
 		barChart.getChildren().addAll(bChart);
 		return barChart;
