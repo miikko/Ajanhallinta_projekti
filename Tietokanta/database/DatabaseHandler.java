@@ -45,6 +45,10 @@ public class DatabaseHandler {
 		return userObject.updateKayttaja(user);
 	}
 	
+	public void deleteUser(String username) {
+		userObject.deleteKayttaja(username);
+	}
+	
 	//Sitting methods
 	
 	public boolean sendSitting(Sitting sitting) {

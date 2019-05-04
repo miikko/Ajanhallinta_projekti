@@ -183,10 +183,13 @@ public class MainScreen extends BorderPane {
 		navBar = new VBox();
 		navBar.setId("naviBar");
 		Button defaultBtn = new Button("Main menu");
+		defaultBtn.setId("mainmenuBtn");
 		defaultBtn.setOnAction(createNavBarBtnHandler(defaultContent));
 		Button historyBtn = new Button("History");
+		historyBtn.setId("historyBtn");
 		historyBtn.setOnAction(createNavBarBtnHandler(historyContainer));
 		Button groupsBtn = new Button("Groups");
+		groupsBtn.setId("groupsBtn");
 		groupsBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {

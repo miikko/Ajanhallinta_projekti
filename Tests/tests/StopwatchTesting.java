@@ -1,18 +1,16 @@
 package tests;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.api.FxRobot;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
-import org.testfx.matcher.control.TextInputControlMatchers;
+import org.testfx.util.WaitForAsyncUtils;
 
-import application.LoginScreen;
 import application.Stopwatch;
 import application.View;
 import controllers.GUI_Controller;
@@ -41,13 +39,13 @@ public class StopwatchTesting{
 	 * Tests the size of the stopwatch's screen once it launches.
 	 * @param stage
 	 */
-	
 	 @Start
 	 void onStart(Stage stage) {
 		 sw = new Stopwatch(gui);
 		 scene = new Scene(sw, 1000, 700);
 	     stage.setScene(scene);
 	     stage.show();
+	     WaitForAsyncUtils.waitForFxEvents();
 	 }
 
 	 /**
@@ -55,7 +53,6 @@ public class StopwatchTesting{
 	  * a recorder button.
 	  * @param robot
 	  */
-	 
 	 @Test
 	 void should_contain_button(FxRobot robot) {
 	     // expect:
@@ -64,18 +61,23 @@ public class StopwatchTesting{
 	     
 	 }
 
-	 /*@Test
-	 void should_contain_timer() {
-		 verifyThat("#TimerNum",  TextInputControlMatchers.hasText("00:00:00"));
-		 
+	 /**
+	  * Tests that timer should increase when it is started
+	  * @param robot
+	  */
+	 @Test
+	 void should_increase_timer(FxRobot robot) {
+		 robot.clickOn(".button");
+		 Assertions.assertThrows(AssertionError.class, () -> verifyThat("#timerNum",  hasText("00:00:00")));
 	 }
 	 
-	@Test
-	 void should_click_on_button(FxRobot robot) {
-	     // when:
-	     robot.clickOn(".button");
-
-	     // then:
-	     verifyThat(".button", hasText("clicked!"));
-	 }*/
+	 /**
+	  * Test whether the stopwatch has a timer,
+	  */
+	/* @Test
+	 void should_contain_timer() {
+		 verifyThat("#timerNum",  hasText("00:00:00"));
+	 }
+	*/
+	 
 }

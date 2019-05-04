@@ -69,6 +69,7 @@ public class View extends Application {
 		popupStage.initModality(Modality.APPLICATION_MODAL);
 		VBox popup = new VBox();
 		Button confButton = new Button("Confirm");
+		confButton.setId("confirmButton");
 		confButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {

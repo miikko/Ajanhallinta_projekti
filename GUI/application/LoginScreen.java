@@ -59,11 +59,14 @@ public class LoginScreen extends BorderPane {
 		appName.setId("appName");
 		tfContainer = new VBox();
 		inputInfoLbl = new Label("");
+		inputInfoLbl.setId("infoLabel");
 		HBox subContainer = new HBox(spacing);
 		usernameTF = new TextField();
+		usernameTF.setId("userText");
 		usernameTF.setOnKeyTyped(inputHandler);
 		usernameTF.setPromptText("Username");
 		passwordTF = new PasswordField();
+		passwordTF.setId("passText");
 		passwordTF.setPromptText("Password");
 		passwordTF.setOnKeyTyped(inputHandler);
 		subContainer.getChildren().addAll(usernameTF, passwordTF);
@@ -118,6 +121,8 @@ public class LoginScreen extends BorderPane {
 				String password = passwordTF.getText();
 				if (!controller.handleRegister(username, password)) {
 					inputInfoLbl.setText("Selected username is already taken. Please choose another one.");
+				}else {
+					inputInfoLbl.setText("Registration succesful!");
 				}
 				passwordTF.clear();
 			}

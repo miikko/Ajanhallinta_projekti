@@ -18,7 +18,7 @@ import org.hibernate.Transaction;
  * @since 08/03/2019
  */
 
-class KayttajaAccessObject implements KayttajaDAO_IF {
+public class KayttajaAccessObject implements KayttajaDAO_IF {
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 
