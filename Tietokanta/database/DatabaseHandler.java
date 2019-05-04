@@ -93,8 +93,16 @@ public class DatabaseHandler {
 		return restrictObject.createRestriction(restriction);
 	}
 	
-	public List<Restriction> fetchRestrictions(int userId, String weekday) {
+	public List<Restriction> fetchRestrictions(int userId) {
+		return restrictObject.readRestrictions(userId);
+	}
+	
+	public List<Restriction> fetchRestrictions(String weekday, int userId) {
 		return restrictObject.readRestrictions(weekday, userId);
+	}
+	
+	public Restriction fetchRestriction(String progName, String weekday, int userId) {
+		return restrictObject.readRestriction(progName, weekday, userId);
 	}
 	
 	public boolean updateRestriction(Restriction restriction) {

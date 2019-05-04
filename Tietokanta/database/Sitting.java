@@ -50,6 +50,7 @@ public class Sitting {
 		super();
 		this.kayttaja = kayttaja;
 		this.start_date = start_date;
+		this.end_date = start_date;
 	}
 	
 	public String getStart_date() {

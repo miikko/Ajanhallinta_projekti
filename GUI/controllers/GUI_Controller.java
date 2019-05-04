@@ -12,8 +12,10 @@ import application.ScreenFactory;
 import application.View;
 import database.DatabaseHandler;
 import database.Kayttaja;
+import database.Restriction;
 import database.Sitting;
 import database.UserGroup;
+import database.WindowTime;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
@@ -125,7 +127,18 @@ public class GUI_Controller {
 		return true;
 	}
 	
-	//TODO: Complete method
+	public Set<String> getAllProgramNames() {
+		Set<String> progNames = new HashSet<>();
+		Set<Sitting> sittings = getSittings(LocalDate.now().minusYears(100), LocalDate.now());
+		for (Sitting sitting : sittings) {
+			Set<WindowTime> wts = sitting.getWindowTimes();
+			for (WindowTime wt : wts) {
+				progNames.add(wt.getProgramName());
+			}
+		}
+		return progNames;
+	}
+	
 	public Set<Sitting> getSittings(LocalDate sDate, LocalDate eDate) {
 		if (user == null) {
 			return null;
@@ -151,6 +164,13 @@ public class GUI_Controller {
 			sittings.addAll(dbHandler.fetchSittings(startDate, endDate, userId));
 		}
 		return sittings;
+	}
+	
+	public List<Restriction> getRestrictions() {
+		if (user == null) {
+			return null;
+		}
+		return dbHandler.fetchRestrictions(user.getId());
 	}
 	
 	public List<UserGroup> getUserGroups() {

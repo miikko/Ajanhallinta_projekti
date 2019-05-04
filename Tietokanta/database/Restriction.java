@@ -48,4 +48,8 @@ public class Restriction {
 		this.hours = hours;
 		this.minutes = minutes;
 	}
+	
+	public String getProgName() {
+		return prog_name;
+	}
 }

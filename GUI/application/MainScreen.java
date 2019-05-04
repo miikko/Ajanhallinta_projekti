@@ -126,10 +126,10 @@ public class MainScreen extends BorderPane {
 			public void handle(ActionEvent event) {
 				String username = usernameField.getText();
 				if (controller.handleUsernameChange(username)) {
-					infoLabel.setText("Vaihto onnistui!");
+					infoLabel.setText("Username was changed successfully!");
 					usernameField.clear();
 				} else {
-					infoLabel.setText("Vaihto epäonnistui.");
+					infoLabel.setText("Failed to change username.");
 				}
 			}
 		});
@@ -140,9 +140,9 @@ public class MainScreen extends BorderPane {
 				String setPass1 = passwordField.getText();
 				String setPass2 = passwordField2.getText();
 				if (controller.handlePasswordChange(setPass1, setPass2)) {
-					infoLabel.setText("Vaihto onnistui!");
+					infoLabel.setText("Password was changed successfully!");
 				} else {
-					infoLabel.setText("Vaihto epäonnistui.");
+					infoLabel.setText("Failed to change password.");
 				}
 				passwordField.clear();
 				passwordField2.clear();
@@ -195,7 +195,10 @@ public class MainScreen extends BorderPane {
 			}
 		});
 		Button restrictBtn = new Button("Restrictions");
-		restrictBtn.setOnAction(createNavBarBtnHandler(restrictContainer));
+		restrictBtn.setOnAction((ActionEvent event) -> {
+			restrictContainer.refresh();
+			updateCenter(restrictContainer);
+		});
 		navBar.getChildren().addAll(defaultBtn, historyBtn, groupsBtn, restrictBtn);
 	}
 	

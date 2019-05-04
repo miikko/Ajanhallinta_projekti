@@ -47,7 +47,7 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 			istunto.close();
 		}
 	}
-	
+
 	@Override
 	public boolean deleteRestriction(Restriction restriction) {
 		Session istunto = istuntotehdas.openSession();
@@ -67,13 +67,35 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 	}
 
 	@Override
+	public List<Restriction> readRestrictions(int userId) {
+		Session istunto = istuntotehdas.openSession();
+		String query = "from Restriction where userId =:userId";
+		try {
+			transaktio = istunto.beginTransaction();
+			@SuppressWarnings("unchecked")
+			List<Restriction> resultList = (List<Restriction>) istunto.createQuery(query).setParameter("userId", userId)
+					.getResultList();
+			transaktio.commit();
+			return resultList;
+		} catch (Exception e) {
+			if (transaktio != null) {
+				transaktio.rollback();
+			}
+			throw e;
+		} finally {
+			istunto.close();
+		}
+	}
+
+	@Override
 	public List<Restriction> readRestrictions(String weekday, int userId) {
 		Session istunto = istuntotehdas.openSession();
 		String query = "from Restriction where userId =:userId and weekday =:weekday";
 		try {
 			transaktio = istunto.beginTransaction();
 			@SuppressWarnings("unchecked")
-			List<Restriction> resultList = (List<Restriction>) istunto.createQuery(query).setParameter("userId", userId).setParameter("weekday", weekday).getResultList();
+			List<Restriction> resultList = (List<Restriction>) istunto.createQuery(query).setParameter("userId", userId)
+					.setParameter("weekday", weekday).getResultList();
 			transaktio.commit();
 			return resultList;
 		} catch (Exception e) {
@@ -92,7 +114,8 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 		String query = "from Restriction where prog_name =:progName and weekday =:weekday and userId =:userId";
 		try {
 			transaktio = istunto.beginTransaction();
-			Restriction result = (Restriction) istunto.createQuery(query).setParameter("progName", progName).setParameter("weekday", weekday).setParameter("userId", userId).getSingleResult();
+			Restriction result = (Restriction) istunto.createQuery(query).setParameter("progName", progName)
+					.setParameter("weekday", weekday).setParameter("userId", userId).getSingleResult();
 			transaktio.commit();
 			return result;
 		} catch (NoResultException nre) {
