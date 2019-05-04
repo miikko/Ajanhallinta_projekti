@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
@@ -36,9 +37,11 @@ public class View extends Application {
 			controller = new GUI_Controller(this);
 			loginScreen = new LoginScreen(controller, 5);
 			scene = new Scene(loginScreen, 1000, 700);
+			//Image icon = new Image(getClass().getResourceAsStream("../../assets/kello.png"));
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			//scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
 			primaryStage.setTitle("Ajanhallintapalvelu");
+			//primaryStage.getIcons().add(icon);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e) {
