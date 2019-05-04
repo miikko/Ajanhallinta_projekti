@@ -27,8 +27,8 @@ public class LanguageUtil {
 			"Select end date", "Remove group", "Group history", "Create new group", "Create", "Group name", "User Id",
 			"Add user", "User added", "The Id you entered is not valid",
 			"Failed to create a new group, check that there is atleast one other member and that the name is unique",
-			"Remove", "Select restricted program", "Edit", "Choose program", "Minutes", "Add", "Finish", "Save",
-			"Select weekday", "Main", "Start recording", "Stop recording" };
+			"Remove", "Select restricted program", "Edit", "Choose program", "Minutes", "Add", "Add new", "Finish", "Save",
+			"Select weekday", "Please select a weekday", "Invalid time values", "Main", "Start recording", "Stop recording" };
 
 	private static final String[] GUI_WORDS_FI = new String[] { "Ajanhallintapalvelu", "K‰ytt‰j‰", "Salasana",
 			"Kirjaudu", "Rekisterˆidy", "Virheellinen k‰ytt‰j‰nimi ja/tai salasana.",
@@ -42,8 +42,8 @@ public class LanguageUtil {
 			"Ryhm‰n historia", "Luo uusi ryhm‰", "Luo", "Ryhm‰n nimi", "K‰ytt‰j‰n Id", "Lis‰‰ k‰ytt‰j‰",
 			"K‰ytt‰j‰ lis‰tty", "Antamaasi Id:t‰ ei lˆydy.",
 			"Ryhm‰n luominen ep‰onnistui. Tarkista, ett‰ ryhm‰ss‰ on v‰hint‰‰n yksi j‰sen lis‰ksesi ja ett‰ ryhm‰n nimi on k‰ytett‰viss‰",
-			"Poista", "Valitse rajoitettava sovellus", "Muokkaa", "Valitse sovellus", "Minuutit", "Lis‰‰", "Valmis",
-			"Tallenna", "Valitse viikonp‰iv‰", "P‰‰valikko", "Aloita tallentaminen", "Lopeta tallentaminen" };
+			"Poista", "Valitse rajoitettava sovellus", "Muokkaa", "Valitse sovellus", "Minuutit", "Lis‰‰", "Lis‰‰ uusi", "Valmis",
+			"Tallenna", "Valitse viikonp‰iv‰", "Ole hyv‰ ja valitse viikonp‰iv‰", "V‰‰r‰t aika arvot", "P‰‰valikko", "Aloita tallentaminen", "Lopeta tallentaminen" };
 
 	private static List<String> wordList_en = Arrays.asList(GUI_WORDS_EN);
 	private static List<String> wordList_fi = Arrays.asList(GUI_WORDS_FI);
@@ -62,6 +62,9 @@ public class LanguageUtil {
 	public static String translate(String originalString) {
 
 		int wordPointer = wordList_en.indexOf(originalString);
+		if (wordPointer < 0) {
+			return originalString;
+		}
 		String langString = Locale.getDefault().getLanguage();
 
 		if (manualLanguage != null) {
