@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import controllers.DateUtil;
+import controllers.LanguageUtil;
 import database.DatabaseHandler;
 import database.Kayttaja;
 import database.Restriction;
@@ -26,6 +27,7 @@ public class Recorder extends Thread {
 	private Kayttaja user;
 	private Set<WindowTime> windowTimes = new HashSet<>();
 	private List<Restriction> restrictions;
+	private Set<String> notifiedPrograms = new HashSet<>();
 	private DatabaseHandler dbHandler;
 	private WindowTime currWt = null;
 
@@ -120,17 +122,29 @@ public class Recorder extends Thread {
 	 * Compares the current WindowTime's program to this weekday's Restrictions to
 	 * see if the current program should be shut down.<br>
 	 * If a match is found and the WindowTime's duration is longer than the
-	 * Restriction allows, the program is closed.
+	 * Restriction allows, the program is closed. If the duration is close to
+	 * reaching the Restrictions limit, a warning notification is displayed.
 	 * 
 	 * @return true if the current active window was closed, false otherwise
 	 */
 	private boolean checkRestrictions() {
 		if (currWt != null) {
+			String currProgName = currWt.getProgramName();
 			for (Restriction r : restrictions) {
-				if (r.getProgramName().equals(currWt.getProgramName())) {
-					if (currWt.getHours() > r.getHours()
-							|| (currWt.getHours() == r.getHours() && currWt.getMinutes() >= r.getMinutes())) {
+				if (r.getProgramName().equals(currProgName)) {
+					int wtHours = currWt.getHours();
+					int wtMins = currWt.getMinutes();
+					int rHours = r.getHours();
+					int rMins = r.getMinutes();
+					int minutesLeft = rMins - wtMins;
+					if (wtHours > rHours || (wtHours == rHours && minutesLeft <= 0)) {
 						WindowUtil.closeActiveWindow();
+					} else if (!notifiedPrograms.contains(currProgName) && wtHours == rHours && minutesLeft <= 5) {
+						TaskBarNotification notificationThread = new TaskBarNotification(
+								LanguageUtil.translate("Warning!"), LanguageUtil.translate("You have ") + minutesLeft
+										+ LanguageUtil.translate(" minute(s) left to use the program ") + currProgName);
+						notificationThread.start();
+						notifiedPrograms.add(currProgName);
 					}
 					return true;
 				}
