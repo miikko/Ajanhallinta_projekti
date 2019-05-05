@@ -20,7 +20,7 @@ import javafx.util.Duration;
  * @author miikk & MrJoXuX
  *
  */
-class Stopwatch extends VBox {
+public class Stopwatch extends VBox {
 	private int hrs = 0, mins = 0, secs = 0, millis = 0;
 	private boolean recording;
 	private GUI_Controller controller;

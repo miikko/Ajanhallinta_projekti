@@ -1,6 +1,5 @@
 package application;
 
-import java.util.Locale;
 
 import controllers.GUI_Controller;
 import controllers.LanguageUtil;
@@ -38,11 +37,11 @@ public class View extends Application {
 			controller = new GUI_Controller(this);
 			loginScreen = new LoginScreen(controller, 5);
 			scene = new Scene(loginScreen, 1000, 700);
-			//Image icon = new Image(getClass().getResourceAsStream("../../assets/kello.png"));
+			Image icon = new Image("file:assets/kello.png");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			//scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
 			primaryStage.setTitle("Ajanhallintapalvelu");
-			//primaryStage.getIcons().add(icon);
+			primaryStage.getIcons().add(icon);
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (Exception e) {
@@ -56,7 +55,6 @@ public class View extends Application {
 	}
 
 	public static void main(String[] args) {
-		// Locale.setDefault(Locale.US);
 		launch(args);
 	}
 
