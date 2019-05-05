@@ -173,6 +173,33 @@ public class GUI_Controller {
 		return dbHandler.fetchRestrictions(user.getId());
 	}
 	
+	public boolean saveRestriction(HashMap<String, Integer[]> restrictionDaySettings, String progName) {
+		if (user == null || progName == null) {
+			return false;
+		}
+		for (String weekday : restrictionDaySettings.keySet()) {
+			Integer[] time = restrictionDaySettings.get(weekday);
+			int hours = time[0];
+			int minutes = time[1];
+			dbHandler.sendRestriction(new Restriction(user, progName, weekday, hours, minutes));
+		}
+		return true;
+	}
+	
+	public boolean updateRestriction(Restriction restriction) {
+		if (user == null || restriction == null) {
+			return false;
+		}
+		return dbHandler.updateRestriction(restriction);
+	}
+	
+	public boolean removeRestriction(Restriction restriction) {
+		if (restriction == null) {
+			return false;
+		}
+		return dbHandler.deleteRestriction(restriction);
+	}
+	
 	public List<UserGroup> getUserGroups() {
 		if (user == null) {
 			return null;

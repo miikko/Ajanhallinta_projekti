@@ -1,16 +1,13 @@
 package database;
 
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;;
 
 @Entity
@@ -38,18 +35,39 @@ public class Restriction {
 	private Kayttaja kayttaja;
 	
 	public Restriction() {
-		//super();
+		super();
 	}
 	
-	public Restriction(Kayttaja kayttaja, String weekday, int hours, int minutes) {
-		//super();
+	public Restriction(Kayttaja kayttaja, String progName, String weekday, int hours, int minutes) {
+		super();
 		this.kayttaja = kayttaja;
+		this.prog_name = progName;
 		this.weekday = weekday;
 		this.hours = hours;
 		this.minutes = minutes;
 	}
 	
-	public String getProgName() {
+	public String getProgramName() {
 		return prog_name;
+	}
+	
+	public String getWeekday() {
+		return weekday;
+	}
+	
+	public int getHours() {
+		return hours;
+	}
+	
+	public void setHours(int hours) {
+		this.hours = hours;
+	}
+	
+	public int getMinutes() {
+		return minutes;
+	}
+	
+	public void setMinutes(int minutes) {
+		this.minutes = minutes;
 	}
 }

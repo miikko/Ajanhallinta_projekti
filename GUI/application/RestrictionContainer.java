@@ -9,13 +9,10 @@ import controllers.DateUtil;
 import controllers.GUI_Controller;
 import controllers.LanguageUtil;
 import database.Restriction;
-import database.Sitting;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -40,7 +37,8 @@ class RestrictionContainer extends HBox {
 	private ObservableList<String> obsAllProgNames;
 	private String editProgName;
 	private String newProgName;
-	private HashMap<String, String> newRestrictionDaySettings;
+	private Restriction editRestriction;
+	private HashMap<String, Integer[]> newRestrictionDaySettings;
 	private final Insets MARGIN = new Insets(5, 5, 5, 5);
 
 	public RestrictionContainer(GUI_Controller controller) {
@@ -71,7 +69,7 @@ class RestrictionContainer extends HBox {
 		restrictions = controller.getRestrictions();
 		restrictedProgNames = new HashSet<String>();
 		for (Restriction r : restrictions) {
-			restrictedProgNames.add(r.getProgName());
+			restrictedProgNames.add(r.getProgramName());
 		}
 		obsRestrictedProgNames = FXCollections.observableArrayList(restrictedProgNames);
 		final ComboBox<String> progNameComboBox = new ComboBox<>(obsRestrictedProgNames);
@@ -123,7 +121,7 @@ class RestrictionContainer extends HBox {
 	private void createAdditionContent() {
 		additionContent = new BorderPane();
 		Label infoLbl = new Label();
-		newRestrictionDaySettings = new HashMap<String, String>();
+		newRestrictionDaySettings = new HashMap<String, Integer[]>();
 		final ComboBox<String> weekDayComboBox = createWeekDayComboBox();
 		VBox tfContainer = new VBox();
 		tfContainer.setAlignment(Pos.CENTER);
@@ -149,15 +147,23 @@ class RestrictionContainer extends HBox {
 					if (weekDay == null) {
 						infoLbl.setText(LanguageUtil.translate("Please select a weekday"));
 					} else {
-						newRestrictionDaySettings.put(weekDayComboBox.getValue(), hours + ":" + minutes);
+						infoLbl.setText("");
+						newRestrictionDaySettings.put(weekDayComboBox.getValue(), new Integer[] { hours, minutes });
 					}
 				}
 			} catch (NumberFormatException e) {
 				infoLbl.setText(LanguageUtil.translate("Invalid time values"));
 			}
-
 		});
 		Button confirmBtn = new Button(LanguageUtil.translate("Finish"));
+		confirmBtn.setOnAction((ActionEvent event) -> {
+			if (controller.saveRestriction(newRestrictionDaySettings, newProgName)) {
+				infoLbl.setText("");
+				refresh();
+			} else {
+				infoLbl.setText(LanguageUtil.translate("Failed to save restrictions"));
+			}
+		});
 		btnContainer.getChildren().addAll(addBtn, confirmBtn);
 		additionContent.setTop(infoLbl);
 		additionContent.setCenter(weekDayComboBox);
@@ -170,7 +176,7 @@ class RestrictionContainer extends HBox {
 
 	private void createEditingContent() {
 		editingContent = new BorderPane();
-		final ComboBox<String> weekDayComboBox = createWeekDayComboBox();
+		Label infoLbl = new Label();
 		VBox tfContainer = new VBox();
 		tfContainer.setAlignment(Pos.CENTER);
 		TextField hourTF = new TextField();
@@ -181,10 +187,68 @@ class RestrictionContainer extends HBox {
 		for (Node child : tfContainer.getChildren()) {
 			VBox.setMargin(child, MARGIN);
 		}
+		final ComboBox<String> weekDayComboBox = createWeekDayComboBox();
+		weekDayComboBox.valueProperty()
+				.addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+					editRestriction = null;
+					if (newValue != null) {
+						for (Restriction r : restrictions) {
+							if (r.getWeekday().equals(newValue) && r.getProgramName().equals(editProgName)) {
+								editRestriction = r;
+								break;
+							}
+						}
+						if (editRestriction == null) {
+							hourTF.clear();
+							minuteTF.clear();
+						} else {
+							hourTF.setText(String.valueOf(editRestriction.getHours()));
+							minuteTF.setText(String.valueOf(editRestriction.getMinutes()));
+						}
+					}
+				});
 		Button saveBtn = new Button(LanguageUtil.translate("Save"));
+		saveBtn.setOnAction((ActionEvent event) -> {
+			try {
+				int hours = Integer.parseInt(hourTF.getText());
+				int minutes = Integer.parseInt(minuteTF.getText());
+				if (hours > 23 || hours < 0 || minutes > 59 || minutes < 0) {
+					infoLbl.setText(LanguageUtil.translate("Invalid time values"));
+				} else {
+					String weekDay = weekDayComboBox.getValue();
+					if (weekDay == null) {
+						infoLbl.setText(LanguageUtil.translate("Please select a weekday"));
+					} else {
+						if (editRestriction == null) {
+							HashMap<String, Integer[]> settings = new HashMap<>();
+							settings.put(weekDay, new Integer[] { hours, minutes });
+							controller.saveRestriction(settings, editProgName);
+						} else {
+							editRestriction.setHours(hours);
+							editRestriction.setMinutes(minutes);
+							controller.updateRestriction(editRestriction);
+						}
+						infoLbl.setText(LanguageUtil.translate("Restriction updated!"));
+					}
+				}
+			} catch (NumberFormatException e) {
+				infoLbl.setText("");
+			}
+		});
+		Button removeBtn = new Button(LanguageUtil.translate("Remove"));
+		removeBtn.setOnAction((ActionEvent event) -> {
+			controller.removeRestriction(editRestriction);
+			hourTF.clear();
+			minuteTF.clear();
+			editRestriction = null;
+		});
+		HBox btnContainer = new HBox();
+		btnContainer.setAlignment(Pos.CENTER);
+		btnContainer.getChildren().addAll(saveBtn, removeBtn);
+		editingContent.setTop(infoLbl);
 		editingContent.setCenter(weekDayComboBox);
 		editingContent.setRight(tfContainer);
-		editingContent.setBottom(saveBtn);
+		editingContent.setBottom(btnContainer);
 		for (Node child : editingContent.getChildren()) {
 			BorderPane.setAlignment(child, Pos.CENTER);
 		}
@@ -192,7 +256,7 @@ class RestrictionContainer extends HBox {
 
 	private ComboBox<String> createWeekDayComboBox() {
 		ComboBox<String> weekDayComboBox = new ComboBox<>();
-		weekDayComboBox.setPromptText("Select weekday");
+		weekDayComboBox.setPromptText(LanguageUtil.translate("Select weekday"));
 		weekDayComboBox.getItems().addAll(DateUtil.getWeekdays());
 		return weekDayComboBox;
 	}
@@ -208,7 +272,7 @@ class RestrictionContainer extends HBox {
 		restrictions = controller.getRestrictions();
 		restrictedProgNames.clear();
 		for (Restriction r : restrictions) {
-			restrictedProgNames.add(r.getProgName());
+			restrictedProgNames.add(r.getProgramName());
 		}
 		obsRestrictedProgNames.setAll(restrictedProgNames);
 		obsAllProgNames.setAll(controller.getAllProgramNames());

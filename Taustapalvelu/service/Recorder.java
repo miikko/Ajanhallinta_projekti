@@ -1,17 +1,21 @@
 package service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import controllers.DateUtil;
 import database.DatabaseHandler;
 import database.Kayttaja;
+import database.Restriction;
 import database.Sitting;
 import database.WindowTime;
 
 /**
- * This Thread class records user activity outside of this application.<br> 
+ * This Thread class records and acts based on user activity outside of this
+ * application.<br>
  * The recorded data is periodically sent to the database.<br>
  * 
  * @author miikk
@@ -21,6 +25,7 @@ public class Recorder extends Thread {
 	private boolean quit;
 	private Kayttaja user;
 	private Set<WindowTime> windowTimes = new HashSet<>();
+	private List<Restriction> restrictions;
 	private DatabaseHandler dbHandler;
 	private WindowTime currWt = null;
 
@@ -32,6 +37,7 @@ public class Recorder extends Thread {
 
 	@Override
 	public void run() {
+		restrictions = dbHandler.fetchRestrictions(DateUtil.weekdayUtil(LocalDate.now()), user.getId());
 		LocalDateTime startDate = LocalDateTime.now();
 		Sitting sitting = new Sitting(user, DateUtil.dateToString(startDate));
 		dbHandler.sendSitting(sitting);
@@ -44,6 +50,7 @@ public class Recorder extends Thread {
 		long timerNanoSecs = System.nanoTime();
 		long wtIntervalTime = System.nanoTime();
 		while (!quit) {
+			checkRestrictions();
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -70,14 +77,9 @@ public class Recorder extends Thread {
 				sitting.setEnd_date(DateUtil.dateToString(endDate));
 				dbHandler.updateSitting(sitting);
 				timerNanoSecs = System.nanoTime();
+
+				restrictions = dbHandler.fetchRestrictions(DateUtil.weekdayUtil(LocalDate.now()), user.getId());
 			}
-			/*
-			String temp = WindowUtil.getActiveProgramDescription();
-			System.out.println(temp);
-			if (temp != null && temp.equals("Discord")) {
-				System.out.println("foo");
-				WindowUtil.closeActiveWindow();
-			}*/
 		}
 		LocalDateTime endDate = LocalDateTime.now();
 		sitting.setEnd_date(DateUtil.dateToString(endDate));
@@ -113,5 +115,28 @@ public class Recorder extends Thread {
 			}
 		}
 	}
-	
+
+	/**
+	 * Compares the current WindowTime's program to this weekday's Restrictions to
+	 * see if the current program should be shut down.<br>
+	 * If a match is found and the WindowTime's duration is longer than the
+	 * Restriction allows, the program is closed.
+	 * 
+	 * @return true if the current active window was closed, false otherwise
+	 */
+	private boolean checkRestrictions() {
+		if (currWt != null) {
+			for (Restriction r : restrictions) {
+				if (r.getProgramName().equals(currWt.getProgramName())) {
+					if (currWt.getHours() > r.getHours()
+							|| (currWt.getHours() == r.getHours() && currWt.getMinutes() >= r.getMinutes())) {
+						WindowUtil.closeActiveWindow();
+					}
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
 }

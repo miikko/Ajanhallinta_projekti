@@ -200,7 +200,7 @@ public class MainScreen extends BorderPane {
 		});
 		Button restrictBtn = new Button(LanguageUtil.translate("Restrictions"));
 		restrictBtn.setOnAction((ActionEvent event) -> {
-			restrictContainer.refresh();
+			restrictContainer = new RestrictionContainer(controller);
 			updateCenter(restrictContainer);
 		});
 		navBar.getChildren().addAll(defaultBtn, historyBtn, groupsBtn, restrictBtn);

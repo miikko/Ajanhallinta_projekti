@@ -28,7 +28,7 @@ public class LanguageUtil {
 			"Add user", "User added", "The Id you entered is not valid",
 			"Failed to create a new group, check that there is atleast one other member and that the name is unique",
 			"Remove", "Select restricted program", "Edit", "Choose program", "Minutes", "Add", "Add new", "Finish", "Save",
-			"Select weekday", "Please select a weekday", "Invalid time values", "Main", "Start recording", "Stop recording" };
+			"Select weekday", "Please select a weekday", "Invalid time values", "Restriction updated!", "Failed to save restrictions", "Main", "Start recording", "Stop recording" };
 
 	private static final String[] GUI_WORDS_FI = new String[] { "Ajanhallintapalvelu", "K‰ytt‰j‰", "Salasana",
 			"Kirjaudu", "Rekisterˆidy", "Virheellinen k‰ytt‰j‰nimi ja/tai salasana.",
@@ -43,7 +43,7 @@ public class LanguageUtil {
 			"K‰ytt‰j‰ lis‰tty", "Antamaasi Id:t‰ ei lˆydy.",
 			"Ryhm‰n luominen ep‰onnistui. Tarkista, ett‰ ryhm‰ss‰ on v‰hint‰‰n yksi j‰sen lis‰ksesi ja ett‰ ryhm‰n nimi on k‰ytett‰viss‰",
 			"Poista", "Valitse rajoitettava sovellus", "Muokkaa", "Valitse sovellus", "Minuutit", "Lis‰‰", "Lis‰‰ uusi", "Valmis",
-			"Tallenna", "Valitse viikonp‰iv‰", "Ole hyv‰ ja valitse viikonp‰iv‰", "V‰‰r‰t aika arvot", "P‰‰valikko", "Aloita tallentaminen", "Lopeta tallentaminen" };
+			"Tallenna", "Valitse viikonp‰iv‰", "Ole hyv‰ ja valitse viikonp‰iv‰", "V‰‰r‰t aika arvot", "Rajoitus p‰ivitetty!", "Rajoituksien tallentaminen ep‰onnistui", "P‰‰valikko", "Aloita tallentaminen", "Lopeta tallentaminen" };
 
 	private static List<String> wordList_en = Arrays.asList(GUI_WORDS_EN);
 	private static List<String> wordList_fi = Arrays.asList(GUI_WORDS_FI);
