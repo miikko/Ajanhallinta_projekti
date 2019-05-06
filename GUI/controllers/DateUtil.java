@@ -16,8 +16,9 @@ import java.time.format.DateTimeFormatter;
 public class DateUtil {
 	private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 	private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-	private static final String[] WEEKDAYS = new String[] { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
-			"Saturday", "Sunday" };
+	private static final String[] WEEKDAYS = new String[] { LanguageUtil.translate("Monday"),
+			LanguageUtil.translate("Tuesday"), LanguageUtil.translate("Wednesday"), LanguageUtil.translate("Thursday"),
+			LanguageUtil.translate("Friday"), LanguageUtil.translate("Saturday"), LanguageUtil.translate("Sunday") };
 
 	/**
 	 * This method converts a given date to a string in the correct format. Doesn't
