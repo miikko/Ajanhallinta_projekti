@@ -156,7 +156,7 @@ public class MainScreen extends BorderPane {
 		accountContainer = new VBox();
 		VBox areaMiddle = new VBox();
         areaMiddle.setBackground(Background.EMPTY);
-        areaMiddle.setPrefSize(100, 200);
+        areaMiddle.setPrefSize(100, 150);
         //areaMiddle.setSpacing(5);
         areaMiddle.setAlignment(Pos.CENTER);
         String style = "-fx-background-color: rgba(167, 197, 204, 0.5);";

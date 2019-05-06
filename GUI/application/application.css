@@ -73,6 +73,7 @@
 
 #appName {
 	-fx-font-size: 60.0px;
+	-fx-font-family: "Lucida Handwriting";
 	-fx-font-style: italic;
 	-fx-font-weight: bold;
 }

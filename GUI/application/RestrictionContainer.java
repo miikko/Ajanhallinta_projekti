@@ -39,7 +39,7 @@ class RestrictionContainer extends HBox {
 	private String newProgName;
 	private Restriction editRestriction;
 	private HashMap<String, Integer[]> newRestrictionDaySettings;
-	private final Insets MARGIN = new Insets(5, 5, 5, 5);
+	private final Insets MARGIN = new Insets(10, 10, 10, 10);
 
 	public RestrictionContainer(GUI_Controller controller) {
 		this.controller = controller;
@@ -242,9 +242,13 @@ class RestrictionContainer extends HBox {
 			minuteTF.clear();
 			editRestriction = null;
 		});
+		Button backingBtn = new Button(LanguageUtil.translate("Return"));
+		backingBtn.setOnAction((ActionEvent event) -> {
+			refresh();
+		});
 		HBox btnContainer = new HBox();
 		btnContainer.setAlignment(Pos.CENTER);
-		btnContainer.getChildren().addAll(saveBtn, removeBtn);
+		btnContainer.getChildren().addAll(saveBtn, removeBtn, backingBtn);
 		editingContent.setTop(infoLbl);
 		editingContent.setCenter(weekDayComboBox);
 		editingContent.setRight(tfContainer);
