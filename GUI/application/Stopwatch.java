@@ -41,7 +41,7 @@ public class Stopwatch extends VBox {
 		}));
 		timeline.setCycleCount(Timeline.INDEFINITE);
 		timeline.setAutoReverse(false);
-		Button startButton = new Button(LanguageUtil.translate("Start recording"));
+		Button startButton = new Button(LanguageUtil.translate("Start"));
 		startButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -53,13 +53,13 @@ public class Stopwatch extends VBox {
 					secs = 0;
 					millis = 0;
 					timerText.setText("00:00:00");
-					startButton.setText(LanguageUtil.translate("Start recording"));
+					startButton.setText(LanguageUtil.translate("Start"));
 					recording = false;
 				} else {
 					controller.startRecording();
 					recording = true;
 					timeline.play();
-					startButton.setText(LanguageUtil.translate("Stop recording"));
+					startButton.setText(LanguageUtil.translate("Stop"));
 				}
 			}
 		});

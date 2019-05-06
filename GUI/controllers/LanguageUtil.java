@@ -19,7 +19,7 @@ public class LanguageUtil {
 	private static final String[] GUI_WORDS_EN = new String[] { "Time Manager", "Username", "Password", "Login",
 			"Register", "Invalid username and/or password.",
 			"Selected username is already taken. Please choose another one.", "Options", "Account", "Logout", "Quit",
-			"Your Id: ", "New username", "New password", "Type same password", "Change username", "Change password",
+			"Your Id: ", "New username", "New password", "Type same password", "Change", "Change",
 			"Main menu", "History", "Groups", "Restrictions", "Username was changed successfully!",
 			"Failed to change username.", "Password was changed successfully!", "Failed to change password.",
 			"Welcome ", "Confirm", "Select chart type", "Pie chart", "Bar chart", "Return", "No data to show",
@@ -29,14 +29,14 @@ public class LanguageUtil {
 			"Failed to create a new group, check that there is atleast one other member and that the name is unique",
 			"Remove", "Select restricted program", "Edit", "Choose program", "Minutes", "Add", "Add new", "Finish",
 			"Save", "Select weekday", "Please select a weekday", "Invalid time values", "Restriction updated!",
-			"Failed to save restrictions", "Main", "Start recording", "Stop recording", "Warning!", "You have ",
-			" minute(s) left to use the program " };
+			"Failed to save restrictions", "Main", "Start", "Stop", "Warning!", "You have ",
+			" minute(s) left to use the program ", "Select group", "Add" };
 
 	private static final String[] GUI_WORDS_FI = new String[] { "Ajanhallintapalvelu", "K‰ytt‰j‰", "Salasana",
 			"Kirjaudu", "Rekisterˆidy", "Virheellinen k‰ytt‰j‰nimi ja/tai salasana.",
-			"Valitsemasi k‰ytt‰j‰nimi on varattu, valitse toinen nimi", "Valinnat", "K‰ytt‰j‰tiedot", "Kirjaudu ulos",
+			"Valitsemasi k‰ytt‰j‰nimi on varattu, valitse toinen nimi", "Asetukset", "K‰ytt‰j‰tiedot", "Kirjaudu ulos",
 			"Lopeta", "K‰ytt‰j‰si Id: ", "Uusi k‰ytt‰j‰nimi", "Uusi salasana", "Uusi salasana uudelleen",
-			"Vaihda k‰ytt‰j‰nimi", "Vaihda salasana", "P‰‰valikko", "Historia", "Ryhm‰t", "Rajoitukset",
+			"Vaihda", "Vaihda", "P‰‰valikko", "Historia", "Ryhm‰t", "Rajoitukset",
 			"K‰ytt‰j‰nimen vaihto onnistui!", "K‰ytt‰j‰nimen vaihto ep‰onnistui.", "Salasanan vaihto onnistui!",
 			"Salasanan vaihto ep‰onnistui.", "Tervetuloa ", "Hyv‰ksy", "Valitse kaaviotyyppi", "Ympyr‰kaavio",
 			"Pylv‰skaavio", "Takaisin", "Ei n‰ytett‰vi‰ tilastoja", "Eri ohjelmien parissa k‰ytetty aika p‰iv‰st‰ ",
@@ -46,8 +46,8 @@ public class LanguageUtil {
 			"Ryhm‰n luominen ep‰onnistui. Tarkista, ett‰ ryhm‰ss‰ on v‰hint‰‰n yksi j‰sen lis‰ksesi ja ett‰ ryhm‰n nimi on k‰ytett‰viss‰",
 			"Poista", "Valitse rajoitettava sovellus", "Muokkaa", "Valitse sovellus", "Minuutit", "Lis‰‰", "Lis‰‰ uusi",
 			"Valmis", "Tallenna", "Valitse viikonp‰iv‰", "Ole hyv‰ ja valitse viikonp‰iv‰", "V‰‰r‰t aika arvot",
-			"Rajoitus p‰ivitetty!", "Rajoituksien tallentaminen ep‰onnistui", "P‰‰valikko", "Aloita tallentaminen",
-			"Lopeta tallentaminen", "Varoitus!", "Sinulla on ", " minuutti(a) aikaa k‰ytt‰‰ ohjelmaa " };
+			"Rajoitus p‰ivitetty!", "Rajoituksien tallentaminen ep‰onnistui", "P‰‰valikko", "Aloita",
+			"Lopeta", "Varoitus!", "Sinulla on ", " minuutti(a) aikaa k‰ytt‰‰ ohjelmaa ", "Valitse ryhm‰", "Lis‰‰" };
 
 	private static List<String> wordList_en = Arrays.asList(GUI_WORDS_EN);
 	private static List<String> wordList_fi = Arrays.asList(GUI_WORDS_FI);

@@ -135,7 +135,7 @@ class RestrictionContainer extends HBox {
 		}
 		HBox btnContainer = new HBox();
 		btnContainer.setAlignment(Pos.CENTER);
-		Button addBtn = new Button("Add");
+		Button addBtn = new Button(LanguageUtil.translate("Add"));
 		addBtn.setOnAction((ActionEvent event) -> {
 			try {
 				int hours = Integer.parseInt(hourTF.getText());

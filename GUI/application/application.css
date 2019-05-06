@@ -1,14 +1,17 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
 .root {
-     -fx-background-image: url("../../../assets/MetallicBG.jpg");
+     -fx-background-image: url("../../../assets/TimeManager_BG.jpg");
      -fx-background-position: center;
      -fx-background-repeat: no-repeat;
      -fx-background-size: cover;
-     -fx-font-weight: bold;
      -fx-font-size: 25px;
+     -fx-font-weight: bold;
 }
 
+.textfield {
+	-fx-pref-width: 300.0px;
+}
 
 .button {
     /*-fx-text-fill: white;*/
@@ -71,6 +74,7 @@
 #appName {
 	-fx-font-size: 60.0px;
 	-fx-font-style: italic;
+	-fx-font-weight: bold;
 }
 
 #groupStart {

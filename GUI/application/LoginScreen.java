@@ -71,7 +71,7 @@ public class LoginScreen extends BorderPane {
 		passwordTF.setPromptText(LanguageUtil.translate("Password"));
 		passwordTF.setOnKeyTyped(inputHandler);
 		subContainer.getChildren().addAll(usernameTF, passwordTF);
-		subContainer.setStyle("-fx-border-color: black");
+		//subContainer.setStyle("-fx-border-color: black");
 		subContainer.setAlignment(Pos.CENTER);
 		tfContainer.getChildren().addAll(appName, inputInfoLbl, subContainer);
 		tfContainer.setAlignment(Pos.CENTER);
@@ -95,7 +95,7 @@ public class LoginScreen extends BorderPane {
 		HBox.setMargin(loginBtn, new Insets(spacing));
 		HBox.setMargin(regBtn, new Insets(spacing));
 		btnContainer.setAlignment(Pos.CENTER);
-		btnContainer.setStyle("-fx-border-color: black");
+		//btnContainer.setStyle("-fx-border-color: black");
 		btnContainer.getChildren().addAll(loginBtn, regBtn);
 		this.setBottom(btnContainer);
 	}

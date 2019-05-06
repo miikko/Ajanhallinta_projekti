@@ -117,10 +117,13 @@ public class MainScreen extends BorderPane {
 		Label pass1 = new Label(LanguageUtil.translate("New password"));
 		Label pass2 = new Label(LanguageUtil.translate("Type same password"));
 		usernameField = new TextField();
+		usernameField.setId("changeUN");
 		PasswordField passwordField = new PasswordField();
+		passwordField.setId("changePW1");
 		PasswordField passwordField2 = new PasswordField();
-		Button changeUnameBtn = new Button(LanguageUtil.translate("Change username"));
-		Button changePwBtn = new Button(LanguageUtil.translate("Change password"));
+		passwordField.setId("changePW2");
+		Button changeUnameBtn = new Button(LanguageUtil.translate("Change"));
+		Button changePwBtn = new Button(LanguageUtil.translate("Change"));
 
 		changeUnameBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -154,11 +157,11 @@ public class MainScreen extends BorderPane {
 		VBox areaMiddle = new VBox();
         areaMiddle.setBackground(Background.EMPTY);
         areaMiddle.setPrefSize(100, 200);
-        areaMiddle.setSpacing(5);
+        //areaMiddle.setSpacing(5);
         areaMiddle.setAlignment(Pos.CENTER);
         String style = "-fx-background-color: rgba(167, 197, 204, 0.5);";
         areaMiddle.setStyle(style);
-        areaMiddle.setPadding(new Insets(5));
+        //areaMiddle.setPadding(new Insets(50));
         areaMiddle.getChildren().addAll(usern, usernameField, changeUnameBtn);
         
         VBox areaBottomMiddle = new VBox();

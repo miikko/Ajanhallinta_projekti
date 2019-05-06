@@ -76,7 +76,7 @@ class GroupContainer extends VBox {
 			comboBoxItems.add(group.getGroupName());
 		}
 		final ComboBox<String> comboBox = new ComboBox<>(comboBoxItems);
-		comboBox.setPromptText("Select group");
+		comboBox.setPromptText(LanguageUtil.translate("Select group"));
 		comboBox.valueProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
