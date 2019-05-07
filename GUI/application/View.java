@@ -27,15 +27,15 @@ import javafx.scene.layout.VBox;
 //TODO: Find a proper place to create screens
 public class View extends Application {
 
-	private GUI_Controller controller;
+	private GUI_Controller guiController;
 	private Scene scene;
 	private LoginScreen loginScreen;
 
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			controller = new GUI_Controller(this);
-			loginScreen = new LoginScreen(controller, 5);
+			guiController = new GUI_Controller(this);
+			loginScreen = new LoginScreen(guiController, 5);
 			scene = new Scene(loginScreen, 1000, 700);
 			Image icon = new Image("file:assets/kello.png");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
@@ -76,7 +76,7 @@ public class View extends Application {
 			@Override
 			public void handle(ActionEvent arg0) {
 				popupStage.hide();
-				controller.activateScreen(transitionScreenName);
+				guiController.activateScreen(transitionScreenName);
 			}
 		});
 		popup.getChildren().addAll(new Label(message), confButton);

@@ -1,23 +1,14 @@
 package application;
 
-
+import controllers.ContainerController;
 import controllers.GUI_Controller;
+import controllers.HistoryController;
 import controllers.LanguageUtil;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Background;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -29,17 +20,18 @@ import javafx.scene.layout.VBox;
  * 
  * @author miikk & MrJoXuX & JP
  */
-public class MainScreen extends BorderPane {
+public class MainScreen extends BorderPane implements Screen {
 	private VBox navBar;
-	private VBox defaultContent;
 	private MenuButton optionMenu;
-	private VBox accountContainer;
-	private Label infoLabel;
-	private TextField usernameField;
-	private HistoryContainer historyContainer;
+	private AccountContainer accountContainer;
+	private HomeContainer homeContainer;
+	private CalendarPairContainer calPairContainer;
+	private ChartContainer chartContainer;
 	private GroupContainer groupContainer;
 	private RestrictionContainer restrictContainer;
 	private GUI_Controller controller;
+	private final ContainerController containerController = new ContainerController(this);
+	private final HistoryController hisController = new HistoryController();
 
 	public MainScreen(GUI_Controller controller) {
 		this.controller = controller;
@@ -48,29 +40,38 @@ public class MainScreen extends BorderPane {
 	}
 
 	private void create() {
-		historyContainer = new HistoryContainer(controller);
-		groupContainer = new GroupContainer(controller);
+		homeContainer = new HomeContainer(controller);
+		containerController.addContainer("Home", homeContainer);
+		calPairContainer = new CalendarPairContainer(containerController, hisController);
+		containerController.addContainer("Calendars", calPairContainer);
+		chartContainer = new ChartContainer(hisController);
+		containerController.addContainer("Charts", chartContainer);
+		groupContainer = new GroupContainer(controller, containerController, hisController);
+		containerController.addContainer("Group", groupContainer);
 		restrictContainer = new RestrictionContainer(controller);
-		createDefaultContent();
+		containerController.addContainer("Restrict", restrictContainer);
+		accountContainer = new AccountContainer(controller);
+		containerController.addContainer("Account", accountContainer);
 		createNavBar();
 		createOptionMenu();
-		createAccountContainer();
 		this.setLeft(navBar);
-		this.setCenter(defaultContent);
+		this.setCenter(homeContainer.getContent());
 		this.setRight(optionMenu);
 	}
 
+	@Override
+	public void display(Container container) {
+		this.setCenter(container.getContent());
+	}
+
 	/**
-	 * Changes contents to selection and cleans the previous content.
+	 * Changes contents to container's content after refreshing the container.
 	 * 
-	 * @param selection
+	 * @param container
 	 */
-	private void updateCenter(Node selection) {
-		if (this.getCenter() == accountContainer) {
-			infoLabel.setText("");
-			usernameField.clear();
-		}
-		this.setCenter(selection);
+	private void updateCenter(Container container) {
+		container.refresh();
+		this.setCenter(container.getContent());
 	}
 
 	/**
@@ -110,74 +111,6 @@ public class MainScreen extends BorderPane {
 		optionMenu.getItems().addAll(accountItem, logoutItem, quitItem);
 	}
 
-	private void createAccountContainer() {
-		Label idLbl = new Label(LanguageUtil.translate("Your Id: ") + controller.getUserId()); 
-		infoLabel = new Label("");
-		Label usern = new Label(LanguageUtil.translate("New username"));
-		Label pass1 = new Label(LanguageUtil.translate("New password"));
-		Label pass2 = new Label(LanguageUtil.translate("Type same password"));
-		usernameField = new TextField();
-		usernameField.setId("changeUN");
-		PasswordField passwordField = new PasswordField();
-		passwordField.setId("changePW1");
-		PasswordField passwordField2 = new PasswordField();
-		passwordField.setId("changePW2");
-		Button changeUnameBtn = new Button(LanguageUtil.translate("Change"));
-		Button changePwBtn = new Button(LanguageUtil.translate("Change"));
-
-		changeUnameBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				String username = usernameField.getText();
-				if (controller.handleUsernameChange(username)) {
-					infoLabel.setText(LanguageUtil.translate("Username was changed successfully!"));
-					usernameField.clear();
-				} else {
-					infoLabel.setText(LanguageUtil.translate("Failed to change username."));
-				}
-			}
-		});
-
-		changePwBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				String setPass1 = passwordField.getText();
-				String setPass2 = passwordField2.getText();
-				if (controller.handlePasswordChange(setPass1, setPass2)) {
-					infoLabel.setText(LanguageUtil.translate("Password was changed successfully!"));
-				} else {
-					infoLabel.setText(LanguageUtil.translate("Failed to change password."));
-				}
-				passwordField.clear();
-				passwordField2.clear();
-			}
-		});
-
-		accountContainer = new VBox();
-		VBox areaMiddle = new VBox();
-        areaMiddle.setBackground(Background.EMPTY);
-        areaMiddle.setPrefSize(100, 150);
-        //areaMiddle.setSpacing(5);
-        areaMiddle.setAlignment(Pos.CENTER);
-        String style = "-fx-background-color: rgba(167, 197, 204, 0.5);";
-        areaMiddle.setStyle(style);
-        //areaMiddle.setPadding(new Insets(50));
-        areaMiddle.getChildren().addAll(usern, usernameField, changeUnameBtn);
-        
-        VBox areaBottomMiddle = new VBox();
-        areaBottomMiddle.setBackground(Background.EMPTY);
-        areaBottomMiddle.setPrefSize(100, 250);
-        areaBottomMiddle.setSpacing(5);
-        areaBottomMiddle.setStyle(style);
-        areaBottomMiddle.setAlignment(Pos.CENTER);
-        areaBottomMiddle.setPadding(new Insets(5));
-        areaBottomMiddle.getChildren().addAll(pass1, passwordField, pass2, passwordField2,
-				changePwBtn);
-		accountContainer.setSpacing(20);
-		accountContainer.setAlignment(Pos.CENTER);
-		accountContainer.getChildren().addAll(idLbl, areaMiddle, areaBottomMiddle, infoLabel);
-	}
-
 	/**
 	 * Initializes the navigation bar that can be seen on the left side of the
 	 * screen once a user has logged in.<br>
@@ -188,18 +121,19 @@ public class MainScreen extends BorderPane {
 		navBar.setId("naviBar");
 		Button defaultBtn = new Button(LanguageUtil.translate("Main menu"));
 		defaultBtn.setId("mainmenuBtn");
-		defaultBtn.setOnAction(createNavBarBtnHandler(defaultContent));
+		defaultBtn.setOnAction(createNavBarBtnHandler(homeContainer));
 		Button historyBtn = new Button(LanguageUtil.translate("History"));
 		historyBtn.setId("historyBtn");
-		historyBtn.setOnAction(createNavBarBtnHandler(historyContainer));
+		historyBtn.setOnAction((ActionEvent event) -> {
+			hisController.setDataSource(controller.getUserId());
+			calPairContainer.refresh();
+			updateCenter(calPairContainer);
+		});
 		Button groupsBtn = new Button(LanguageUtil.translate("Groups"));
 		groupsBtn.setId("groupsBtn");
-		groupsBtn.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				groupContainer.refresh();
-				updateCenter(groupContainer);
-			}
+		groupsBtn.setOnAction((ActionEvent event) -> {
+			groupContainer.refresh();
+			updateCenter(groupContainer);
 		});
 		Button restrictBtn = new Button(LanguageUtil.translate("Restrictions"));
 		restrictBtn.setOnAction((ActionEvent event) -> {
@@ -208,28 +142,11 @@ public class MainScreen extends BorderPane {
 		});
 		navBar.getChildren().addAll(defaultBtn, historyBtn, groupsBtn, restrictBtn);
 	}
-	
-	private EventHandler<ActionEvent> createNavBarBtnHandler(Node destination) {
-		return new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent arg0) {
-				updateCenter(destination);
-			}
+
+	private EventHandler<ActionEvent> createNavBarBtnHandler(Container destination) {
+		return (ActionEvent event) -> {
+			updateCenter(destination);
 		};
 	}
 
-	/**
-	 * Creates the greeting a user receives when logging in.<br>
-	 * Also contains a button that starts the recorder service.
-	 */
-	private void createDefaultContent() {
-		defaultContent = new VBox();
-		Label welcomeLbl = new Label("");
-		StringProperty welcomeProp = new SimpleStringProperty();
-		welcomeProp.bind(Bindings.concat(LanguageUtil.translate("Welcome ")).concat(controller.getUsernameProperty()));
-		welcomeLbl.textProperty().bind(welcomeProp);
-		Stopwatch stopwatch = new Stopwatch(controller);
-		defaultContent.setAlignment(Pos.CENTER);
-		defaultContent.getChildren().addAll(welcomeLbl, stopwatch);
-	}
 }

@@ -32,7 +32,7 @@ public class LoginScreenTesting{
 	private GUI_Controller gui = new GUI_Controller(view);
 	private LoginScreen login;
 	private Scene scene;
-	private static DatabaseHandler dh = new DatabaseHandler();
+	private static DatabaseHandler dh = DatabaseHandler.getInstance();
 	
 	@Start
 	public void onStart(Stage stage) throws Exception {

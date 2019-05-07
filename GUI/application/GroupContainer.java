@@ -2,7 +2,9 @@ package application;
 
 import java.util.List;
 
+import controllers.ContainerController;
 import controllers.GUI_Controller;
+import controllers.HistoryController;
 import controllers.LanguageUtil;
 import database.UserGroup;
 import javafx.beans.value.ChangeListener;
@@ -29,8 +31,11 @@ import javafx.scene.layout.VBox;
  * @author miikk
  *
  */
-class GroupContainer extends VBox {
-	private GUI_Controller controller;
+class GroupContainer implements Container {
+	private VBox content;
+	private GUI_Controller guiController;
+	private ContainerController conController;
+	private HistoryController hisController;
 	private HBox startContent;
 	private VBox groupCreationContent;
 	private ObservableList<String> comboBoxItems;
@@ -39,12 +44,20 @@ class GroupContainer extends VBox {
 	private List<UserGroup> userGroups;
 	private final Insets MARGIN = new Insets(5, 5, 5, 5);
 
-	public GroupContainer(GUI_Controller controller) {
-		this.setAlignment(Pos.CENTER);
-		this.controller = controller;
+	public GroupContainer(GUI_Controller guiController, ContainerController conController,
+			HistoryController hisController) {
+		this.guiController = guiController;
+		this.conController = conController;
+		this.hisController = hisController;
+		create();
+		displayContent(startContent);
+	}
+
+	private void create() {
+		content = new VBox();
+		content.setAlignment(Pos.CENTER);
 		createStartContent();
 		createGroupCreationContent();
-		displayContent(startContent);
 	}
 
 	/**
@@ -70,7 +83,7 @@ class GroupContainer extends VBox {
 		for (Node child : btnContainer.getChildren()) {
 			VBox.setMargin(child, MARGIN);
 		}
-		userGroups = controller.getUserGroups();
+		userGroups = guiController.getUserGroups();
 		comboBoxItems = FXCollections.observableArrayList();
 		for (UserGroup group : userGroups) {
 			comboBoxItems.add(group.getGroupName());
@@ -100,21 +113,22 @@ class GroupContainer extends VBox {
 		createNewGroupBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				newUserGroup = new UserGroup(controller.getUserId());
+				newUserGroup = new UserGroup(guiController.getUserId());
 				displayContent(groupCreationContent);
 			}
 		});
 		removeGroupBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				controller.removeUserGroup(selectedUserGroup);
+				guiController.removeUserGroup(selectedUserGroup);
 				refresh();
 			}
 		});
 		groupStatsBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				displayContent(new HistoryContainer(controller, selectedUserGroup));
+				hisController.setDataSource(selectedUserGroup.getUserIds());
+				conController.display("Calendars", true);
 			}
 		});
 		startContent.getChildren().addAll(comboBox, btnContainer);
@@ -146,7 +160,7 @@ class GroupContainer extends VBox {
 			@Override
 			public void handle(ActionEvent arg0) {
 				String userIdStr = userIdTextField.getText();
-				if (controller.addUserToGroup(newUserGroup, userIdStr)) {
+				if (guiController.addUserToGroup(newUserGroup, userIdStr)) {
 					infoLbl.setText(LanguageUtil.translate("User added"));
 					groupCreationContent.getChildren().add(1, createUserTab(userIdStr));
 					confirmBtn.setDisable(false);
@@ -160,11 +174,11 @@ class GroupContainer extends VBox {
 			@Override
 			public void handle(ActionEvent arg0) {
 				newUserGroup.setGroupName(nameTextField.getText());
-				if (controller.saveUserGroup(newUserGroup)) {
+				if (guiController.saveUserGroup(newUserGroup)) {
 					refresh();
 				} else {
-					infoLbl.setText(
-							LanguageUtil.translate("Failed to create a new group, check that there is atleast one other member and that the name is unique"));
+					infoLbl.setText(LanguageUtil.translate(
+							"Failed to create a new group, check that there is atleast one other member and that the name is unique"));
 				}
 			}
 		});
@@ -188,7 +202,7 @@ class GroupContainer extends VBox {
 		removeBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent arg0) {
-				if (controller.removeUserFromGroup(newUserGroup, userIdStr)) {
+				if (guiController.removeUserFromGroup(newUserGroup, userIdStr)) {
 					groupCreationContent.getChildren().remove(userTab);
 				}
 			}
@@ -203,7 +217,7 @@ class GroupContainer extends VBox {
 	 * @param content a Pane that this container is going to display
 	 */
 	private void displayContent(Pane content) {
-		this.getChildren().setAll(content);
+		this.content.getChildren().setAll(content);
 	}
 
 	/**
@@ -211,14 +225,20 @@ class GroupContainer extends VBox {
 	 * dropdown menu.<br>
 	 * Then displays the startContent
 	 */
+	@Override
 	public void refresh() {
 		newUserGroup = null;
 		selectedUserGroup = null;
 		comboBoxItems.clear();
-		userGroups = controller.getUserGroups();
+		userGroups = guiController.getUserGroups();
 		for (UserGroup group : userGroups) {
 			comboBoxItems.add(group.getGroupName());
 		}
 		displayContent(startContent);
+	}
+
+	@Override
+	public Node getContent() {
+		return content;
 	}
 }

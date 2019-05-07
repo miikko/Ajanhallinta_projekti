@@ -42,7 +42,7 @@ public class GUI_Controller {
 
 	public GUI_Controller(View view) {
 		this.view = view;
-		dbHandler = new DatabaseHandler();
+		dbHandler = DatabaseHandler.getInstance();
 		uAuth = new UserAuth(dbHandler);
 	}
 
@@ -272,6 +272,10 @@ public class GUI_Controller {
 
 	public StringProperty getUsernameProperty() {
 		return usernameProperty;
+	}
+	
+	public String getUsername() {
+		return user.getName();
 	}
 	
 	/**

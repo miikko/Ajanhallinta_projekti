@@ -25,7 +25,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
-class RestrictionContainer extends HBox {
+class RestrictionContainer implements Container {
+	private HBox content;
 	private HBox startContent;
 	private BorderPane progSelectionContent;
 	private BorderPane additionContent;
@@ -43,7 +44,12 @@ class RestrictionContainer extends HBox {
 
 	public RestrictionContainer(GUI_Controller controller) {
 		this.controller = controller;
-		this.setAlignment(Pos.CENTER);
+		create();
+	}
+
+	private void create() {
+		content = new HBox();
+		content.setAlignment(Pos.CENTER);
 		createStartContent();
 		createAdditionContent();
 		createProgSelectionContent();
@@ -266,9 +272,10 @@ class RestrictionContainer extends HBox {
 	}
 
 	private void displayContent(Pane content) {
-		this.getChildren().setAll(content);
+		this.content.getChildren().setAll(content);
 	}
 
+	@Override
 	public void refresh() {
 		newProgName = null;
 		editProgName = null;
@@ -281,5 +288,10 @@ class RestrictionContainer extends HBox {
 		obsRestrictedProgNames.setAll(restrictedProgNames);
 		obsAllProgNames.setAll(controller.getAllProgramNames());
 		displayContent(startContent);
+	}
+
+	@Override
+	public Node getContent() {
+		return content;
 	}
 }

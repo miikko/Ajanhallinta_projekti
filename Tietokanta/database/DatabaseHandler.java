@@ -18,13 +18,21 @@ public class DatabaseHandler {
 	private RestrictionAccessObject restrictObject;
 	private ConnectionHandler connHandler;
 	
-	public DatabaseHandler() {
+	private DatabaseHandler() {
 		connHandler = ConnectionHandler.getInstance();
 		connHandler.openTunnel();
 		userObject = new KayttajaAccessObject();
 		sittingObject = new SittingAccessObject();
 		groupObject = new UserGroupAccessObject();
 		restrictObject = new RestrictionAccessObject();
+	}
+	
+	private static class SingletonHolder {
+		private static final DatabaseHandler INSTANCE = new DatabaseHandler();
+	}
+	
+	public static DatabaseHandler getInstance() {
+		return SingletonHolder.INSTANCE;
 	}
 	
 	//User methods

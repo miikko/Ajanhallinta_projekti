@@ -2,11 +2,15 @@ package application;
 
 import java.time.LocalDate;
 
+import controllers.ContainerController;
+import controllers.HistoryController;
 import controllers.LanguageUtil;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
@@ -14,7 +18,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
-class CalendarPair extends HBox {
+class CalendarPairContainer implements Container {
+	private ContainerController conController;
+	private HistoryController hisController;
+	private VBox content;
 	private VBox sCalendar;
 	private VBox eCalendar;
 	private DatePicker sDatePicker;
@@ -23,15 +30,31 @@ class CalendarPair extends HBox {
 	private LocalDate endDate;
 	private LocalDate currDate;
 	private final Insets MARGIN = new Insets(5, 5, 5, 5);
-	
-	public CalendarPair() {
-		this.setAlignment(Pos.CENTER);
+
+	public CalendarPairContainer(ContainerController conController, HistoryController hisController) {
+		this.conController = conController;
+		this.hisController = hisController;
 		currDate = LocalDate.now();
+		create();
+	}
+
+	private void create() {
+		content = new VBox();
+		content.setId("calPair");
+		content.setAlignment(Pos.CENTER);
+		HBox calendarContent = new HBox();
 		createStartCalendar();
 		createEndCalendar();
-		this.getChildren().addAll(sCalendar, eCalendar);
+		calendarContent.getChildren().addAll(sCalendar, eCalendar);
+		Button confirmBtn = new Button(LanguageUtil.translate("Confirm"));
+		confirmBtn.setOnAction((ActionEvent event) -> {
+			hisController.setStartDate(startDate);
+			hisController.setEndDate(endDate);
+			conController.display("Charts", true);
+		});
+		content.getChildren().addAll(calendarContent, confirmBtn);
 	}
-	
+
 	private void createStartCalendar() {
 		sCalendar = new VBox(10);
 		sCalendar.setAlignment(Pos.CENTER);
@@ -55,24 +78,22 @@ class CalendarPair extends HBox {
 				};
 			}
 		});
-		sDatePicker.valueProperty().addListener(new ChangeListener<LocalDate>() {
-			@Override
-			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldDate, LocalDate newDate) {
-				// Correct selection if user types an invalid date
-				if (endDate != null && newDate.isAfter(endDate)) {
-					sDatePicker.setValue(endDate);
-				} else if (newDate.isAfter(currDate)) {
-					sDatePicker.setValue(currDate);
-				} else {
-					startDate = newDate;
-					updateEndCalendar();
-				}
-			}
-		});
+		sDatePicker.valueProperty().addListener(
+				(ObservableValue<? extends LocalDate> observable, LocalDate oldDate, LocalDate newDate) -> {
+					// Correct selection if user types an invalid date
+					if (endDate != null && newDate.isAfter(endDate)) {
+						sDatePicker.setValue(endDate);
+					} else if (newDate.isAfter(currDate)) {
+						sDatePicker.setValue(currDate);
+					} else {
+						startDate = newDate;
+						updateEndCalendar();
+					}
+				});
 		sCalendar.getChildren().addAll(startInfoLbl, sDatePicker);
 		HBox.setMargin(sCalendar, MARGIN);
 	}
-	
+
 	private void createEndCalendar() {
 		eCalendar = new VBox(10);
 		eCalendar.setAlignment(Pos.CENTER);
@@ -92,23 +113,20 @@ class CalendarPair extends HBox {
 						if (item.isAfter(currDate) || (startDate != null && item.isBefore(startDate))) {
 							setDisable(true);
 						}
-
 					}
 				};
 			}
 		});
-		eDatePicker.valueProperty().addListener(new ChangeListener<LocalDate>() {
-			@Override
-			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldDate, LocalDate newDate) {
-				// Correct selection if user types an invalid date
-				if (newDate.isAfter(currDate) || (startDate != null && newDate.isBefore(startDate))) {
-					eDatePicker.setValue(currDate);
-				} else {
-					endDate = newDate;
-					updateStartCalendar();
-				}
-			}
-		});
+		eDatePicker.valueProperty().addListener(
+				(ObservableValue<? extends LocalDate> observable, LocalDate oldDate, LocalDate newDate) -> {
+					// Correct selection if user types an invalid date
+					if (newDate.isAfter(currDate) || (startDate != null && newDate.isBefore(startDate))) {
+						eDatePicker.setValue(currDate);
+					} else {
+						endDate = newDate;
+						updateStartCalendar();
+					}
+				});
 		eCalendar.getChildren().addAll(endInfoLbl, eDatePicker);
 		HBox.setMargin(eCalendar, MARGIN);
 	}
@@ -120,12 +138,24 @@ class CalendarPair extends HBox {
 	private void updateEndCalendar() {
 		eDatePicker.getDayCellFactory().call(eDatePicker);
 	}
-	
+
 	public LocalDate getStartDate() {
 		return startDate;
 	}
-	
+
 	public LocalDate getEndDate() {
 		return endDate;
+	}
+
+	@Override
+	public void refresh() {
+		currDate = LocalDate.now();
+		eDatePicker.setValue(currDate);
+		sDatePicker.setValue(currDate);
+	}
+
+	@Override
+	public Node getContent() {
+		return content;
 	}
 }
