@@ -1,6 +1,5 @@
 package application;
 
-
 import controllers.GUI_Controller;
 import controllers.LanguageUtil;
 import javafx.application.Application;
@@ -24,7 +23,6 @@ import javafx.scene.layout.VBox;
  * @author miikko & MrJoXuX & JP
  * @since 11/03/2019
  */
-//TODO: Find a proper place to create screens
 public class View extends Application {
 
 	private GUI_Controller guiController;
@@ -39,7 +37,6 @@ public class View extends Application {
 			scene = new Scene(loginScreen, 1000, 700);
 			Image icon = new Image("file:assets/kello.png");
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			//scene.getStylesheets().add(getClass().getResource("stopwatch.css").toExternalForm());
 			primaryStage.setTitle("Ajanhallintapalvelu");
 			primaryStage.getIcons().add(icon);
 			primaryStage.setScene(scene);
@@ -47,11 +44,6 @@ public class View extends Application {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void init() {
-
 	}
 
 	public static void main(String[] args) {
@@ -62,10 +54,9 @@ public class View extends Application {
 	 * Creates and shows a popup with the given message and a confirm button.<br>
 	 * Clicking the button hides the popup and activates the given screen.
 	 * 
-	 * @param message
-	 * @param transitionScreenName
+	 * @param message the Text to be displayed in the popup
+	 * @param transitionScreenName the String identifier for the next screen.
 	 */
-	// TODO: Find a more elegant way for creating a popup
 	public void createAndDisplayPopup(String message, String transitionScreenName) {
 		Stage popupStage = new Stage();
 		popupStage.initModality(Modality.APPLICATION_MODAL);
@@ -88,10 +79,18 @@ public class View extends Application {
 		popupStage.show();
 	}
 
+	/** Sets the given Pane as this View's scene root.
+	 * @param screen the Pane object that is the desired root.
+	 */
 	public void setRoot(Pane screen) {
 		scene.setRoot(screen);
 	}
 
+	/**
+	 * Getter
+	 * 
+	 * @return the Scene-object belonging to this View.
+	 */
 	public Scene getScene() {
 		return scene;
 	}

@@ -12,6 +12,12 @@ import java.util.Set;
 import database.DatabaseHandler;
 import database.Sitting;
 
+/**
+ * Controller-class that contains logic used to form Charts and Calendars.
+ * 
+ * @author miikk
+ *
+ */
 public class HistoryController {
 	private LocalDate sDate;
 	private LocalDate eDate;
@@ -49,10 +55,11 @@ public class HistoryController {
 		this.userIds = Arrays.asList(userId);
 	}
 
+	/**
+	 * @return Set of Sittings belonging to previously set userIds and within the
+	 *         previously set Date range.
+	 */
 	public Set<Sitting> getData() {
-		if (userIds == null) {
-			return null;
-		}
 		Set<Sitting> data = new HashSet<>();
 		LocalDateTime sDateTime = LocalDateTime.of(sDate, LocalTime.MIN);
 		LocalDateTime eDateTime = LocalDateTime.of(eDate.plusDays(1), LocalTime.MIN);

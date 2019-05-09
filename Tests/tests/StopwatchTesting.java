@@ -78,13 +78,4 @@ public class StopwatchTesting{
 		 Assertions.assertThrows(AssertionError.class, () -> verifyThat("#timerNum",  hasText("00:00:00")));
 	 }
 	 
-	 /**
-	  * Test whether the stopwatch has a timer,
-	  */
-	/* @Test
-	 void should_contain_timer() {
-		 verifyThat("#timerNum",  hasText("00:00:00"));
-	 }
-	*/
-	 
 }

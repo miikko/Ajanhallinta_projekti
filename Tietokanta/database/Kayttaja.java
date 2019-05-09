@@ -32,7 +32,6 @@ public class Kayttaja {
 	private String user_name;
 
 	@Column(name="password")
-	//@ColumnTransformer(forColumn="password", read="pgp_sym_decrypt(password), current_setting('encrypt.key')", write="pgp_sym_encrypt(?), current_setting('encrypt.key')")
 	private String password;
 	
 	@Column
@@ -49,7 +48,6 @@ public class Kayttaja {
 		this.password = password;
 	}
 	
-	// Tarvitaan käyttäjän updatemiseen
 	public Kayttaja(int userId, String user_name, String password) {
 		super();
 		this.userId = userId;

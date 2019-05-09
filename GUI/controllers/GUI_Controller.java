@@ -16,8 +16,6 @@ import database.Restriction;
 import database.Sitting;
 import database.UserGroup;
 import database.WindowTime;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import models.UserAuth;
@@ -25,8 +23,10 @@ import service.Recorder;
 
 /**
  * Controller class for most GUI-package classes.<br>
- * Contains handling methods for login, user info changing, recording and database calls from GUI-package classes.<br>
- * Also stores the logged in user as a Kayttaja-object. 
+ * Contains handling methods for login, user info changing, recording and
+ * database calls from GUI-package classes.<br>
+ * Also stores the logged in user as a Kayttaja-object.
+ * 
  * @author miikk & Arttuhal
  *
  */
@@ -35,7 +35,6 @@ public class GUI_Controller {
 	private View view;
 	private HashMap<String, Pane> screens = new HashMap<>();
 	private UserAuth uAuth;
-	private StringProperty usernameProperty = new SimpleStringProperty();
 	private Kayttaja user;
 	private Recorder rec;
 	private DatabaseHandler dbHandler;
@@ -59,7 +58,6 @@ public class GUI_Controller {
 		if (user == null) {
 			return false;
 		}
-		usernameProperty.set(user.getName()); 
 		screens.put("Main", ScreenFactory.createScreen("Main", 10, this));
 		activateScreen("Main");
 		return true;
@@ -78,7 +76,6 @@ public class GUI_Controller {
 		if (user == null) {
 			return false;
 		}
-		usernameProperty.set(user.getName());
 		screens.put("Main", ScreenFactory.createScreen("Main", 10, this));
 		view.createAndDisplayPopup("Registration successful!", "Main");
 		return true;
@@ -86,24 +83,24 @@ public class GUI_Controller {
 
 	/**
 	 * Changes the user's username if the new name is not taken or empty.
+	 * 
 	 * @param username
 	 * @return the state of the username change
 	 */
-	
 	public boolean handleUsernameChange(String username) {
 		Kayttaja tempUser = uAuth.changeUsername(user.getId(), username, user.getPassword());
 		if (tempUser == null) {
 			return false;
 		} else {
 			user = tempUser;
-			usernameProperty.set(user.getName());
 			return true;
 		}
 	}
 
-	
 	/**
-	 * Changes the user's password if the password is not empty and the two passwords match
+	 * Changes the user's password if the password is not empty and the two
+	 * passwords match
+	 * 
 	 * @param pass1
 	 * @param pass2
 	 * @return the state of the password change
@@ -119,6 +116,12 @@ public class GUI_Controller {
 
 	}
 
+	/**
+	 * Creates and starts a new recorder
+	 * 
+	 * @return false if a recorder is already running or if the user is not logged
+	 *         in, true otherwise.
+	 */
 	public boolean startRecording() {
 		if ((rec != null && rec.isAlive()) || user == null) {
 			return false;
@@ -128,6 +131,12 @@ public class GUI_Controller {
 		return true;
 	}
 
+	/**
+	 * Stops the current recorder
+	 * 
+	 * @return false if the recorder is null or if the recorder was already closed,
+	 *         true otherwise.
+	 */
 	public boolean stopRecording() {
 		if (rec == null || !rec.isAlive()) {
 			return false;
@@ -135,7 +144,13 @@ public class GUI_Controller {
 		rec.quit();
 		return true;
 	}
-	
+
+	/**
+	 * Loads all the WindowTimes belonging to the current user and adds each unique
+	 * program name to the to be returned Set.
+	 * 
+	 * @return a Set of unique encountered program names.
+	 */
 	public Set<String> getAllProgramNames() {
 		Set<String> progNames = new HashSet<>();
 		Set<Sitting> sittings = getSittings(LocalDate.now().minusYears(100), LocalDate.now());
@@ -147,26 +162,39 @@ public class GUI_Controller {
 		}
 		return progNames;
 	}
-	
+
+	/**
+	 * Gets all the Sittings that are in the given Date range and belong to the
+	 * current user from the database.
+	 * 
+	 * @param sDate the first date at which Sittings are considered
+	 * @param eDate the last date at which Sittings are considered
+	 * @return all the Sittings belonging to current user in the given Date range.
+	 */
 	public Set<Sitting> getSittings(LocalDate sDate, LocalDate eDate) {
 		if (user == null) {
 			return null;
 		}
-		// Commented lines based on the Date variable and replaced with LocalDateTime, kept in case of undiscovered bugs
-//		LocalDateTime startDate = LocalDateTime.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-//		LocalDateTime endDate = LocalDateTime.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		LocalDateTime startDate = LocalDateTime.of(sDate, LocalTime.MIN);
 		LocalDateTime endDate = LocalDateTime.of(eDate.plusDays(1), LocalTime.MIN);
 		return dbHandler.fetchSittings(startDate, endDate, user.getId());
 	}
-	
+
+	/**
+	 * Gets all the Sittings that are in the given Date range and belong to the
+	 * members of this group from the database.
+	 * 
+	 * @param sDate the first date at which Sittings are considered
+	 * @param eDate the last date at which Sittings are considered
+	 * @param group the UserGroup from which the Sittings are taken from
+	 * @return all the Sittings belonging to the group members in the given Date
+	 *         range.
+	 */
 	public Set<Sitting> getGroupSittings(LocalDate sDate, LocalDate eDate, UserGroup group) {
 		if (group == null) {
 			return null;
 		}
 		Set<Sitting> sittings = new HashSet<>();
-//		LocalDateTime startDate = LocalDateTime.from(sDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
-//		LocalDateTime endDate = LocalDateTime.from(eDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
 		LocalDateTime startDate = LocalDateTime.of(sDate, LocalTime.MIN);
 		LocalDateTime endDate = LocalDateTime.of(eDate.plusDays(1), LocalTime.MIN);
 		for (int userId : group.getUserIds()) {
@@ -174,15 +202,31 @@ public class GUI_Controller {
 		}
 		return sittings;
 	}
-	
+
+	/**
+	 * Gets all the current user's restrictions.
+	 * 
+	 * @return all the current user's restrictions, or null if the current user is
+	 *         not logged in
+	 */
 	public List<Restriction> getRestrictions() {
 		if (user == null) {
 			return null;
 		}
 		return dbHandler.fetchRestrictions(user.getId());
 	}
-	
-	public boolean saveRestriction(HashMap<String, Integer[]> restrictionDaySettings, String progName) {
+
+	/**
+	 * Creates and saves Restriction(s) based on restrictionDaySettings. Each
+	 * restriction has the same given progName.
+	 * 
+	 * @param restrictionDaySettings a HashMap that contains weekdays as keys and
+	 *                               hours-minutes as values in an Integer array.
+	 * @param progName               the program name that the Restriction(s) guard.
+	 * @returns false if the current user is not logged in or if the progName is
+	 *          null, true otherwise.
+	 */
+	public boolean saveRestrictions(HashMap<String, Integer[]> restrictionDaySettings, String progName) {
 		if (user == null || progName == null) {
 			return false;
 		}
@@ -194,21 +238,43 @@ public class GUI_Controller {
 		}
 		return true;
 	}
-	
+
+	/**
+	 * Sends the updated Restriction to the database.
+	 * 
+	 * @param restriction the Restriction that is updated
+	 * @return false if the given Restriction is null or if the current user is not
+	 *         logged in or if the Restriction was not updated to the database, true
+	 *         otherwise
+	 */
 	public boolean updateRestriction(Restriction restriction) {
 		if (user == null || restriction == null) {
 			return false;
 		}
 		return dbHandler.updateRestriction(restriction);
 	}
-	
+
+	/**
+	 * Removes the given Restriction from the database.
+	 * 
+	 * @param restriction the Restriction that is removed
+	 * @return false if the given Restriction is null or if the current user is not
+	 *         logged in or if the Restriction was not removed from the database,
+	 *         true otherwise
+	 */
 	public boolean removeRestriction(Restriction restriction) {
-		if (restriction == null) {
+		if (user == null || restriction == null) {
 			return false;
 		}
 		return dbHandler.deleteRestriction(restriction);
 	}
-	
+
+	/**
+	 * Gets a List of all the UserGroups the current user owns.
+	 * 
+	 * @return all the UserGroups the current user owns, null if the current user is
+	 *         not logged in.
+	 */
 	public List<UserGroup> getUserGroups() {
 		if (user == null) {
 			return null;
@@ -216,6 +282,16 @@ public class GUI_Controller {
 		return dbHandler.fetchUserGroups(user.getId());
 	}
 
+	/**
+	 * Adds the user with the given Id to the group. Before adding, checks that the
+	 * Id String is a Integer. Addition fails if the Id is the same as the current
+	 * user's Id or if the userGroup already contains a user with the same Id or if
+	 * no user with the given Id can be found in the database.
+	 * 
+	 * @param group     The UserGroup that user is added to
+	 * @param userIdStr The added user's Id as a String
+	 * @return true if the user was added successfully, false if Id is invalid.
+	 */
 	public boolean addUserToGroup(UserGroup userGroup, String userIdStr) {
 		int userId = 0;
 		try {
@@ -229,7 +305,16 @@ public class GUI_Controller {
 		userGroup.addUserId(userId);
 		return true;
 	}
-	
+
+	/**
+	 * Removes the user with the given Id from the group. Before removing, checks
+	 * that the Id String is a Integer. Removal fails if the Id is the same as the
+	 * current user's Id.
+	 * 
+	 * @param group     The UserGroup that user is removed from
+	 * @param userIdStr The removed user's Id as a String
+	 * @return true if the user was removed successfully, false if Id is invalid.
+	 */
 	public boolean removeUserFromGroup(UserGroup group, String userIdStr) {
 		int userId = 0;
 		try {
@@ -243,10 +328,19 @@ public class GUI_Controller {
 		group.removeUserId(userId);
 		return true;
 	}
-	
+
+	/**
+	 * Saves the given UserGroup to the database. Before saving checks that the
+	 * group is not empty and has a name. Doesn't save the group if the current user
+	 * already owns a group with the same name.
+	 * 
+	 * @param userGroup The UserGroup that will be saved to the database.
+	 * @return false if the given UserGroup was invalid or if the save was
+	 *         unsuccessful. True otherwise.
+	 */
 	public boolean saveUserGroup(UserGroup userGroup) {
 		String groupName = userGroup.getGroupName();
-		if (userGroup.getUserIds().size() == 0 || groupName == null || groupName.equals("")) {
+		if (userGroup == null || userGroup.getUserIds().size() == 0 || groupName == null || groupName.equals("")) {
 			return false;
 		}
 		List<UserGroup> userGroups = dbHandler.fetchUserGroups(user.getId());
@@ -257,37 +351,53 @@ public class GUI_Controller {
 		}
 		return dbHandler.sendUserGroup(userGroup);
 	}
-	
+
+	/**
+	 * Removes the given UserGroup from the database
+	 * 
+	 * @param userGroup The UserGroup that will be deleted from the database.
+	 * @return false if the given UserGroup was null or if the removal was
+	 *         unsuccessful. True otherwise.
+	 */
 	public boolean removeUserGroup(UserGroup userGroup) {
 		if (userGroup == null) {
 			return false;
 		}
 		return dbHandler.deleteGroup(userGroup);
 	}
-	
-	// TODO: Complete method, BUG: recorder doesn't stop instantly, instead stops on
-	// next timer check
+
+	/**
+	 * Stops the recorder and logs the user out
+	 */
 	public void handleLogout() {
 		stopRecording();
 		user = null;
 	}
 
-	
+	/**
+	 * Logs the user out and then closes the application window.
+	 */
 	public void handleExit() {
 		handleLogout();
 		Stage stage = (Stage) view.getScene().getWindow();
 		stage.close();
 	}
 
-	public StringProperty getUsernameProperty() {
-		return usernameProperty;
-	}
-	
+	/**
+	 * Getter
+	 * 
+	 * @return the current user's username, or null if no user is logged in.
+	 */
 	public String getUsername() {
+		if (user == null) {
+			return null;
+		}
 		return user.getName();
 	}
-	
+
 	/**
+	 * Getter
+	 * 
 	 * @return the current user's id, or null if no user is logged in.
 	 */
 	public Integer getUserId() {
@@ -300,7 +410,7 @@ public class GUI_Controller {
 	/**
 	 * Adds a screen with the given parameters to the screen-mapping.
 	 * 
-	 * @param name  String that works as a key in the screen-mapping.
+	 * @param name   String that works as a key in the screen-mapping.
 	 * @param screen The Pane to be stored.
 	 */
 	public void addScreen(String name, Pane screen) {
@@ -310,7 +420,7 @@ public class GUI_Controller {
 	/**
 	 * Activates a screen with the given name
 	 * 
-	 * @param name
+	 * @param name String key of the screen-mapping
 	 */
 	public void activateScreen(String name) {
 		view.setRoot(screens.get(name));

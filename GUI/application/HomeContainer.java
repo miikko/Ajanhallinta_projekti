@@ -8,8 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
- * This container contains a Label with a greeting to the user and a
- * Stopwatch.<br>
+ * This container implementation contains a Label with a greeting to the user
+ * and a Stopwatch.<br>
  * 
  * @author miikk
  *
@@ -24,6 +24,10 @@ class HomeContainer implements Container {
 		create();
 	}
 
+	/**
+	 * Creates the content inside the container.<br>
+	 * This method should only be called once, during object initialization.
+	 */
 	private void create() {
 		content = new VBox();
 		content.setAlignment(Pos.CENTER);

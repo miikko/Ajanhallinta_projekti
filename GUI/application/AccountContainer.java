@@ -14,7 +14,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 
 /**
- * This container contains TextFields for changing the username and
+ * This Container implementation contains TextFields for changing the username and
  * password.<br>
  * Also contains Labels for guidance and for checking out the userId.
  * 
@@ -38,9 +38,7 @@ class AccountContainer implements Container {
 
 	/**
 	 * Creates the all the content shown in the account management screen.
-	 * 
 	 */
-	
 	private void create() {
 		idLbl = new Label(LanguageUtil.translate("Your Id: ") + controller.getUserId());
 		infoLbl = new Label("");
@@ -55,7 +53,6 @@ class AccountContainer implements Container {
 	 * 
 	 * @return the content needed for changing a username
 	 */
-	
 	private VBox createUsernameContent() {
 		Label usern = new Label(LanguageUtil.translate("New username"));
 		usernameField = new TextField();
@@ -84,7 +81,6 @@ class AccountContainer implements Container {
 	 * 
 	 * @return the content needed for changing a password
 	 */
-	
 	private VBox createPasswordContent() {
 		Label pass1 = new Label(LanguageUtil.translate("New password"));
 		Label pass2 = new Label(LanguageUtil.translate("Type same password"));
