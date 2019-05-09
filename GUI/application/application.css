@@ -1,5 +1,12 @@
 /* JavaFX CSS - Leave this comment until you have at least create one rule which uses -fx-Property */
 
+/* Modifies the graphical user interface to create a more <br>
+ * user-friendly experience of the use of the application
+ * 
+ * Author: MrJoXuX 
+ * 
+ */
+
 .root {
      -fx-background-image: url("../../../assets/TimeManager_BG.jpg");
      -fx-background-position: center;
@@ -37,15 +44,6 @@
     -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
 }
 
-/*.combo-box .list-cell {
-	-fx-text-fill: white;
-    -fx-font-family: "Arial Narrow";
-    -fx-font-weight: bold;
-    -fx-font-size: 25;
-    -fx-background-color: linear-gradient(#00BBFF, #2A5058);
-    -fx-effect: dropshadow( three-pass-box , rgba(0,0,0,0.6) , 5, 0.0 , 0 , 1 );
-}*/
-
 .combo-box:hover {
     -fx-background-color: linear-gradient(#00BBFF, #77DAFF);
 }
@@ -76,9 +74,6 @@
 	-fx-font-family: "Lucida Handwriting";
 	-fx-font-style: italic;
 	-fx-font-weight: bold;
-}
-
-#groupStart {
 }
 
 #removeGroup {
