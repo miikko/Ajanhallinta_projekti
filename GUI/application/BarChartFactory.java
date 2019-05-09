@@ -61,6 +61,13 @@ class BarChartFactory implements ChartFactory {
 		return barChart;
 	}
 	
+	/**
+	 * Creates bar charts based on the information recorded into the database.
+	 * 
+	 * @param sittings
+	 * @return the information about the program times in charts
+	 */
+	
 	private Set<XYChart.Series<String, Number>> formBars(Set<Sitting> sittings) {
 		Set<XYChart.Series<String, Number>> programs = new HashSet<>();
 		HashMap<String, Set<WindowTime>> nameGroupedWts = groupWtsByProgName(sittings);
@@ -85,6 +92,14 @@ class BarChartFactory implements ChartFactory {
 		return programs;
 	}
 	
+	/**
+	 * Sets the bar charts program data to the data found in the database. <br>
+	 * Inserts different program names to the label portion
+	 * 
+	 * @param sittings
+	 * @return names of the programs used
+	 */
+	
 	private HashMap<String, Set<WindowTime>> groupWtsByProgName(Set<Sitting> sittings) {
 		HashMap<String, Set<WindowTime>> nameGroupedWts = new HashMap<>();
 		for (Sitting sitting : sittings) {
@@ -99,6 +114,13 @@ class BarChartFactory implements ChartFactory {
 		}
 		return nameGroupedWts;
 	}
+	
+	/**
+	 * Sets the window times to certain weekdays as recorded in the database.
+	 * 
+	 * @param sittings
+	 * @return  window times on different weekdays
+	 */
 	
 	private HashMap<String, Set<WindowTime>> groupWtsByWeekDay(Set<Sitting> sittings) {
 		HashMap<String, Set<WindowTime>> dayGroupedWts = new HashMap<>();

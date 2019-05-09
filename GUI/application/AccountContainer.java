@@ -36,6 +36,11 @@ class AccountContainer implements Container {
 		create();
 	}
 
+	/**
+	 * Creates the all the content shown in the account management screen.
+	 * 
+	 */
+	
 	private void create() {
 		idLbl = new Label(LanguageUtil.translate("Your Id: ") + controller.getUserId());
 		infoLbl = new Label("");
@@ -45,6 +50,12 @@ class AccountContainer implements Container {
 		content.getChildren().addAll(idLbl, createUsernameContent(), createPasswordContent(), infoLbl);
 	}
 
+	/**
+	 * Creates the necessary elements for changing a username
+	 * 
+	 * @return the content needed for changing a username
+	 */
+	
 	private VBox createUsernameContent() {
 		Label usern = new Label(LanguageUtil.translate("New username"));
 		usernameField = new TextField();
@@ -68,6 +79,12 @@ class AccountContainer implements Container {
 		return usernameContent;
 	}
 
+	/**
+	 * Creates the necessary elements for changing a password
+	 * 
+	 * @return the content needed for changing a password
+	 */
+	
 	private VBox createPasswordContent() {
 		Label pass1 = new Label(LanguageUtil.translate("New password"));
 		Label pass2 = new Label(LanguageUtil.translate("Type same password"));
