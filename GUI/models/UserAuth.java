@@ -55,6 +55,14 @@ public class UserAuth {
 		return null;
 	}
 
+	
+	/**
+	 * Checks if the given username is not empty or the username can be found in the database.
+	 * @param id
+	 * @param username
+	 * @param password
+	 * @return the kayttaja-object with the new username or null if requirements were not met.
+	 */
 	public Kayttaja changeUsername(int id, String username, String password) {
 		if (username.equals("") || password.equals("") || dbHandler.fetchUser(username) != null) {
 			return null;
@@ -65,6 +73,14 @@ public class UserAuth {
 		}
 	}
 
+	/**
+	 * Checks if the given passwords do not match or they are empty.
+	 * @param id
+	 * @param username
+	 * @param newPw
+	 * @param newPwRepeated
+	 * @return the kayttaja-object with the new password or null if the requirements were not met.
+	 */
 	public Kayttaja changePassword(int id, String username, String newPw, String newPwRepeated) {
 		if (!newPwRepeated.equals(newPw) || newPw.equals("")) {
 			return null;

@@ -84,26 +84,35 @@ public class GUI_Controller {
 		return true;
 	}
 
+	/**
+	 * Changes the user's username if the new name is not taken or empty.
+	 * @param username
+	 * @return the state of the username change
+	 */
+	
 	public boolean handleUsernameChange(String username) {
 		Kayttaja tempUser = uAuth.changeUsername(user.getId(), username, user.getPassword());
 		if (tempUser == null) {
-			System.out.println("Nimen vaihto ei onnistunut");
 			return false;
 		} else {
-			System.out.println("Nimen vaihto onnistui!");
 			user = tempUser;
 			usernameProperty.set(user.getName());
 			return true;
 		}
 	}
 
+	
+	/**
+	 * Changes the user's password if the password is not empty and the two passwords match
+	 * @param pass1
+	 * @param pass2
+	 * @return the state of the password change
+	 */
 	public boolean handlePasswordChange(String pass1, String pass2) {
 		Kayttaja tempUser = uAuth.changePassword(user.getId(), user.getName(), pass1, pass2);
 		if (tempUser == null) {
-			System.out.println("Salasanan vaihto epäonnistui");
 			return false;
 		} else {
-			System.out.println("Salasanan vaihto onnistui");
 			user = tempUser;
 			return true;
 		}

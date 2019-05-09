@@ -100,6 +100,10 @@ public class LoginScreen extends BorderPane {
 		this.setBottom(btnContainer);
 	}
 	
+	/**
+	 * Handles the click of the login button.
+	 * @param loginBtn
+	 */
 	private void handleLoginButton(Button loginBtn) {
 		loginBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -114,6 +118,10 @@ public class LoginScreen extends BorderPane {
 		});
 	}
 	
+	/**
+	 * handles the click of the register button.
+	 * @param regBtn
+	 */
 	public void handleRegisterButton(Button regBtn) {
 		regBtn.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
