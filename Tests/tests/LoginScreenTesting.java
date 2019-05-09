@@ -118,15 +118,6 @@ public class LoginScreenTesting{
 		robot.clickOn("#RegisterButton");
 		verifyThat("#infoLabel", hasText("Selected username is already taken. Please choose another one."));
 	}
-
-	/*@Test
-	void testSuccessfulRegistration(FxRobot robot) {
-		robot.clickOn("#userText").write("TestiUser");
-		robot.clickOn("#passText").write("TestiSalasana");
-		robot.clickOn("#RegisterButton");
-		verifyThat("#infoLabel", hasText("Registration succesful!"));
-		robot.clickOn("#confirmButton"); // Ei osaa vielä mennä confirm nappun jälkeen eteenpäin
-	}*/
 	
 	/**
 	 * Tests duplicate username registration.

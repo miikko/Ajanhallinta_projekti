@@ -26,7 +26,7 @@ import javafx.scene.layout.StackPane;
  * @author miikk & MrJoXuX
  */
 class BarChartFactory implements ChartFactory {
-	
+
 	private final String[] WEEKDAYS = DateUtil.getWeekdays();
 
 	private BarChartFactory() {
@@ -53,21 +53,22 @@ class BarChartFactory implements ChartFactory {
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		final BarChart<String, Number> bChart = new BarChart<String, Number>(xAxis, yAxis);
-		bChart.setTitle(LanguageUtil.translate("Used time on different applications from ") + startDateStr + LanguageUtil.translate(" to ") + endDateStr);
+		bChart.setTitle(LanguageUtil.translate("Used time on different applications from ") + startDateStr
+				+ LanguageUtil.translate(" to ") + endDateStr);
 		xAxis.setLabel(LanguageUtil.translate("Day of the week"));
 		yAxis.setLabel(LanguageUtil.translate("Hours"));
 		bChart.getData().addAll(data);
 		barChart.getChildren().addAll(bChart);
 		return barChart;
 	}
-	
+
 	/**
-	 * Creates bar charts based on the information recorded into the database.
+	 * Forms BarChart bars from the given data. Each bar belongs to a specific weekday and program name.
 	 * 
-	 * @param sittings
-	 * @return the information about the program times in charts
+	 * @param sittings Set of Sittings that contain WindowTimes
+	 * @return a Set of BarChart bars.
 	 */
-	
+
 	private Set<XYChart.Series<String, Number>> formBars(Set<Sitting> sittings) {
 		Set<XYChart.Series<String, Number>> programs = new HashSet<>();
 		HashMap<String, Set<WindowTime>> nameGroupedWts = groupWtsByProgName(sittings);
@@ -85,21 +86,20 @@ class BarChartFactory implements ChartFactory {
 					}
 				}
 				thisProg.getData().add(new XYChart.Data<String, Number>(weekday, round(hours, 1)));
-				
+
 			}
 			programs.add(thisProg);
 		}
 		return programs;
 	}
-	
+
 	/**
-	 * Sets the bar charts program data to the data found in the database. <br>
-	 * Inserts different program names to the label portion
+	 * Extracts and groups WindowTimes from the given Sitting-Set. Grouping is done
+	 * with program names.
 	 * 
-	 * @param sittings
-	 * @return names of the programs used
+	 * @param sittings Set of Sittings that contain WindowTimes
+	 * @return a HashMap with program-name - WindowTime-Set key - value pairs
 	 */
-	
 	private HashMap<String, Set<WindowTime>> groupWtsByProgName(Set<Sitting> sittings) {
 		HashMap<String, Set<WindowTime>> nameGroupedWts = new HashMap<>();
 		for (Sitting sitting : sittings) {
@@ -114,14 +114,14 @@ class BarChartFactory implements ChartFactory {
 		}
 		return nameGroupedWts;
 	}
-	
+
 	/**
-	 * Sets the window times to certain weekdays as recorded in the database.
+	 * Extracts and groups WindowTimes from the given Sitting-Set. Grouping is done
+	 * with weekdays.
 	 * 
-	 * @param sittings
-	 * @return  window times on different weekdays
+	 * @param sittings Set of Sittings that contain WindowTimes
+	 * @return a HashMap with weekday - WindowTime-Set key - value pairs
 	 */
-	
 	private HashMap<String, Set<WindowTime>> groupWtsByWeekDay(Set<Sitting> sittings) {
 		HashMap<String, Set<WindowTime>> dayGroupedWts = new HashMap<>();
 		for (String weekDay : WEEKDAYS) {
@@ -136,6 +136,13 @@ class BarChartFactory implements ChartFactory {
 		return dayGroupedWts;
 	}
 
+	/**
+	 * Rounds the given value to the desired decimal-point
+	 * 
+	 * @param value    the number that gets rounded
+	 * @param decimals the desired number of decimal numbers
+	 * @return copy of the value rounded to given decimals.
+	 */
 	private double round(double value, int decimals) {
 		if (decimals < 0) {
 			throw new IllegalArgumentException();

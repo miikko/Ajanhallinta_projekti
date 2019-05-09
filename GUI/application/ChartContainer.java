@@ -13,7 +13,14 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 
-public class ChartContainer implements Container {
+/**
+ * Container implementation that contains different types of charts and a
+ * dropdown menu for choosing between them.
+ * 
+ * @author miikk
+ *
+ */
+class ChartContainer implements Container {
 	private BorderPane content;
 	private HistoryController hisController;
 	private Set<Sitting> data;
@@ -31,6 +38,10 @@ public class ChartContainer implements Container {
 		create();
 	}
 
+	/**
+	 * Creates the content inside the container.<br>
+	 * This method should only be called once, during object initialization.
+	 */
 	private void create() {
 		content = new BorderPane();
 		ObservableList<String> chartTypes = FXCollections.observableArrayList();

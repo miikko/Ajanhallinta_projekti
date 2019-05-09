@@ -25,8 +25,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 /**
- * A Container-Class for creating, removing and viewing UserGroups.<br>
- * This class extends the VBox-class.
+ * A Container implementation meant for creating, removing and viewing
+ * UserGroups.<br>
  * 
  * @author miikk
  *
@@ -53,6 +53,10 @@ class GroupContainer implements Container {
 		displayContent(startContent);
 	}
 
+	/**
+	 * Creates the content inside the container.<br>
+	 * This method should only be called once, during object initialization.
+	 */
 	private void create() {
 		content = new VBox();
 		content.setAlignment(Pos.CENTER);
@@ -220,11 +224,6 @@ class GroupContainer implements Container {
 		this.content.getChildren().setAll(content);
 	}
 
-	/**
-	 * Resets the selections and updates the UserGroup names in startContents
-	 * dropdown menu.<br>
-	 * Then displays the startContent
-	 */
 	@Override
 	public void refresh() {
 		newUserGroup = null;

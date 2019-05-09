@@ -19,9 +19,12 @@ import com.sun.jna.ptr.IntByReference;
 import sun.awt.shell.ShellFolder;
 
 /**
- * Class contains static methods for getting information on active program windows.<br>
- * Most of the methods use Native functions from native C libraries. These methods work only on Windows OS.<br>
+ * Class contains static methods for getting information on active program
+ * windows.<br>
+ * Most of the methods use Native functions from native C libraries. These
+ * methods work only on Windows OS.<br>
  * Linking Java and native C libraries is done with the JNA library.
+ * 
  * @author miikk
  *
  */
@@ -29,7 +32,7 @@ public class WindowUtil {
 	private static final int MAX_NAME_LENGTH = 1024;
 	private static final Kernel32 KERNEL32 = Kernel32.INSTANCE;
 	private static final User32 USER32 = User32.INSTANCE;
-	
+
 	/**
 	 * Uses User32 library's native methods to get the active window's name.
 	 * 
@@ -135,9 +138,10 @@ public class WindowUtil {
 		}
 		return description.trim();
 	}
-	
+
 	/**
 	 * Destroys the process and all the child processes belonging to the window.
+	 * 
 	 * @return true if the window was closed successfully, false otherwise.
 	 */
 	public static boolean closeActiveWindow() {
@@ -145,7 +149,7 @@ public class WindowUtil {
 		String filePath = getActiveWindowFilePath();
 		try {
 			exeName = filePath.split("\\\\")[filePath.split("\\\\").length - 1];
-		} catch(Exception e) {
+		} catch (Exception e) {
 			return false;
 		}
 		if (isProcessRunning(exeName)) {
@@ -160,7 +164,15 @@ public class WindowUtil {
 		}
 		return false;
 	}
-	
+
+	/**
+	 * Starts a new process which checks if a process has been started from the
+	 * given filename.
+	 * 
+	 * @param exeName name of the .exe file owning the process
+	 * @return true if the process is running at the time this method was called,
+	 *         false otherwise
+	 */
 	private static boolean isProcessRunning(String exeName) {
 		Process listProc = null;
 		BufferedReader br = null;

@@ -18,6 +18,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
+/**
+ * A Container implementation that contains two mutually bound DatePickers.
+ * Additionally contains Labels for guidance and a button for confirming the
+ * selection.
+ * 
+ * @author miikk & MrJoXuX
+ *
+ */
 class CalendarPairContainer implements Container {
 	private ContainerController conController;
 	private HistoryController hisController;
@@ -38,6 +46,10 @@ class CalendarPairContainer implements Container {
 		create();
 	}
 
+	/**
+	 * Creates the content inside the container.<br>
+	 * This method should only be called once, during object initialization.
+	 */
 	private void create() {
 		content = new VBox();
 		content.setId("calPair");
@@ -55,6 +67,10 @@ class CalendarPairContainer implements Container {
 		content.getChildren().addAll(calendarContent, confirmBtn);
 	}
 
+	/**
+	 * Creates the start calendar. The start calendar is set to respond to changes
+	 * in the end calendar.
+	 */
 	private void createStartCalendar() {
 		sCalendar = new VBox(10);
 		sCalendar.setAlignment(Pos.CENTER);
@@ -94,6 +110,10 @@ class CalendarPairContainer implements Container {
 		HBox.setMargin(sCalendar, MARGIN);
 	}
 
+	/**
+	 * Creates the end calendar. The end calendar is set to respond to changes in
+	 * the start calendar.
+	 */
 	private void createEndCalendar() {
 		eCalendar = new VBox(10);
 		eCalendar.setAlignment(Pos.CENTER);
@@ -131,10 +151,16 @@ class CalendarPairContainer implements Container {
 		HBox.setMargin(eCalendar, MARGIN);
 	}
 
+	/**
+	 * Updates the start calendar's date-cells
+	 */
 	private void updateStartCalendar() {
 		sDatePicker.getDayCellFactory().call(sDatePicker);
 	}
 
+	/**
+	 * Updates the end calendar's date-cells
+	 */
 	private void updateEndCalendar() {
 		eDatePicker.getDayCellFactory().call(eDatePicker);
 	}

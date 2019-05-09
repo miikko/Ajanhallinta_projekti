@@ -163,7 +163,7 @@ class RestrictionContainer implements Container {
 		});
 		Button confirmBtn = new Button(LanguageUtil.translate("Finish"));
 		confirmBtn.setOnAction((ActionEvent event) -> {
-			if (controller.saveRestriction(newRestrictionDaySettings, newProgName)) {
+			if (controller.saveRestrictions(newRestrictionDaySettings, newProgName)) {
 				infoLbl.setText("");
 				refresh();
 			} else {
@@ -228,7 +228,7 @@ class RestrictionContainer implements Container {
 						if (editRestriction == null) {
 							HashMap<String, Integer[]> settings = new HashMap<>();
 							settings.put(weekDay, new Integer[] { hours, minutes });
-							controller.saveRestriction(settings, editProgName);
+							controller.saveRestrictions(settings, editProgName);
 						} else {
 							editRestriction.setHours(hours);
 							editRestriction.setMinutes(minutes);
