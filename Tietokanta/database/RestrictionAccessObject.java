@@ -8,10 +8,23 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+/**
+ * RestrictionAccessObject contains the methods for reading, writing and
+ * deleting restrictions for specific programs.
+ * 
+ * @author miikk
+ * @since 05/05/2019
+ */
+
 public class RestrictionAccessObject implements RestrictionDAO_IF {
 	SessionFactory istuntotehdas = Istuntotehdas.annaIstuntotehdas();
 	Transaction transaktio = null;
 
+	/**
+	 * This method creates a new restriction.
+	 * 
+	 * @param restriction This is the new restriction that will be created.
+	 */
 	@Override
 	public boolean createRestriction(Restriction restriction) {
 		Session istunto = istuntotehdas.openSession();
@@ -30,6 +43,11 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 		}
 	}
 
+	/**
+	 * This method updates a pre-existing restriction.
+	 * 
+	 * @param restriction This is the specified restriction that will be updated.
+	 */
 	@Override
 	public boolean updateRestriction(Restriction restriction) {
 		Session istunto = istuntotehdas.openSession();
@@ -48,6 +66,11 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 		}
 	}
 
+	/**
+	 * This method deletes a pre-existing restriction.
+	 * 
+	 * @param restriction This is the specified restriction that will be deleted.
+	 */
 	@Override
 	public boolean deleteRestriction(Restriction restriction) {
 		Session istunto = istuntotehdas.openSession();
@@ -66,6 +89,12 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 		}
 	}
 
+	/**
+	 * This method returns a list of all restrictions a specific user has.
+	 * 
+	 * @param userId The id of the user from which the restrictions are read.
+	 * @return resultList Returns a list containing all the matching restrictions.
+	 */
 	@Override
 	public List<Restriction> readRestrictions(int userId) {
 		Session istunto = istuntotehdas.openSession();
@@ -87,6 +116,14 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 		}
 	}
 
+	/**
+	 * This method returns a list of all restrictions a specific user has on a
+	 * specified day of the week.
+	 * 
+	 * @param weekday The day of the week on which the restriction are on.
+	 * @param userId The id of the user from which the restrictions are read.
+	 * @return resultList Returns a list containing all the matching restrictions.
+	 */
 	@Override
 	public List<Restriction> readRestrictions(String weekday, int userId) {
 		Session istunto = istuntotehdas.openSession();
@@ -108,6 +145,15 @@ public class RestrictionAccessObject implements RestrictionDAO_IF {
 		}
 	}
 
+	/**
+	 * This method returns a list of all restrictions a specific user has on a
+	 * specified day of the week, for a specific single program.
+	 * 
+	 * @param progName The name of the program which is restricted.
+	 * @param weekday The day of the week on which the restriction are on.
+	 * @param userId The id of the user from which the restrictions are read.
+	 * @return resultList Returns a list containing all the matching restrictions.
+	 */
 	@Override
 	public Restriction readRestriction(String progName, String weekday, int userId) {
 		Session istunto = istuntotehdas.openSession();
