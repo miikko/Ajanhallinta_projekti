@@ -54,7 +54,7 @@ public class LanguageUtil {
 	private static List<String> wordList_en = Arrays.asList(GUI_WORDS_EN);
 	private static List<String> wordList_fi = Arrays.asList(GUI_WORDS_FI);
 
-	private static String manualLanguage = "fi";
+	private static String manualLanguage = null;
 
 	/**
 	 * This method initially sets the program to the current default language of the
